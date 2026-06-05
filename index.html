@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>スマホ動画 自動カット｜無料体験版</title>
+<style>
+  :root{
+    --bg:#0e1118; --card:#161b26; --line:#283143;
+    --txt:#eef2f8; --sub:#9aa7bd; --accent:#22d3a6; --accent2:#3b82f6;
+    --cut:#2a3344; --keep:#22d3a6; --warn:#fbbf24; --lock:#f97316;
+    --radius:16px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    background:radial-gradient(1200px 600px at 50% -10%, #1a2233 0%, var(--bg) 60%);
+    color:var(--txt);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;
+    line-height:1.7; min-height:100vh;
+    padding:env(safe-area-inset-top) 0 calc(env(safe-area-inset-bottom) + 24px);
+  }
+  .wrap{max-width:560px;margin:0 auto;padding:20px 16px}
+  header{text-align:center;margin-bottom:18px}
+  .badge{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.04em;
+    color:var(--accent);background:rgba(34,211,166,.12);border:1px solid rgba(34,211,166,.3);
+    padding:4px 12px;border-radius:999px;margin-bottom:10px}
+  h1{font-size:22px;margin:6px 0 4px;font-weight:800;letter-spacing:.01em}
+  h1 .em{color:var(--accent)}
+  .lead{font-size:13.5px;color:var(--sub);margin:0}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px 16px;margin-top:16px}
+  .step-no{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;
+    border-radius:50%;background:var(--accent2);color:#fff;font-size:12px;font-weight:800;margin-right:8px}
+  .card h2{font-size:15px;margin:0 0 12px;display:flex;align-items:center}
+
+  /* drop / pick */
+  #drop{border:2px dashed var(--line);border-radius:14px;padding:26px 14px;text-align:center;
+    transition:.15s;cursor:pointer;background:rgba(255,255,255,.015)}
+  #drop.drag{border-color:var(--accent);background:rgba(34,211,166,.07)}
+  #drop .ic{font-size:34px}
+  #drop .t{font-weight:700;margin-top:6px}
+  #drop .s{font-size:12px;color:var(--sub);margin-top:4px}
+  input[type=file]{display:none}
+
+  video{width:100%;border-radius:12px;background:#000;margin-top:4px;display:block}
+
+  /* timeline */
+  .tl-wrap{margin-top:14px}
+  .tl{position:relative;width:100%;height:30px;background:var(--cut);border-radius:8px;overflow:hidden}
+  .tl .seg{position:absolute;top:0;height:100%;background:linear-gradient(180deg,#2ee6b6,#16b893)}
+  .tl .play{position:absolute;top:0;width:2px;height:100%;background:#fff;opacity:.9;transform:translateX(-1px);display:none}
+  .legend{display:flex;gap:16px;font-size:11.5px;color:var(--sub);margin-top:8px}
+  .legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+  .legend .k{background:var(--keep)} .legend .c{background:var(--cut)}
+
+  /* stats */
+  .stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:14px}
+  .stat{background:#10151f;border:1px solid var(--line);border-radius:12px;padding:10px 8px;text-align:center}
+  .stat .v{font-size:19px;font-weight:800;letter-spacing:.01em}
+  .stat .v.big{color:var(--accent)}
+  .stat .l{font-size:10.5px;color:var(--sub);margin-top:2px}
+
+  /* controls */
+  .ctl{margin-top:8px}
+  .ctl label{display:flex;justify-content:space-between;font-size:12.5px;color:var(--sub);margin:10px 0 4px}
+  .ctl label b{color:var(--txt);font-variant-numeric:tabular-nums}
+  input[type=range]{width:100%;accent-color:var(--accent)}
+  .ctl .hint{font-size:11px;color:var(--sub);margin-top:2px}
+  details{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}
+  summary{font-size:12.5px;color:var(--sub);cursor:pointer;list-style:none}
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:"⚙ ";color:var(--accent)}
+
+  /* buttons */
+  .btns{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+  button.b{flex:1 1 0;min-width:130px;border:none;border-radius:12px;padding:13px 12px;font-size:14px;
+    font-weight:800;cursor:pointer;transition:.12s;font-family:inherit}
+  .b.prim{background:linear-gradient(180deg,#2ee6b6,#15b894);color:#04201a}
+  .b.prim:active{transform:translateY(1px)}
+  .b.ghost{background:#10151f;color:var(--txt);border:1px solid var(--line)}
+  .b:disabled{opacity:.4;cursor:not-allowed}
+
+  /* lock CTA */
+  .lock{margin-top:16px;background:linear-gradient(135deg,rgba(249,115,22,.12),rgba(59,130,246,.10));
+    border:1px solid rgba(249,115,22,.35);border-radius:14px;padding:16px}
+  .lock .h{font-weight:800;font-size:15px;display:flex;align-items:center;gap:7px}
+  .lock p{font-size:12.5px;color:#d8c6b0;margin:8px 0 12px}
+  .lock .pw{display:flex;gap:8px}
+  .lock input{flex:1;background:#0d1119;border:1px solid var(--line);color:var(--txt);
+    border-radius:10px;padding:11px;font-size:14px;font-family:inherit}
+  .lock .unlock{background:var(--lock);color:#1a0d02;border:none;border-radius:10px;padding:0 16px;
+    font-weight:800;font-size:13px;cursor:pointer}
+  .lock .msg{font-size:12px;margin-top:8px;min-height:16px}
+  .lock .msg.ok{color:var(--accent)} .lock .msg.ng{color:#f87171}
+
+  .status{font-size:12.5px;color:var(--sub);margin-top:10px;min-height:18px;text-align:center}
+  .status.work{color:var(--warn)}
+  .status.err{color:#f87171}
+  .spin{display:inline-block;width:13px;height:13px;border:2px solid var(--line);
+    border-top-color:var(--accent);border-radius:50%;animation:sp .7s linear infinite;vertical-align:-2px;margin-right:6px}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  .hidden{display:none!important}
+  footer{text-align:center;font-size:11px;color:#5b6678;margin-top:22px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <span class="badge">無料体験版</span>
+    <h1>スマホ動画 <span class="em">自動カット</span></h1>
+    <p class="lead">動画を選ぶだけで、しゃべってない“間”を自動で検出。<br>カット後の状態をその場でプレビューできます。</p>
+  </header>
+
+  <!-- STEP 1 -->
+  <div class="card">
+    <h2><span class="step-no">1</span>動画を選ぶ</h2>
+    <div id="drop">
+      <div class="ic">🎬</div>
+      <div class="t">タップして動画を選択</div>
+      <div class="s">（PCはドラッグ＆ドロップもOK / カメラロールから選べます）</div>
+    </div>
+    <input type="file" id="file" accept="video/*">
+    <div class="status" id="status"></div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="card hidden" id="resultCard">
+    <h2><span class="step-no">2</span>自動カット結果</h2>
+    <video id="video" playsinline preload="metadata"></video>
+
+    <div class="tl-wrap">
+      <div class="tl" id="tl"><div class="play" id="playhead"></div></div>
+      <div class="legend">
+        <span><i class="k"></i>残す（しゃべってる所）</span>
+        <span><i class="c"></i>カット（無音）</span>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="v" id="sOrig">–</div><div class="l">元の長さ</div></div>
+      <div class="stat"><div class="v big" id="sCut">–</div><div class="l">カット後</div></div>
+      <div class="stat"><div class="v big" id="sPct">–</div><div class="l">短縮率</div></div>
+    </div>
+
+    <div class="btns">
+      <button class="b prim" id="playCut">▶ カット版を再生</button>
+      <button class="b ghost" id="playOrig">元の動画を再生</button>
+    </div>
+
+    <details>
+      <summary>カットの強さを調整する</summary>
+      <div class="ctl">
+        <label>無音と判定する音量 <b><span id="thrV">-40</span> dB</b></label>
+        <input type="range" id="thr" min="-60" max="-20" step="1" value="-40">
+        <div class="hint">右にするほど “小さい音まで無音扱い” でカットが増えます</div>
+
+        <label>カットする最短の無音 <b><span id="minV">0.5</span> 秒</b></label>
+        <input type="range" id="min" min="0.2" max="2" step="0.1" value="0.5">
+        <div class="hint">この長さ以上の無音だけを削ります（短い“間”は残す）</div>
+      </div>
+    </details>
+  </div>
+
+  <!-- LOCKED EXPORT -->
+  <div class="lock hidden" id="lock">
+    <div class="h">🔒 カット済みの動画を書き出す（保存）</div>
+    <p>体験版ではプレビューまで。<b>カット済み動画のフル書き出し</b>は、無料の個別相談に参加した方に解放パスワードをお渡ししています。</p>
+    <div class="pw">
+      <input type="text" id="pw" placeholder="解放パスワードを入力" autocomplete="off">
+      <button class="unlock" id="unlock">解放</button>
+    </div>
+    <div class="msg" id="pwMsg"></div>
+  </div>
+
+  <footer>※ 動画はあなたの端末内だけで解析されます（アップロードされません）</footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const drop=$("drop"), fileInput=$("file"), statusEl=$("status");
+  const resultCard=$("resultCard"), video=$("video"), tl=$("tl"), playhead=$("playhead");
+  const sOrig=$("sOrig"), sCut=$("sCut"), sPct=$("sPct");
+  const playCut=$("playCut"), playOrig=$("playOrig");
+  const thr=$("thr"), thrV=$("thrV"), minR=$("min"), minV=$("min")? $("min"):null;
+  const minRange=$("min"), minLbl=$("minV");
+  const lock=$("lock"), pw=$("pw"), unlock=$("unlock"), pwMsg=$("pwMsg");
+
+  // ===== 設定 =====
+  const UNLOCK_PASSWORD = "VPRO-FULL"; // ←個別相談参加者に渡すパスワード（後で変更）
+  const CONSULT_URL = "#"; // ←個別相談LPのURL（後で差し込み）
+  const PAD_SEC = 0.08;      // カット前後に少し残す
+  const WIN_SEC = 0.03;      // 解析ウィンドウ
+
+  let cache=null;   // {dbs, winSec, duration}
+  let segs=[];      // 残すセグメント [{start,end}]
+  let rafId=null, mode=null; // 'cut' | 'orig'
+  let segIdx=0;
+
+  // ===== ステータス表示 =====
+  function setStatus(msg, cls){ statusEl.className="status"+(cls?(" "+cls):""); statusEl.innerHTML=msg||""; }
+  function fmt(t){ if(!isFinite(t))return"–"; const m=Math.floor(t/60), s=Math.floor(t%60); return m+":"+String(s).padStart(2,"0"); }
+
+  // ===== ファイル受け取り =====
+  drop.addEventListener("click", ()=>fileInput.click());
+  ["dragenter","dragover"].forEach(e=>drop.addEventListener(e,ev=>{ev.preventDefault();drop.classList.add("drag");}));
+  ["dragleave","drop"].forEach(e=>drop.addEventListener(e,ev=>{ev.preventDefault();drop.classList.remove("drag");}));
+  drop.addEventListener("drop", ev=>{ const f=ev.dataTransfer.files[0]; if(f) handleFile(f); });
+  fileInput.addEventListener("change", ()=>{ const f=fileInput.files[0]; if(f) handleFile(f); });
+
+  async function handleFile(file){
+    if(!file.type.startsWith("video/")){ setStatus("動画ファイルを選んでください","err"); return; }
+    stopPlayback();
+    setStatus('<span class="spin"></span>動画を読み込んでいます…',"work");
+    resultCard.classList.add("hidden"); lock.classList.add("hidden");
+
+    // 動画表示
+    if(video.src) URL.revokeObjectURL(video.src);
+    video.src = URL.createObjectURL(file);
+    video.load();
+
+    // 音声解析
+    try{
+      const buf = await file.arrayBuffer();
+      setStatus('<span class="spin"></span>音声を解析しています…',"work");
+      const dbs = await analyzeAudio(buf);
+      // duration は動画メタから（より正確）
+      const duration = await getDuration();
+      cache = { dbs, winSec: WIN_SEC, duration };
+      recompute();
+      resultCard.classList.remove("hidden");
+      lock.classList.remove("hidden");
+      setStatus("");
+    }catch(err){
+      console.error(err);
+      setStatus("この動画は音声解析に対応していないようです。別の動画（mp4 / mov 推奨）でお試しください。","err");
+    }
+  }
+
+  function getDuration(){
+    return new Promise(res=>{
+      if(isFinite(video.duration)&&video.duration>0) return res(video.duration);
+      video.addEventListener("loadedmetadata", ()=>res(video.duration||0), {once:true});
+    });
+  }
+
+  // ===== 音声解析（Web Audio API・Whisper/FFmpeg不要） =====
+  async function analyzeAudio(arrayBuffer){
+    const AC = window.AudioContext || window.webkitAudioContext;
+    // 低サンプルレートで復号 → メモリ削減（Safariは無視されることあり）
+    let ctx;
+    try{ ctx = new AC({sampleRate:16000}); }catch(e){ ctx = new AC(); }
+    const audioBuf = await ctx.decodeAudioData(arrayBuffer.slice(0));
+    const sr = audioBuf.sampleRate;
+    const ch0 = audioBuf.getChannelData(0);
+    const ch1 = audioBuf.numberOfChannels>1 ? audioBuf.getChannelData(1) : null;
+    const win = Math.max(1, Math.floor(sr*WIN_SEC));
+    const n = Math.floor(ch0.length/win);
+    const dbs = new Float32Array(n);
+    for(let i=0;i<n;i++){
+      const off=i*win; let sum=0;
+      for(let j=0;j<win;j++){
+        let s=ch0[off+j]; if(ch1) s=(s+ch1[off+j])*0.5;
+        sum+=s*s;
+      }
+      const rms=Math.sqrt(sum/win);
+      dbs[i] = rms>1e-7 ? 20*Math.log10(rms) : -120;
+    }
+    try{ ctx.close(); }catch(e){}
+    return dbs;
+  }
+
+  // ===== セグメント計算（しきい値・最短無音から） =====
+  function buildSegments(dbs, winSec, duration, thrDb, minSilSec){
+    const n=dbs.length;
+    const voiced=new Uint8Array(n);
+    for(let i=0;i<n;i++) voiced[i]= dbs[i]>=thrDb ? 1:0;
+    // 短い無音（minSil未満）は残す側に橋渡し
+    const minSilWin=Math.max(1,Math.ceil(minSilSec/winSec));
+    let i=0;
+    while(i<n){
+      if(!voiced[i]){
+        let j=i; while(j<n&&!voiced[j]) j++;
+        if(j-i<minSilWin) for(let k=i;k<j;k++) voiced[k]=1;
+        i=j;
+      } else i++;
+    }
+    // 残すセグメント抽出＋前後パディング
+    const raw=[];
+    i=0;
+    while(i<n){
+      if(voiced[i]){
+        let j=i; while(j<n&&voiced[j]) j++;
+        let s=i*winSec-PAD_SEC, e=j*winSec+PAD_SEC;
+        if(s<0)s=0; if(e>duration)e=duration;
+        raw.push({start:s,end:e});
+        i=j;
+      } else i++;
+    }
+    // パディング後の重なりをマージ
+    const merged=[];
+    for(const s of raw){
+      const last=merged[merged.length-1];
+      if(last && s.start<=last.end) last.end=Math.max(last.end,s.end);
+      else merged.push({start:s.start,end:s.end});
+    }
+    return merged;
+  }
+
+  function recompute(){
+    if(!cache) return;
+    const thrDb=parseFloat(thr.value);
+    const minSil=parseFloat(minRange.value);
+    segs = buildSegments(cache.dbs, cache.winSec, cache.duration, thrDb, minSil);
+    if(segs.length===0) segs=[{start:0,end:cache.duration}]; // 全部無音判定の保険
+    renderTimeline();
+    renderStats();
+    stopPlayback();
+  }
+
+  function renderTimeline(){
+    const dur=cache.duration||1;
+    [...tl.querySelectorAll(".seg")].forEach(el=>el.remove());
+    for(const s of segs){
+      const d=document.createElement("div");
+      d.className="seg";
+      d.style.left=(s.start/dur*100)+"%";
+      d.style.width=(Math.max(0,(s.end-s.start))/dur*100)+"%";
+      tl.insertBefore(d, playhead);
+    }
+  }
+
+  function renderStats(){
+    const dur=cache.duration||0;
+    const kept=segs.reduce((a,s)=>a+(s.end-s.start),0);
+    const pct=dur>0?Math.max(0,Math.round((1-kept/dur)*100)):0;
+    sOrig.textContent=fmt(dur);
+    sCut.textContent=fmt(kept);
+    sPct.textContent=pct+"%";
+  }
+
+  // ===== スライダー =====
+  thr.addEventListener("input", ()=>{ thrV.textContent=thr.value; debounce(recompute); });
+  minRange.addEventListener("input", ()=>{ minLbl.textContent=parseFloat(minRange.value).toFixed(1); debounce(recompute); });
+  let dbT=null; function debounce(fn){ clearTimeout(dbT); dbT=setTimeout(fn,180); }
+
+  // ===== 再生（カット版＝無音を飛ばす / 元動画＝そのまま） =====
+  function stopPlayback(){ if(rafId)cancelAnimationFrame(rafId); rafId=null; mode=null; video.pause(); playhead.style.display="none";
+    playCut.textContent="▶ カット版を再生"; playOrig.textContent="元の動画を再生"; }
+
+  playCut.addEventListener("click", ()=>{
+    if(mode==="cut"){ stopPlayback(); return; }
+    stopPlayback(); mode="cut"; segIdx=0;
+    playhead.style.display="block";
+    video.currentTime=segs[0].start;
+    video.play().then(loop).catch(()=>{ setStatus("再生をタップでもう一度お試しください"); });
+    playCut.textContent="⏸ 停止";
+  });
+  playOrig.addEventListener("click", ()=>{
+    if(mode==="orig"){ stopPlayback(); return; }
+    stopPlayback(); mode="orig";
+    playhead.style.display="block";
+    video.play().then(loop).catch(()=>{});
+    playOrig.textContent="⏸ 停止";
+  });
+
+  function loop(){
+    const dur=cache?cache.duration:video.duration||1;
+    playhead.style.left=(video.currentTime/dur*100)+"%";
+    if(mode==="cut"){
+      const t=video.currentTime;
+      let seg=segs[segIdx];
+      if(!seg){ stopPlayback(); return; }
+      if(t < seg.start-0.03){ video.currentTime=seg.start; }
+      else if(t >= seg.end-0.005){
+        segIdx++;
+        if(segIdx<segs.length){ video.currentTime=segs[segIdx].start; }
+        else { stopPlayback(); return; }
+      }
+    }
+    if(!video.paused && !video.ended) rafId=requestAnimationFrame(loop);
+    else if(video.ended) stopPlayback();
+  }
+  video.addEventListener("ended", stopPlayback);
+
+  // ===== パスワード解放（有料＝書き出し） =====
+  unlock.addEventListener("click", ()=>{
+    const v=(pw.value||"").trim();
+    if(!v){ pwMsg.className="msg ng"; pwMsg.textContent="パスワードを入力してください"; return; }
+    if(v.toUpperCase()===UNLOCK_PASSWORD){
+      pwMsg.className="msg ok";
+      pwMsg.textContent="✓ 解放されました！（※書き出し機能はフル版で有効になります）";
+      // ここにフル版（書き出し）解放処理を後で実装
+    }else{
+      pwMsg.className="msg ng";
+      pwMsg.textContent="パスワードが違います。個別相談でお渡ししたものをご確認ください。";
+    }
+  });
+
+  // 初期表示
+  thrV.textContent=thr.value;
+  minLbl.textContent=parseFloat(minRange.value).toFixed(1);
+})();
+</script>
+</body>
+</html>
