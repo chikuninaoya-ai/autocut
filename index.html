@@ -77,10 +77,11 @@
   .btns{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
   button.b{flex:1 1 0;min-width:130px;border:none;border-radius:12px;padding:13px 12px;font-size:14px;
     font-weight:800;cursor:pointer;transition:.12s;font-family:inherit}
+  .b.full{flex:1 1 100%;width:100%}
   .b.prim{background:linear-gradient(180deg,#2ee6b6,#15b894);color:#04201a}
   .b.prim:active{transform:translateY(1px)}
   .b.ghost{background:#10151f;color:var(--txt);border:1px solid var(--line)}
-  .b:disabled{opacity:.4;cursor:not-allowed}
+  .b:disabled{opacity:.5;cursor:not-allowed}
 
   /* lock CTA */
   .lock{margin-top:16px;background:linear-gradient(135deg,rgba(249,115,22,.12),rgba(59,130,246,.10));
@@ -129,39 +130,45 @@
   <!-- STEP 2 -->
   <div class="card hidden" id="resultCard">
     <h2><span class="step-no">2</span>自動カット結果</h2>
-    <video id="video" playsinline preload="metadata"></video>
+    <video id="video" playsinline webkit-playsinline preload="metadata"></video>
 
-    <div class="tl-wrap">
-      <div class="tl" id="tl"><div class="play" id="playhead"></div></div>
-      <div class="legend">
-        <span><i class="k"></i>残す（しゃべってる所）</span>
-        <span><i class="c"></i>カット（無音）</span>
+    <!-- 解析ボタン（iOSは必ずユーザー操作起点で実行） -->
+    <button class="b prim full" id="analyze" style="margin-top:12px">▶ 自動カットを解析する</button>
+
+    <!-- 解析後に表示 -->
+    <div id="analyzed" class="hidden">
+      <div class="tl-wrap">
+        <div class="tl" id="tl"><div class="play" id="playhead"></div></div>
+        <div class="legend">
+          <span><i class="k"></i>残す（しゃべってる所）</span>
+          <span><i class="c"></i>カット（無音）</span>
+        </div>
       </div>
-    </div>
 
-    <div class="stats">
-      <div class="stat"><div class="v" id="sOrig">–</div><div class="l">元の長さ</div></div>
-      <div class="stat"><div class="v big" id="sCut">–</div><div class="l">カット後</div></div>
-      <div class="stat"><div class="v big" id="sPct">–</div><div class="l">短縮率</div></div>
-    </div>
-
-    <div class="btns">
-      <button class="b prim" id="playCut">▶ カット版を再生</button>
-      <button class="b ghost" id="playOrig">元の動画を再生</button>
-    </div>
-
-    <details>
-      <summary>カットの強さを調整する</summary>
-      <div class="ctl">
-        <label>無音と判定する音量 <b><span id="thrV">-40</span> dB</b></label>
-        <input type="range" id="thr" min="-60" max="-20" step="1" value="-40">
-        <div class="hint">右にするほど “小さい音まで無音扱い” でカットが増えます</div>
-
-        <label>カットする最短の無音 <b><span id="minV">0.5</span> 秒</b></label>
-        <input type="range" id="min" min="0.2" max="2" step="0.1" value="0.5">
-        <div class="hint">この長さ以上の無音だけを削ります（短い“間”は残す）</div>
+      <div class="stats">
+        <div class="stat"><div class="v" id="sOrig">–</div><div class="l">元の長さ</div></div>
+        <div class="stat"><div class="v big" id="sCut">–</div><div class="l">カット後</div></div>
+        <div class="stat"><div class="v big" id="sPct">–</div><div class="l">短縮率</div></div>
       </div>
-    </details>
+
+      <div class="btns">
+        <button class="b prim" id="playCut">▶ カット版を再生</button>
+        <button class="b ghost" id="playOrig">元の動画を再生</button>
+      </div>
+
+      <details>
+        <summary>カットの強さを調整する</summary>
+        <div class="ctl">
+          <label>無音と判定する音量 <b><span id="thrV">-40</span> dB</b></label>
+          <input type="range" id="thr" min="-60" max="-20" step="1" value="-40">
+          <div class="hint">右にするほど “小さい音まで無音扱い” でカットが増えます</div>
+
+          <label>カットする最短の無音 <b><span id="minV">0.5</span> 秒</b></label>
+          <input type="range" id="min" min="0.2" max="2" step="0.1" value="0.5">
+          <div class="hint">この長さ以上の無音だけを削ります（短い“間”は残す）</div>
+        </div>
+      </details>
+    </div>
   </div>
 
   <!-- LOCKED EXPORT -->
@@ -183,62 +190,84 @@
   "use strict";
   const $ = id => document.getElementById(id);
   const drop=$("drop"), fileInput=$("file"), statusEl=$("status");
-  const resultCard=$("resultCard"), video=$("video"), tl=$("tl"), playhead=$("playhead");
+  const resultCard=$("resultCard"), video=$("video");
+  const analyzeBtn=$("analyze"), analyzed=$("analyzed");
+  const tl=$("tl"), playhead=$("playhead");
   const sOrig=$("sOrig"), sCut=$("sCut"), sPct=$("sPct");
   const playCut=$("playCut"), playOrig=$("playOrig");
-  const thr=$("thr"), thrV=$("thrV"), minR=$("min"), minV=$("min")? $("min"):null;
-  const minRange=$("min"), minLbl=$("minV");
+  const thr=$("thr"), thrV=$("thrV"), minRange=$("min"), minLbl=$("minV");
   const lock=$("lock"), pw=$("pw"), unlock=$("unlock"), pwMsg=$("pwMsg");
 
   // ===== 設定 =====
   const UNLOCK_PASSWORD = "VPRO-FULL"; // ←個別相談参加者に渡すパスワード（後で変更）
-  const CONSULT_URL = "#"; // ←個別相談LPのURL（後で差し込み）
-  const PAD_SEC = 0.08;      // カット前後に少し残す
-  const WIN_SEC = 0.03;      // 解析ウィンドウ
+  const CONSULT_URL = "#";             // ←個別相談LPのURL（後で差し込み）
+  const PAD_SEC   = 0.08;  // カット前後に少し残す
+  const WIN_SEC   = 0.03;  // 解析ウィンドウ
+  const DECODE_TIMEOUT = 6000; // 高速デコードの上限（固まり防止）
 
-  let cache=null;   // {dbs, winSec, duration}
-  let segs=[];      // 残すセグメント [{start,end}]
-  let rafId=null, mode=null; // 'cut' | 'orig'
-  let segIdx=0;
+  let currentFile=null;
+  let cache=null;      // {dbs, winSec, duration}
+  let segs=[];         // 残すセグメント [{start,end}]
+  let rafId=null, mode=null, segIdx=0;
 
-  // ===== ステータス表示 =====
+  // WebAudio（リアルタイム解析用・要素に1度だけバインド）
+  let rtCtx=null, mediaSrc=null, mainGain=null, analyserNode=null;
+
   function setStatus(msg, cls){ statusEl.className="status"+(cls?(" "+cls):""); statusEl.innerHTML=msg||""; }
   function fmt(t){ if(!isFinite(t))return"–"; const m=Math.floor(t/60), s=Math.floor(t%60); return m+":"+String(s).padStart(2,"0"); }
+  function withTimeout(p, ms){ return Promise.race([p, new Promise((_,rej)=>setTimeout(()=>rej(new Error("timeout")), ms))]); }
 
   // ===== ファイル受け取り =====
   drop.addEventListener("click", ()=>fileInput.click());
   ["dragenter","dragover"].forEach(e=>drop.addEventListener(e,ev=>{ev.preventDefault();drop.classList.add("drag");}));
   ["dragleave","drop"].forEach(e=>drop.addEventListener(e,ev=>{ev.preventDefault();drop.classList.remove("drag");}));
-  drop.addEventListener("drop", ev=>{ const f=ev.dataTransfer.files[0]; if(f) handleFile(f); });
-  fileInput.addEventListener("change", ()=>{ const f=fileInput.files[0]; if(f) handleFile(f); });
+  drop.addEventListener("drop", ev=>{ const f=ev.dataTransfer.files[0]; if(f) pickFile(f); });
+  fileInput.addEventListener("change", ()=>{ const f=fileInput.files[0]; if(f) pickFile(f); });
 
-  async function handleFile(file){
+  function pickFile(file){
     if(!file.type.startsWith("video/")){ setStatus("動画ファイルを選んでください","err"); return; }
     stopPlayback();
-    setStatus('<span class="spin"></span>動画を読み込んでいます…',"work");
-    resultCard.classList.add("hidden"); lock.classList.add("hidden");
-
-    // 動画表示
+    currentFile=file; cache=null; segs=[];
     if(video.src) URL.revokeObjectURL(video.src);
-    video.src = URL.createObjectURL(file);
+    video.src=URL.createObjectURL(file);
     video.load();
+    // 動画はすぐ表示、解析はボタンで（iOSのユーザー操作起点対策）
+    resultCard.classList.remove("hidden");
+    analyzed.classList.add("hidden");
+    lock.classList.add("hidden");
+    analyzeBtn.disabled=false;
+    analyzeBtn.textContent="▶ 自動カットを解析する";
+    setStatus("動画を読み込みました。「解析する」を押してください👇");
+  }
 
-    // 音声解析
-    try{
-      const buf = await file.arrayBuffer();
-      setStatus('<span class="spin"></span>音声を解析しています…',"work");
-      const dbs = await analyzeAudio(buf);
-      // duration は動画メタから（より正確）
-      const duration = await getDuration();
-      cache = { dbs, winSec: WIN_SEC, duration };
-      recompute();
-      resultCard.classList.remove("hidden");
-      lock.classList.remove("hidden");
-      setStatus("");
-    }catch(err){
-      console.error(err);
-      setStatus("この動画は音声解析に対応していないようです。別の動画（mp4 / mov 推奨）でお試しください。","err");
+  // ===== 解析ボタン =====
+  analyzeBtn.addEventListener("click", runAnalysis);
+  async function runAnalysis(){
+    if(!currentFile) return;
+    analyzeBtn.disabled=true;
+    let dbs=null;
+    // 1) 高速デコード（PCは一瞬）＋タイムアウト
+    setStatus('<span class="spin"></span>音声を解析しています…',"work");
+    try{ dbs=await fastDecode(currentFile); }
+    catch(e){ console.warn("fastDecode failed:",e.message); }
+    // 2) ダメならリアルタイム解析（iOSフォールバック）
+    if(!dbs){
+      try{
+        setStatus('<span class="spin"></span>この端末向けに解析中…（動画を内部再生します）',"work");
+        dbs=await realtimeDecode();
+      }catch(e){
+        console.error("realtimeDecode failed:",e);
+        setStatus("解析できませんでした。短め（〜2分）の動画でもう一度お試しください。","err");
+        analyzeBtn.disabled=false; return;
+      }
     }
+    const duration=await getDuration();
+    cache={dbs, winSec:WIN_SEC, duration};
+    recompute();
+    analyzed.classList.remove("hidden");
+    lock.classList.remove("hidden");
+    analyzeBtn.textContent="✓ 解析しました";
+    setStatus("");
   }
 
   function getDuration(){
@@ -248,99 +277,141 @@
     });
   }
 
-  // ===== 音声解析（Web Audio API・Whisper/FFmpeg不要） =====
-  async function analyzeAudio(arrayBuffer){
-    const AC = window.AudioContext || window.webkitAudioContext;
-    // 低サンプルレートで復号 → メモリ削減（Safariは無視されることあり）
+  // ===== 高速デコード（decodeAudioData） =====
+  async function fastDecode(file){
+    const AC=window.AudioContext||window.webkitAudioContext;
+    if(!AC) throw new Error("no-webaudio");
     let ctx;
-    try{ ctx = new AC({sampleRate:16000}); }catch(e){ ctx = new AC(); }
-    const audioBuf = await ctx.decodeAudioData(arrayBuffer.slice(0));
-    const sr = audioBuf.sampleRate;
-    const ch0 = audioBuf.getChannelData(0);
-    const ch1 = audioBuf.numberOfChannels>1 ? audioBuf.getChannelData(1) : null;
-    const win = Math.max(1, Math.floor(sr*WIN_SEC));
-    const n = Math.floor(ch0.length/win);
-    const dbs = new Float32Array(n);
+    try{ ctx=new AC({sampleRate:16000}); }catch(e){ ctx=new AC(); }
+    try{ await ctx.resume(); }catch(e){}
+    const buf=await file.arrayBuffer();
+    const audioBuf=await withTimeout(decodeCompat(ctx, buf.slice(0)), DECODE_TIMEOUT);
+    try{ ctx.close(); }catch(e){}
+    if(!audioBuf || !audioBuf.length) throw new Error("empty");
+    const dbs=bufferToDbs(audioBuf);
+    let mx=-200; for(let i=0;i<dbs.length;i++) if(dbs[i]>mx) mx=dbs[i];
+    if(mx < -90) throw new Error("silent"); // デコードできたが音が無い＝失敗扱い→フォールバック
+    return dbs;
+  }
+  // Safari旧仕様（コールバック版）にも対応
+  function decodeCompat(ctx, arrbuf){
+    return new Promise((resolve,reject)=>{
+      let done=false;
+      try{
+        const p=ctx.decodeAudioData(arrbuf, b=>{done=true;resolve(b);}, e=>{if(!done)reject(e||new Error("decode"));});
+        if(p&&p.then) p.then(b=>{if(!done){done=true;resolve(b);}}).catch(e=>{if(!done)reject(e);});
+      }catch(e){ reject(e); }
+    });
+  }
+  function bufferToDbs(audioBuf){
+    const sr=audioBuf.sampleRate;
+    const ch0=audioBuf.getChannelData(0);
+    const ch1=audioBuf.numberOfChannels>1?audioBuf.getChannelData(1):null;
+    const win=Math.max(1,Math.floor(sr*WIN_SEC));
+    const n=Math.floor(ch0.length/win);
+    const dbs=new Float32Array(n);
     for(let i=0;i<n;i++){
       const off=i*win; let sum=0;
-      for(let j=0;j<win;j++){
-        let s=ch0[off+j]; if(ch1) s=(s+ch1[off+j])*0.5;
-        sum+=s*s;
-      }
+      for(let j=0;j<win;j++){ let s=ch0[off+j]; if(ch1)s=(s+ch1[off+j])*0.5; sum+=s*s; }
       const rms=Math.sqrt(sum/win);
-      dbs[i] = rms>1e-7 ? 20*Math.log10(rms) : -120;
+      dbs[i]= rms>1e-7 ? 20*Math.log10(rms) : -120;
     }
-    try{ ctx.close(); }catch(e){}
     return dbs;
   }
 
-  // ===== セグメント計算（しきい値・最短無音から） =====
+  // ===== リアルタイム解析（iOS用フォールバック） =====
+  async function realtimeDecode(){
+    const AC=window.AudioContext||window.webkitAudioContext;
+    if(!AC) throw new Error("no-webaudio");
+    if(!rtCtx) rtCtx=new AC();
+    await rtCtx.resume();
+    if(!mediaSrc){
+      mediaSrc=rtCtx.createMediaElementSource(video);
+      mainGain=rtCtx.createGain();
+      analyserNode=rtCtx.createAnalyser(); analyserNode.fftSize=1024;
+      mediaSrc.connect(analyserNode);
+      mediaSrc.connect(mainGain); mainGain.connect(rtCtx.destination);
+    }
+    mainGain.gain.value=0; // 解析中は無音
+    const data=new Float32Array(analyserNode.fftSize);
+    const samples=[];
+    video.muted=false;
+    try{ video.currentTime=0; }catch(e){}
+    video.preservesPitch=false; video.webkitPreservesPitch=false;
+    let rate=2; try{ video.playbackRate=rate; }catch(e){ rate=1; }
+    await video.play();
+    const dur=video.duration||1;
+    await new Promise((resolve)=>{
+      let raf;
+      const finish=()=>{ if(raf)cancelAnimationFrame(raf);
+        video.pause(); try{video.playbackRate=1;}catch(e){}
+        mainGain.gain.value=1; try{video.currentTime=0;}catch(e){} resolve(); };
+      const tick=()=>{
+        analyserNode.getFloatTimeDomainData(data);
+        let sum=0; for(let i=0;i<data.length;i++) sum+=data[i]*data[i];
+        samples.push({t:video.currentTime, rms:Math.sqrt(sum/data.length)});
+        setStatus('<span class="spin"></span>解析中… '+Math.min(99,Math.round(video.currentTime/dur*100))+'%',"work");
+        if(video.ended || video.currentTime>=dur-0.06){ finish(); }
+        else raf=requestAnimationFrame(tick);
+      };
+      video.addEventListener("ended", finish, {once:true});
+      raf=requestAnimationFrame(tick);
+    });
+    return samplesToDbs(samples, video.duration||dur);
+  }
+  function samplesToDbs(samples, duration){
+    const n=Math.max(1,Math.floor(duration/WIN_SEC));
+    const rms=new Float32Array(n).fill(-1);
+    for(const s of samples){
+      let i=Math.floor(s.t/WIN_SEC); if(i<0)i=0; if(i>=n)i=n-1;
+      rms[i]= rms[i]<0 ? s.rms : Math.max(rms[i], s.rms);
+    }
+    let last=0; const dbs=new Float32Array(n);
+    for(let i=0;i<n;i++){ let v=rms[i]; if(v<0)v=last; last=v; dbs[i]= v>1e-7?20*Math.log10(v):-120; }
+    return dbs;
+  }
+
+  // ===== セグメント計算 =====
   function buildSegments(dbs, winSec, duration, thrDb, minSilSec){
     const n=dbs.length;
     const voiced=new Uint8Array(n);
     for(let i=0;i<n;i++) voiced[i]= dbs[i]>=thrDb ? 1:0;
-    // 短い無音（minSil未満）は残す側に橋渡し
     const minSilWin=Math.max(1,Math.ceil(minSilSec/winSec));
     let i=0;
     while(i<n){
-      if(!voiced[i]){
-        let j=i; while(j<n&&!voiced[j]) j++;
-        if(j-i<minSilWin) for(let k=i;k<j;k++) voiced[k]=1;
-        i=j;
-      } else i++;
+      if(!voiced[i]){ let j=i; while(j<n&&!voiced[j]) j++; if(j-i<minSilWin) for(let k=i;k<j;k++) voiced[k]=1; i=j; }
+      else i++;
     }
-    // 残すセグメント抽出＋前後パディング
-    const raw=[];
-    i=0;
+    const raw=[]; i=0;
     while(i<n){
-      if(voiced[i]){
-        let j=i; while(j<n&&voiced[j]) j++;
-        let s=i*winSec-PAD_SEC, e=j*winSec+PAD_SEC;
-        if(s<0)s=0; if(e>duration)e=duration;
-        raw.push({start:s,end:e});
-        i=j;
-      } else i++;
+      if(voiced[i]){ let j=i; while(j<n&&voiced[j]) j++;
+        let s=i*winSec-PAD_SEC, e=j*winSec+PAD_SEC; if(s<0)s=0; if(e>duration)e=duration;
+        raw.push({start:s,end:e}); i=j; }
+      else i++;
     }
-    // パディング後の重なりをマージ
     const merged=[];
-    for(const s of raw){
-      const last=merged[merged.length-1];
-      if(last && s.start<=last.end) last.end=Math.max(last.end,s.end);
-      else merged.push({start:s.start,end:s.end});
-    }
+    for(const s of raw){ const last=merged[merged.length-1];
+      if(last && s.start<=last.end) last.end=Math.max(last.end,s.end); else merged.push({start:s.start,end:s.end}); }
     return merged;
   }
-
   function recompute(){
     if(!cache) return;
-    const thrDb=parseFloat(thr.value);
-    const minSil=parseFloat(minRange.value);
-    segs = buildSegments(cache.dbs, cache.winSec, cache.duration, thrDb, minSil);
-    if(segs.length===0) segs=[{start:0,end:cache.duration}]; // 全部無音判定の保険
-    renderTimeline();
-    renderStats();
-    stopPlayback();
+    segs=buildSegments(cache.dbs, cache.winSec, cache.duration, parseFloat(thr.value), parseFloat(minRange.value));
+    if(segs.length===0) segs=[{start:0,end:cache.duration}];
+    renderTimeline(); renderStats(); stopPlayback();
   }
-
   function renderTimeline(){
     const dur=cache.duration||1;
     [...tl.querySelectorAll(".seg")].forEach(el=>el.remove());
-    for(const s of segs){
-      const d=document.createElement("div");
-      d.className="seg";
-      d.style.left=(s.start/dur*100)+"%";
-      d.style.width=(Math.max(0,(s.end-s.start))/dur*100)+"%";
-      tl.insertBefore(d, playhead);
-    }
+    for(const s of segs){ const d=document.createElement("div"); d.className="seg";
+      d.style.left=(s.start/dur*100)+"%"; d.style.width=(Math.max(0,(s.end-s.start))/dur*100)+"%";
+      tl.insertBefore(d, playhead); }
   }
-
   function renderStats(){
     const dur=cache.duration||0;
     const kept=segs.reduce((a,s)=>a+(s.end-s.start),0);
     const pct=dur>0?Math.max(0,Math.round((1-kept/dur)*100)):0;
-    sOrig.textContent=fmt(dur);
-    sCut.textContent=fmt(kept);
-    sPct.textContent=pct+"%";
+    sOrig.textContent=fmt(dur); sCut.textContent=fmt(kept); sPct.textContent=pct+"%";
   }
 
   // ===== スライダー =====
@@ -348,56 +419,44 @@
   minRange.addEventListener("input", ()=>{ minLbl.textContent=parseFloat(minRange.value).toFixed(1); debounce(recompute); });
   let dbT=null; function debounce(fn){ clearTimeout(dbT); dbT=setTimeout(fn,180); }
 
-  // ===== 再生（カット版＝無音を飛ばす / 元動画＝そのまま） =====
+  // ===== 再生（カット版＝無音スキップ / 元動画＝そのまま） =====
   function stopPlayback(){ if(rafId)cancelAnimationFrame(rafId); rafId=null; mode=null; video.pause(); playhead.style.display="none";
-    playCut.textContent="▶ カット版を再生"; playOrig.textContent="元の動画を再生"; }
-
+    if(playCut)playCut.textContent="▶ カット版を再生"; if(playOrig)playOrig.textContent="元の動画を再生"; }
   playCut.addEventListener("click", ()=>{
     if(mode==="cut"){ stopPlayback(); return; }
-    stopPlayback(); mode="cut"; segIdx=0;
-    playhead.style.display="block";
-    video.currentTime=segs[0].start;
-    video.play().then(loop).catch(()=>{ setStatus("再生をタップでもう一度お試しください"); });
+    stopPlayback(); mode="cut"; segIdx=0; playhead.style.display="block";
+    try{video.currentTime=segs[0].start;}catch(e){}
+    video.play().then(loop).catch(()=>setStatus("もう一度タップして再生してください"));
     playCut.textContent="⏸ 停止";
   });
   playOrig.addEventListener("click", ()=>{
     if(mode==="orig"){ stopPlayback(); return; }
-    stopPlayback(); mode="orig";
-    playhead.style.display="block";
+    stopPlayback(); mode="orig"; playhead.style.display="block";
     video.play().then(loop).catch(()=>{});
     playOrig.textContent="⏸ 停止";
   });
-
   function loop(){
-    const dur=cache?cache.duration:video.duration||1;
+    const dur=cache?cache.duration:(video.duration||1);
     playhead.style.left=(video.currentTime/dur*100)+"%";
     if(mode==="cut"){
-      const t=video.currentTime;
-      let seg=segs[segIdx];
+      const t=video.currentTime; const seg=segs[segIdx];
       if(!seg){ stopPlayback(); return; }
       if(t < seg.start-0.03){ video.currentTime=seg.start; }
-      else if(t >= seg.end-0.005){
-        segIdx++;
-        if(segIdx<segs.length){ video.currentTime=segs[segIdx].start; }
-        else { stopPlayback(); return; }
-      }
+      else if(t >= seg.end-0.005){ segIdx++; if(segIdx<segs.length){ video.currentTime=segs[segIdx].start; } else { stopPlayback(); return; } }
     }
     if(!video.paused && !video.ended) rafId=requestAnimationFrame(loop);
     else if(video.ended) stopPlayback();
   }
-  video.addEventListener("ended", stopPlayback);
+  video.addEventListener("ended", ()=>{ if(mode) stopPlayback(); });
 
   // ===== パスワード解放（有料＝書き出し） =====
   unlock.addEventListener("click", ()=>{
     const v=(pw.value||"").trim();
     if(!v){ pwMsg.className="msg ng"; pwMsg.textContent="パスワードを入力してください"; return; }
     if(v.toUpperCase()===UNLOCK_PASSWORD){
-      pwMsg.className="msg ok";
-      pwMsg.textContent="✓ 解放されました！（※書き出し機能はフル版で有効になります）";
-      // ここにフル版（書き出し）解放処理を後で実装
+      pwMsg.className="msg ok"; pwMsg.textContent="✓ 解放されました！（※書き出し機能はフル版で有効になります）";
     }else{
-      pwMsg.className="msg ng";
-      pwMsg.textContent="パスワードが違います。個別相談でお渡ししたものをご確認ください。";
+      pwMsg.className="msg ng"; pwMsg.textContent="パスワードが違います。個別相談でお渡ししたものをご確認ください。";
     }
   });
 
