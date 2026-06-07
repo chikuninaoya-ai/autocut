@@ -99,6 +99,7 @@
   .status{font-size:12.5px;color:var(--sub);margin-top:10px;min-height:18px;text-align:center}
   .status.work{color:var(--warn)}
   .status.err{color:#f87171}
+  .status.ok{color:var(--accent)}
   .spin{display:inline-block;width:13px;height:13px;border:2px solid var(--line);
     border-top-color:var(--accent);border-radius:50%;animation:sp .7s linear infinite;vertical-align:-2px;margin-right:6px}
   @keyframes sp{to{transform:rotate(360deg)}}
@@ -180,9 +181,12 @@
       <button class="unlock" id="unlock">解放</button>
     </div>
     <div class="msg" id="pwMsg"></div>
+    <button class="b prim full hidden" id="exportBtn" style="margin-top:12px">⬇ カット動画を書き出して保存</button>
+    <div class="status" id="expStatus"></div>
+    <div class="hidden" id="expNote" style="font-size:11px;color:var(--sub);margin-top:6px">※書き出しはサーバーで処理します（動画を安全に送信し、保存ファイルを作成します）</div>
   </div>
 
-  <footer>※ 動画はあなたの端末内だけで解析されます（アップロードされません）</footer>
+  <footer>※ 体験版のプレビュー解析は端末内だけで行われます（書き出し時のみサーバー処理）</footer>
 </div>
 
 <script>
@@ -197,10 +201,13 @@
   const playCut=$("playCut"), playOrig=$("playOrig");
   const thr=$("thr"), thrV=$("thrV"), minRange=$("min"), minLbl=$("minV");
   const lock=$("lock"), pw=$("pw"), unlock=$("unlock"), pwMsg=$("pwMsg");
+  const exportBtn=$("exportBtn"), expStatus=$("expStatus"), expNote=$("expNote");
 
   // ===== 設定 =====
-  const UNLOCK_PASSWORD = "VPRO-FULL"; // ←個別相談参加者に渡すパスワード（後で変更）
+  const UNLOCK_PASSWORD = "VPRO-FULL"; // ←個別相談参加者に渡すパスワード（後で変更／バックエンドのAUTOCUT_PASSWORDと一致させる）
   const CONSULT_URL = "#";             // ←個別相談LPのURL（後で差し込み）
+  const BACKEND_URL = "https://autocut-api-506892521047.asia-northeast1.run.app"; // 書き出し用バックエンド（Cloud Run）
+  let unlockedPw = null;               // 解放済みパスワード（書き出し時に送信）
   const PAD_SEC   = 0.08;  // カット前後に少し残す
   const WIN_SEC   = 0.03;  // 解析ウィンドウ
   const DECODE_TIMEOUT = 6000; // 高速デコードの上限（固まり防止）
@@ -454,9 +461,44 @@
     const v=(pw.value||"").trim();
     if(!v){ pwMsg.className="msg ng"; pwMsg.textContent="パスワードを入力してください"; return; }
     if(v.toUpperCase()===UNLOCK_PASSWORD){
-      pwMsg.className="msg ok"; pwMsg.textContent="✓ 解放されました！（※書き出し機能はフル版で有効になります）";
+      unlockedPw=v;
+      pwMsg.className="msg ok"; pwMsg.textContent="✓ 解放されました！下のボタンから書き出せます。";
+      exportBtn.classList.remove("hidden"); expNote.classList.remove("hidden");
     }else{
       pwMsg.className="msg ng"; pwMsg.textContent="パスワードが違います。個別相談でお渡ししたものをご確認ください。";
+    }
+  });
+
+  // ===== 書き出し（バックエンドでカット→MP4をダウンロード） =====
+  exportBtn.addEventListener("click", async ()=>{
+    if(!currentFile){ expStatus.className="status err"; expStatus.textContent="先に動画を選んでください"; return; }
+    if(!unlockedPw){ expStatus.className="status err"; expStatus.textContent="パスワードを解放してください"; return; }
+    exportBtn.disabled=true;
+    expStatus.className="status work"; expStatus.innerHTML='<span class="spin"></span>サーバーで書き出し中…（動画の長さにより数十秒〜数分）';
+    try{
+      const fd=new FormData();
+      fd.append("video", currentFile);
+      fd.append("password", unlockedPw);
+      fd.append("telop", "false");
+      fd.append("noise_db", thr.value);
+      fd.append("min_sil", minRange.value);
+      const res=await fetch(BACKEND_URL+"/process", {method:"POST", body:fd});
+      if(!res.ok){
+        let msg="書き出しに失敗しました（"+res.status+"）";
+        try{ const j=await res.json(); if(j.detail) msg=j.detail; }catch(e){}
+        throw new Error(msg);
+      }
+      const blob=await res.blob();
+      const a=document.createElement("a");
+      a.href=URL.createObjectURL(blob);
+      a.download="autocut.mp4";
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(()=>URL.revokeObjectURL(a.href), 10000);
+      expStatus.className="status ok"; expStatus.textContent="✓ 書き出し完了！ダウンロードを確認してください。";
+    }catch(err){
+      expStatus.className="status err"; expStatus.textContent=String(err.message||err);
+    }finally{
+      exportBtn.disabled=false;
     }
   });
 
