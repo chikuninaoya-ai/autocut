@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>自動テロップ入れツール｜特典版</title>
+<style>
+  :root{--bg:#0e1118;--card:#161b26;--line:#283143;--txt:#eef2f8;--sub:#9aa7bd;
+    --accent:#22d3a6;--accent2:#3b82f6;--warn:#fbbf24;--radius:16px;}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{margin:0;background:radial-gradient(1200px 600px at 50% -10%,#1a2233 0%,var(--bg) 60%);
+    color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;
+    line-height:1.7;min-height:100vh;padding:env(safe-area-inset-top) 0 calc(env(safe-area-inset-bottom) + 24px)}
+  .wrap{max-width:560px;margin:0 auto;padding:20px 16px}
+  header{text-align:center;margin-bottom:18px}
+  .badge{display:inline-block;font-size:12px;font-weight:700;color:var(--accent);
+    background:rgba(34,211,166,.12);border:1px solid rgba(34,211,166,.3);padding:4px 12px;border-radius:999px}
+  h1{font-size:22px;margin:8px 0 4px;font-weight:800}.em{color:var(--accent)}
+  .lead{font-size:13.5px;color:var(--sub);margin:0}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px 16px;margin-top:16px}
+  .card h2{font-size:15px;margin:0 0 12px;display:flex;align-items:center}
+  .step-no{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;
+    background:var(--accent2);color:#fff;font-size:12px;font-weight:800;margin-right:8px}
+  #drop{border:2px dashed var(--line);border-radius:14px;padding:26px 14px;text-align:center;cursor:pointer;background:rgba(255,255,255,.015)}
+  #drop.drag{border-color:var(--accent);background:rgba(34,211,166,.07)}
+  #drop .ic{font-size:34px}#drop .t{font-weight:700;margin-top:6px}#drop .s{font-size:12px;color:var(--sub);margin-top:4px}
+  input[type=file]{display:none}
+  video{width:100%;border-radius:12px;background:#000;margin-top:10px;display:block}
+  .row{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:13.5px;color:var(--sub)}
+  .pw input{flex:1;background:#0d1119;border:1px solid var(--line);color:var(--txt);border-radius:10px;padding:11px;font-size:14px;font-family:inherit}
+  label.chk{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt);margin-top:12px;cursor:pointer}
+  button.b{width:100%;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;margin-top:14px}
+  .b.prim{background:linear-gradient(180deg,#2ee6b6,#15b894);color:#04201a}
+  .b:disabled{opacity:.5;cursor:not-allowed}
+  .status{font-size:12.5px;color:var(--sub);margin-top:12px;text-align:center;min-height:18px}
+  .status.work{color:var(--warn)}.status.err{color:#f87171}.status.ok{color:var(--accent)}
+  .spin{display:inline-block;width:13px;height:13px;border:2px solid var(--line);border-top-color:var(--accent);
+    border-radius:50%;animation:sp .7s linear infinite;vertical-align:-2px;margin-right:6px}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  .hidden{display:none!important}
+  footer{text-align:center;font-size:11px;color:#5b6678;margin-top:22px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="badge">特典版</span>
+    <h1>自動テロップ <span class="em">入れツール</span></h1>
+    <p class="lead">動画を入れるだけで、しゃべった内容を<br>自動で文字起こし→テロップ（字幕）を焼き込みます。</p>
+  </header>
+
+  <div class="card">
+    <h2><span class="step-no">1</span>動画を選ぶ</h2>
+    <div id="drop">
+      <div class="ic">🎬</div>
+      <div class="t">タップして動画を選択</div>
+      <div class="s">（カットした動画でもOK／PCはD&amp;Dも可）</div>
+    </div>
+    <input type="file" id="file" accept="video/*">
+    <video id="video" playsinline preload="metadata" class="hidden"></video>
+  </div>
+
+  <div class="card">
+    <h2><span class="step-no">2</span>テロップを入れて書き出す</h2>
+    <div class="row pw"><input type="text" id="pw" placeholder="解放パスワードを入力" autocomplete="off"></div>
+    <label class="chk"><input type="checkbox" id="alsoCut"> 無音カットも一緒に行う（カット＋テロップ）</label>
+    <button class="b prim" id="go">⬇ テロップを入れて書き出す</button>
+    <div class="status" id="status"></div>
+  </div>
+
+  <footer>※ 文字起こし・書き出しはサーバーで処理します（動画を安全に送信します）</footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  const $=id=>document.getElementById(id);
+  const drop=$("drop"),file=$("file"),video=$("video"),pw=$("pw"),alsoCut=$("alsoCut"),go=$("go"),status=$("status");
+  const BACKEND_URL="https://autocut-api-506892521047.asia-northeast1.run.app";
+  let currentFile=null;
+
+  function setS(m,c){status.className="status"+(c?(" "+c):"");status.innerHTML=m||"";}
+  drop.addEventListener("click",()=>file.click());
+  ["dragenter","dragover"].forEach(e=>drop.addEventListener(e,ev=>{ev.preventDefault();drop.classList.add("drag");}));
+  ["dragleave","drop"].forEach(e=>drop.addEventListener(e,ev=>{ev.preventDefault();drop.classList.remove("drag");}));
+  drop.addEventListener("drop",ev=>{const f=ev.dataTransfer.files[0];if(f)pick(f);});
+  file.addEventListener("change",()=>{const f=file.files[0];if(f)pick(f);});
+  function pick(f){
+    if(!f.type.startsWith("video/")){setS("動画ファイルを選んでください","err");return;}
+    currentFile=f;
+    if(video.src)URL.revokeObjectURL(video.src);
+    video.src=URL.createObjectURL(f);video.classList.remove("hidden");
+    setS("動画を読み込みました。パスワードを入れて書き出してください。");
+  }
+
+  go.addEventListener("click",async()=>{
+    if(!currentFile){setS("先に動画を選んでください","err");return;}
+    const p=(pw.value||"").trim();
+    if(!p){setS("解放パスワードを入力してください","err");return;}
+    go.disabled=true;
+    setS('<span class="spin"></span>文字起こし→テロップ焼き込み中…（動画の長さにより数十秒〜数分）',"work");
+    try{
+      const fd=new FormData();
+      fd.append("video",currentFile);
+      fd.append("password",p);
+      fd.append("telop","true");
+      fd.append("cut", alsoCut.checked?"true":"false");
+      const res=await fetch(BACKEND_URL+"/process",{method:"POST",body:fd});
+      if(!res.ok){
+        let msg="書き出しに失敗しました（"+res.status+"）";
+        try{const j=await res.json();if(j.detail)msg=j.detail;}catch(e){}
+        throw new Error(msg);
+      }
+      const blob=await res.blob();
+      const a=document.createElement("a");
+      a.href=URL.createObjectURL(blob);a.download="telop.mp4";
+      document.body.appendChild(a);a.click();a.remove();
+      setTimeout(()=>URL.revokeObjectURL(a.href),10000);
+      setS("✓ 書き出し完了！ダウンロードを確認してください。","ok");
+    }catch(err){
+      setS(String(err.message||err),"err");
+    }finally{
+      go.disabled=false;
+    }
+  });
+})();
+</script>
+</body>
+</html>
