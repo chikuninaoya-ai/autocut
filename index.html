@@ -292,6 +292,50 @@
   /* セクションイラスト */
   .sec-art{width:100%;border-radius:14px;margin:2px 0 16px;display:block;
     box-shadow:0 14px 32px rgba(0,0,0,.45);border:1px solid var(--glass-bd)}
+
+  /* ===================== カラーバンド（セクション色分け）===================== */
+  .band{position:relative;left:50%;width:100vw;margin-left:-50vw;padding:48px 0;border-top:1px solid rgba(255,255,255,.05)}
+  .band .inner{max-width:600px;margin:0 auto;padding:0 18px}
+  .band-problem{background:radial-gradient(620px 320px at 50% 0,rgba(99,102,241,.10),transparent),linear-gradient(180deg,#0c1326,#0a0f1f)}
+  .band-feat{background:radial-gradient(620px 340px at 50% 0,rgba(46,230,182,.15),transparent),linear-gradient(180deg,#07211b,#0a0f1c)}
+  .band-why{background:radial-gradient(620px 340px at 50% 0,rgba(255,181,71,.14),transparent),linear-gradient(180deg,#1f1808,#0d0f1c)}
+  .band-get{background:radial-gradient(620px 340px at 50% 0,rgba(124,121,255,.17),transparent),linear-gradient(180deg,#15122e,#0b0d1d)}
+  .band-limit{background:radial-gradient(620px 320px at 50% 0,rgba(255,90,90,.15),transparent),linear-gradient(180deg,#240e11,#0d0c14)}
+  .band-faq{background:linear-gradient(180deg,#0b101f,#0a0d18)}
+  .band-final{background:radial-gradient(620px 380px at 50% 8%,rgba(46,230,182,.22),transparent),linear-gradient(180deg,#08231c,#0a0d16)}
+
+  /* 目立つセクション見出し */
+  .bhead{text-align:center;margin-bottom:20px}
+  .slabel{display:inline-flex;align-items:center;gap:7px;font-weight:900;font-size:12px;letter-spacing:.1em;padding:7px 16px;border-radius:999px;margin-bottom:14px}
+  .slabel .pn{font-size:14px;line-height:1}
+  .slabel.t{background:rgba(46,230,182,.15);color:#6ff2cf;border:1px solid rgba(46,230,182,.45)}
+  .slabel.g{background:rgba(255,181,71,.15);color:#ffd28a;border:1px solid rgba(255,181,71,.45)}
+  .slabel.i{background:rgba(124,121,255,.18);color:#c2bfff;border:1px solid rgba(124,121,255,.45)}
+  .slabel.r{background:rgba(255,90,90,.16);color:#ffa3a3;border:1px solid rgba(255,90,90,.5)}
+  .slabel.s{background:rgba(255,255,255,.06);color:#cdd7e6;border:1px solid var(--glass-bd)}
+  .bh{font-size:25px;line-height:1.46;font-weight:900;margin:0;letter-spacing:.004em;color:#fff}
+  .bh.sm{font-size:21px}
+  /* 蛍光マーカー */
+  .mk{background:linear-gradient(transparent 56%,rgba(255,213,74,.5) 56%);padding:0 3px;border-radius:2px;color:#fff}
+  .mk.t{background:linear-gradient(transparent 56%,rgba(46,230,182,.5) 56%)}
+  .kw-r{color:#ff7a7a;font-weight:900}
+  .kw-b{color:#5ad1ff;font-weight:900}
+
+  .band p{font-size:14.5px;line-height:1.9;color:#dbe3ef;margin:10px 0}
+  .band .sub{color:#9fb0c8;font-size:13px}
+  .band .big{font-size:17px;font-weight:800;color:#fff}
+
+  /* CTA（先着タブ＋▼）*/
+  .cta-wrap{text-align:center;margin-top:18px}
+  .cta-tab{display:inline-block;background:#ff5a5a;color:#fff;font-weight:900;font-size:12px;padding:6px 16px;border-radius:9px 9px 0 0;letter-spacing:.05em}
+  .cta-arrow{color:var(--mint);font-weight:900;letter-spacing:.34em;font-size:14px;margin:8px 0 4px}
+  .band a.ofcta{margin:0 auto;max-width:460px}
+
+  /* 注意ボックス（限定）*/
+  .warnbox{border:2px solid rgba(255,90,90,.5);background:rgba(255,90,90,.06);border-radius:16px;padding:22px 18px;text-align:center}
+  .warnbox .wt{color:#ff7a7a;font-weight:900;font-size:13px;letter-spacing:.12em;margin-bottom:6px}
+  .warnbox .wbig{font-size:25px;font-weight:900;color:#fff;margin:6px 0}
+  .warnbox .wbig .num{color:#ff7a7a}
 </style>
 </head>
 <body>
@@ -428,29 +472,37 @@
     <div class="hidden" id="expNote" style="font-size:11px;color:var(--sub);margin-top:6px">※書き出しはサーバーで処理します（動画を安全に送信し、保存ファイルを作成します）</div>
   </div>
 
-  <!-- ===== 下部LP：動画編集ツール フル解放パスワードお渡し会 ===== -->
-  <section class="offer">
-    <span class="lead-tag">ここから、フル版のご案内</span>
+  <!-- ===== 下部LP：フル解放パスワードお渡し会（カラーバンド構成）===== -->
 
-    <div class="ofblk">
-      <h2 class="ofh">そのカット、手作業だったら<br>何分かかってたと思いますか？</h2>
+  <!-- 気づき -->
+  <section class="band band-problem">
+    <div class="inner">
+      <div class="bhead">
+        <span class="slabel s">体験版を触ったあなたへ</span>
+        <h2 class="bh">そのカット、手作業なら<br><span class="mk">何分かかってた</span>と思いますか？</h2>
+      </div>
       <p>たった今、動画を入れただけで“しゃべってない間”が消えましたよね。手でやると、地味に何十分もかかる作業です。</p>
-      <p class="big">でも正直に言うと——このツール、あなたはまだ<span class="em">“半分”</span>しか使えていません。</p>
-    </div>
-
-    <div class="ofblk">
-      <h2 class="ofh">カットはできた。でも、その先は？</h2>
-      <p>無料版でできるのは「カットの結果をプレビューで見る」ところまで。本当にやりたいのは、この先ですよね👇</p>
+      <p class="big">でも正直に言うと——このツール、あなたはまだ<span class="kw-b">“半分”</span>しか使えていません。</p>
+      <div class="bhead" style="margin-top:30px">
+        <h2 class="bh sm">カットはできた。<span class="kw-r">でも、その先は？</span></h2>
+      </div>
+      <p>無料版でできるのは「カットの結果をプレビューで見る」ところまで。本当にやりたいのは、この先ですよね。</p>
       <ul class="feat">
         <li>カットした動画を<b>保存（書き出し）</b>したい</li>
         <li><b>テロップ（字幕）</b>を入れて、見やすくしたい</li>
       </ul>
       <p class="sub">“カットだけ”だと、動画はまだ完成しません。</p>
     </div>
+  </section>
 
-    <div class="ofblk accent">
+  <!-- 特典（フル解放）-->
+  <section class="band band-feat">
+    <div class="inner">
+      <div class="bhead">
+        <span class="slabel t"><span class="pn">★</span>フル版でできること</span>
+        <h2 class="bh">フル解放で、<span class="mk t">“完成”まで</span><br>スマホで全部終わる</h2>
+      </div>
       <img class="sec-art" src="assets/feat.jpg" alt="テロップ入りの完成した動画イメージ" loading="lazy">
-      <h2 class="ofh">フル解放すると、<span class="em">“完成”まで</span><br>スマホで全部終わります</h2>
       <div class="fgrid">
         <div class="fcard"><span class="num">01</span>
           <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 3v10"/><path d="M8 9l4 4 4-4"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg></div>
@@ -480,67 +532,93 @@
       </table>
       <p class="sub">正直、これ全部スマホ前提で揃うの、たぶん他で見たことないです。</p>
     </div>
+  </section>
 
-    <div class="ofblk">
+  <!-- なぜ無料 -->
+  <section class="band band-why">
+    <div class="inner">
+      <div class="bhead">
+        <span class="slabel g">なぜ無料？</span>
+        <h2 class="bh">「普通、お金取るでしょ？」<br><span class="mk">——その通りです。</span></h2>
+      </div>
       <img class="sec-art" src="assets/gift.jpg" alt="無料プレゼントのイメージ" loading="lazy">
-      <h2 class="ofh">「こんなの、普通お金取るでしょ？」<br>——その通りです。</h2>
       <p>なのに無料で渡す理由は、2つだけ。</p>
       <ul class="feat">
         <li>① 作ったツールを、もっと多くの人に試して<b>“感想がほしい”</b></li>
         <li>② これから動画編集を始めたい人と<b>“出会いたい”</b></li>
       </ul>
-      <p class="sub">もちろん、後から高額請求や隠れた費用は一切ありません。（正直、無料でここまで渡すの、社内でまた揉めました😂）</p>
+      <p class="sub">もちろん、後から高額請求や隠れた費用は一切ありません。</p>
     </div>
+  </section>
 
-    <div class="ofblk">
+  <!-- 受け取り方＋ステップ＋CTA -->
+  <section class="band band-get">
+    <div class="inner">
+      <div class="bhead">
+        <span class="slabel i">受け取り方</span>
+        <h2 class="bh">受け取りは<br><span class="mk">「お渡し会」</span>だけ</h2>
+      </div>
       <img class="sec-art" src="assets/unlock.jpg" alt="フル解放のイメージ" loading="lazy">
-      <h2 class="ofh">受け取り方は<br>「フル解放パスワードお渡し会」だけ</h2>
-      <p>フル版を解放するパスワードは、<b>「動画編集ツール フル解放パスワードお渡し会」</b>でお渡しします。</p>
       <ul class="feat">
         <li>オンラインで個別（マンツーマン）</li>
         <li>スマホ1台でOK</li>
         <li>やることは、<b>フル解放パスワードを受け取るだけ</b></li>
       </ul>
-      <p class="sub">ついでに「最初に何をすればいいか」も、その場で一緒に整理します。</p>
-    </div>
-
-    <div class="ofblk">
-      <h2 class="ofh">解放までは、たった3ステップ</h2>
+      <div class="bhead" style="margin-top:28px">
+        <h2 class="bh sm">解放までは、<span class="mk t">たった3ステップ</span></h2>
+      </div>
       <ol class="steps">
         <li>下のボタンから申し込む</li>
         <li>お渡し会に参加する（スマホでOK）</li>
-        <li>フル解放パスワードを受け取る → 4つ全部が使える🔓</li>
+        <li>フル解放パスワードを受け取る → 4つ全部が使える</li>
       </ol>
-      <a class="ofcta" data-apply href="#">▶ フル解放パスワードお渡し会に申し込む（無料）</a>
+      <div class="cta-wrap">
+        <div class="cta-tab">参加無料・人数限定</div>
+        <a class="ofcta" data-apply href="#">フル解放パスワードお渡し会に申し込む</a>
+      </div>
     </div>
+  </section>
 
-    <div class="ofblk">
-      <h2 class="ofh">ただし、人数には限りがあります</h2>
-      <p>一人ずつ丁寧にお渡ししたいので、ご案内できる枠には限りがあります。先に動いた人から、どんどんフル解放していきます。</p>
-      <p class="sub">枠が埋まったら、次がいつになるかはお約束できません。</p>
+  <!-- 限定（注意）-->
+  <section class="band band-limit">
+    <div class="inner">
+      <div class="warnbox">
+        <div class="wt">※ ご注意ください ※</div>
+        <div class="wbig">人数には<span class="num">限り</span>があります</div>
+        <p class="sub" style="margin-top:8px">一人ずつ丁寧にお渡しするため、ご案内できる枠には限りがあります。枠が埋まったら、次がいつになるかはお約束できません。</p>
+      </div>
     </div>
+  </section>
 
-    <div class="ofblk">
-      <h2 class="ofh">よくある質問</h2>
+  <!-- FAQ -->
+  <section class="band band-faq">
+    <div class="inner">
+      <div class="bhead"><span class="slabel s">Q &amp; A</span><h2 class="bh sm">よくある質問</h2></div>
       <p class="faqq">Q. 何か売り込まれませんか？</p><p class="faqa">A. 無理な勧誘はしません。その場で何かを買う必要もありません。</p>
       <p class="faqq">Q. お金はかかりますか？</p><p class="faqa">A. 参加もツールも無料です。</p>
       <p class="faqq">Q. スマホだけでできますか？</p><p class="faqa">A. はい。スマホ1台でOKです。</p>
       <p class="faqq">Q. 編集はまったくの未経験ですが？</p><p class="faqa">A. 大丈夫。面倒な作業はツールがやります（操作はタップだけ）。</p>
     </div>
+  </section>
 
-    <div class="ofblk accent">
-      <h2 class="ofh">あなたは、どっちを選びますか？</h2>
-      <p>このまま無料版で“カットだけ”を使い続けるか、フル解放して<span class="em">“保存もテロップも全部”</span>スマホで終わらせるか。</p>
+  <!-- 決断（最終CTA）-->
+  <section class="band band-final">
+    <div class="inner">
+      <div class="bhead">
+        <span class="slabel t">最後に</span>
+        <h2 class="bh">あなたは、<span class="mk t">どっちを選ぶ？</span></h2>
+      </div>
+      <p>このまま無料版で“カットだけ”を使い続けるか、フル解放して<span class="kw-b">“保存もテロップも全部”</span>スマホで終わらせるか。</p>
       <p class="sub">どちらも自由です。費用はかかりません（無料です）。</p>
-      <a class="ofcta" data-apply href="#">▶ フル解放パスワードお渡し会に申し込む（無料）</a>
-    </div>
-
-    <div class="ofblk">
-      <h2 class="ofh">追伸</h2>
-      <p>“あの時パスワードをもらっておけば”——これが、いちばん悔しいやつです。枠があるうちに、下のボタンから受け取ってください。</p>
-      <p class="big">フル解放した向こう側で、待ってます🔥</p>
-      <a class="ofcta" data-apply href="#">▶ フル解放パスワードお渡し会に申し込む（無料）</a>
-      <p class="note-sm">※参加・ツールは無料です。無理な勧誘はありません。</p>
+      <div class="cta-wrap">
+        <div class="cta-arrow">▼ ▼ ▼</div>
+        <a class="ofcta" data-apply href="#">フル解放パスワードお渡し会に申し込む（無料）</a>
+      </div>
+      <p class="big" style="text-align:center;margin-top:26px">“あの時もらっておけば”が、いちばん悔しい。<br>フル解放した向こう側で、待ってます。</p>
+      <div class="cta-wrap">
+        <a class="ofcta" data-apply href="#">いますぐ申し込む（無料）</a>
+        <p class="note-sm" style="margin-top:8px">※参加・ツールは無料です。無理な勧誘はありません。</p>
+      </div>
     </div>
   </section>
 
