@@ -293,6 +293,15 @@
   .sec-art{width:100%;border-radius:14px;margin:2px 0 16px;display:block;
     box-shadow:0 14px 32px rgba(0,0,0,.45);border:1px solid var(--glass-bd)}
 
+  /* 特典＝横長カード（右にアイコン）を縦並び */
+  .frows{display:flex;flex-direction:column;gap:12px;margin:14px 0}
+  .frow{display:flex;align-items:center;gap:13px;background:rgba(255,255,255,.035);border:1px solid var(--glass-bd);border-radius:16px;padding:15px;box-shadow:0 8px 20px rgba(0,0,0,.3)}
+  .frow .fnum{flex:none;width:27px;height:27px;border-radius:8px;background:rgba(46,230,182,.14);color:#37efc0;font-weight:900;font-size:12px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(46,230,182,.32)}
+  .frow .ftxt{flex:1;min-width:0}
+  .frow .ft{font-weight:800;font-size:15.5px;color:#fff;line-height:1.4}
+  .frow .fd{font-size:12.5px;color:#9fb0c8;margin-top:3px;line-height:1.6}
+  .frow .fimg{flex:none;width:74px;height:74px;border-radius:14px;object-fit:cover;border:1px solid var(--glass-bd);box-shadow:0 6px 16px rgba(0,0,0,.45)}
+
   /* ===================== カラーバンド（セクション色分け）===================== */
   .band{position:relative;left:50%;width:100vw;margin-left:-50vw;padding:48px 0;border-top:1px solid rgba(255,255,255,.05)}
   .band .inner{max-width:600px;margin:0 auto;padding:0 18px}
@@ -478,7 +487,6 @@
   <section class="band band-problem">
     <div class="inner">
       <div class="bhead">
-        <span class="slabel s">体験版を触ったあなたへ</span>
         <h2 class="bh">そのカット、手作業なら<br><span class="mk">何分かかってた</span>と思いますか？</h2>
       </div>
       <p>たった今、動画を入れただけで“しゃべってない間”が消えましたよね。手でやると、地味に何十分もかかる作業です。</p>
@@ -499,26 +507,29 @@
   <section class="band band-feat">
     <div class="inner">
       <div class="bhead">
-        <span class="slabel t"><span class="pn">★</span>フル版でできること</span>
-        <h2 class="bh">フル機能を<span class="mk t">解放</span>したく<br>ないですか？</h2>
+        <h2 class="bh">フル機能を<span class="mk t">無料で解放</span>できます</h2>
       </div>
       <img class="sec-art" src="assets/feat.jpg" alt="テロップ入りの完成した動画イメージ" loading="lazy">
-      <div class="fgrid">
-        <div class="fcard"><span class="num">01</span>
-          <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 3v10"/><path d="M8 9l4 4 4-4"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg></div>
-          <div class="ft">カットの正式版</div><div class="fd">カットした動画を<br>そのまま保存（書き出し）</div>
+      <div class="frows">
+        <div class="frow">
+          <span class="fnum">01</span>
+          <div class="ftxt"><div class="ft">カットの正式版</div><div class="fd">カットした動画をそのまま保存（書き出し）できる</div></div>
+          <img class="fimg" src="assets/ic-cut.jpg" alt="" loading="lazy">
         </div>
-        <div class="fcard"><span class="num">02</span>
-          <div class="ico"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M7 11h4"/><path d="M7 15h10"/><path d="M14 11h3"/></svg></div>
-          <div class="ft">自動テロップ入れ</div><div class="fd">しゃべった内容を<br>自動で字幕に</div>
+        <div class="frow">
+          <span class="fnum">02</span>
+          <div class="ftxt"><div class="ft">自動テロップ入れ</div><div class="fd">しゃべった内容を、自動で字幕（テロップ）に</div></div>
+          <img class="fimg" src="assets/ic-telop.jpg" alt="" loading="lazy">
         </div>
-        <div class="fcard"><span class="num">03</span>
-          <div class="ico"><svg viewBox="0 0 24 24"><rect x="2.5" y="8.5" width="19" height="8" rx="4"/><path d="M7 12.5h7"/></svg></div>
-          <div class="ft">テロップベース作成ツール</div><div class="fd">TVで見る“座布団”<br>（強調の帯）を量産</div>
+        <div class="frow">
+          <span class="fnum">03</span>
+          <div class="ftxt"><div class="ft">テロップベース作成ツール</div><div class="fd">TVで見る“座布団”（強調の帯）を量産できる</div></div>
+          <img class="fimg" src="assets/ic-base.jpg" alt="" loading="lazy">
         </div>
-        <div class="fcard"><span class="num">04</span>
-          <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 4.6L18.4 9.4 13.8 11.2 12 15.8 10.2 11.2 5.6 9.4 10.2 7.6z"/><path d="M18.5 14.5l.9 2.3 2.3.9-2.3.9-.9 2.3-.9-2.3-2.3-.9 2.3-.9z"/></svg></div>
-          <div class="ft">リッチテロップツール</div><div class="fd">映えるテロップ案を<br>一瞬で</div>
+        <div class="frow">
+          <span class="fnum">04</span>
+          <div class="ftxt"><div class="ft">リッチテロップツール</div><div class="fd">映える・かっこいいテロップ案を一瞬で</div></div>
+          <img class="fimg" src="assets/ic-rich.jpg" alt="" loading="lazy">
         </div>
       </div>
       <table class="cmp">
@@ -538,7 +549,6 @@
   <section class="band band-why">
     <div class="inner">
       <div class="bhead">
-        <span class="slabel g">なぜ無料？</span>
         <h2 class="bh">「普通、お金取るでしょ？」<br><span class="mk">——その通りです。</span></h2>
       </div>
       <img class="sec-art" src="assets/gift.jpg" alt="無料プレゼントのイメージ" loading="lazy">
@@ -555,7 +565,6 @@
   <section class="band band-get">
     <div class="inner">
       <div class="bhead">
-        <span class="slabel i">受け取り方</span>
         <h2 class="bh sm">「動画編集ツール フル解放<br>パスワードお渡し会」を<br><span class="mk">開催</span>します</h2>
       </div>
       <img class="sec-art" src="assets/unlock.jpg" alt="フル解放のイメージ" loading="lazy">
@@ -593,7 +602,7 @@
   <!-- FAQ -->
   <section class="band band-faq">
     <div class="inner">
-      <div class="bhead"><span class="slabel s">Q &amp; A</span><h2 class="bh sm">よくある質問</h2></div>
+      <div class="bhead"><h2 class="bh sm">よくある質問</h2></div>
       <p class="faqq">Q. 何か売り込まれませんか？</p><p class="faqa">A. 無理な勧誘はしません。その場で何かを買う必要もありません。</p>
       <p class="faqq">Q. お金はかかりますか？</p><p class="faqa">A. 参加もツールも無料です。</p>
       <p class="faqq">Q. スマホだけでできますか？</p><p class="faqa">A. はい。スマホ1台でOKです。</p>
@@ -605,7 +614,6 @@
   <section class="band band-final">
     <div class="inner">
       <div class="bhead">
-        <span class="slabel t">最後に</span>
         <h2 class="bh">あなたは、<span class="mk t">どっちを選ぶ？</span></h2>
       </div>
       <p>このまま無料版で“カットだけ”を使い続けるか、フル解放して<span class="kw-b">“保存もテロップも全部”</span>スマホで終わらせるか。</p>
