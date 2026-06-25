@@ -242,6 +242,52 @@
   a.ofcta:hover{transform:translateY(-2px);box-shadow:0 16px 38px rgba(34,211,166,.5)}
 
   footer{color:#5b6b82;margin-top:30px;font-size:11.5px}
+
+  /* ===================== ビジュアル要素 ===================== */
+  .hero-art{margin:24px auto 4px;max-width:320px}
+  .hero-art svg{width:100%;height:auto;display:block;filter:drop-shadow(0 16px 36px rgba(0,0,0,.5))}
+
+  /* セクション見出しのアイコン丸 */
+  .ofh-ico{display:flex;align-items:center;gap:12px}
+  .ofh-ico .badge-ico{flex:none;width:44px;height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,rgba(46,230,182,.18),rgba(109,108,255,.18));border:1px solid var(--glass-bd)}
+  .ofh-ico .badge-ico svg{width:24px;height:24px;stroke:var(--mint);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .ofh-ico .ofh{margin:0}
+
+  /* POINT番号バッジ */
+  .pnum{display:inline-flex;align-items:center;gap:8px;font-weight:900;color:var(--gold);font-size:12px;letter-spacing:.1em;margin-bottom:8px}
+  .pnum span{font-size:26px;line-height:1;background:linear-gradient(135deg,var(--gold),#ff8a3d);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+
+  /* 特典アイコングリッド（2x2） */
+  .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+  .fcard{background:rgba(255,255,255,.03);border:1px solid var(--glass-bd);border-radius:16px;padding:16px 12px;text-align:center;position:relative}
+  .fcard .num{position:absolute;top:10px;right:12px;font-size:11px;font-weight:900;color:rgba(255,255,255,.18)}
+  .fcard .ico{width:50px;height:50px;margin:2px auto 10px;border-radius:14px;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,rgba(46,230,182,.18),rgba(109,108,255,.18));border:1px solid var(--glass-bd)}
+  .fcard .ico svg{width:28px;height:28px;stroke:var(--mint);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .fcard .ft{font-weight:800;font-size:13.5px;color:#f1f5fb;line-height:1.4}
+  .fcard .fd{font-size:11.5px;color:#9fb0c8;margin-top:4px;line-height:1.5}
+
+  /* ビフォーアフター（時短）ビジュアル */
+  .ba{display:flex;align-items:center;gap:10px;margin:14px 0;justify-content:center}
+  .ba .col{flex:1;background:rgba(255,255,255,.03);border:1px solid var(--glass-bd);border-radius:14px;padding:12px;text-align:center}
+  .ba .col .lab{font-size:11px;color:#9fb0c8;margin-bottom:6px}
+  .ba .bar{height:10px;border-radius:6px;background:#2a3344;overflow:hidden;display:flex;gap:2px}
+  .ba .bar i{display:block;height:100%;background:linear-gradient(90deg,#37efc0,#16c79a)}
+  .ba .arrow{flex:none;color:var(--mint);font-size:22px;font-weight:900}
+  .ba .big2{font-size:20px;font-weight:900;margin-top:6px}
+  .ba .big2.cut{color:var(--mint)}
+
+  /* 比較表 ○✕ をバッジ化 */
+  table.cmp td.y,table.cmp td.n{color:transparent;line-height:0}
+  table.cmp td.y::after{content:"✓";display:inline-flex;align-items:center;justify-content:center;width:23px;height:23px;border-radius:50%;
+    background:linear-gradient(135deg,#37efc0,#16c79a);color:#04231c;font-weight:900;font-size:13px;line-height:1}
+  table.cmp td.n::after{content:"−";display:inline-flex;align-items:center;justify-content:center;width:23px;height:23px;border-radius:50%;
+    background:rgba(255,255,255,.06);color:#5b6b82;font-weight:900;font-size:15px;line-height:1}
+
+  /* ステップにアイコン枠 */
+  ol.steps li{display:flex;align-items:flex-start;gap:10px;padding-left:8px}
+  ol.steps li::before{position:static;flex:none}
 </style>
 </head>
 <body>
@@ -252,6 +298,60 @@
     <h1>スマホに入れるだけ。<br><span class="em">面倒なカット</span>を自動で。</h1>
     <p class="lead">しゃべってない“間”を自動で検出。カット後の仕上がりを、その場でプレビューできます。</p>
     <div class="chips"><span class="chip">スマホ完結</span><span class="chip">アップロード不要</span><span class="chip">3ステップ</span></div>
+    <div class="hero-art">
+      <svg viewBox="0 0 320 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="スマホで自動カットするイメージ">
+        <defs>
+          <linearGradient id="hg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#37efc0"/><stop offset="1" stop-color="#16c79a"/></linearGradient>
+          <linearGradient id="hg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b2546"/><stop offset="1" stop-color="#0d1430"/></linearGradient>
+          <linearGradient id="hg3" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5ad1ff"/><stop offset="1" stop-color="#6d6cff"/></linearGradient>
+        </defs>
+        <ellipse cx="160" cy="205" rx="120" ry="14" fill="rgba(46,230,182,.10)"/>
+        <!-- phone -->
+        <rect x="108" y="16" width="104" height="190" rx="20" fill="url(#hg2)" stroke="rgba(255,255,255,.16)" stroke-width="1.5"/>
+        <rect x="146" y="22" width="28" height="5" rx="2.5" fill="rgba(255,255,255,.18)"/>
+        <!-- screen -->
+        <rect x="118" y="34" width="84" height="92" rx="9" fill="#0a1126"/>
+        <!-- waveform -->
+        <g stroke="url(#hg3)" stroke-width="3" stroke-linecap="round" opacity=".9">
+          <line x1="130" y1="80" x2="130" y2="80"/>
+          <line x1="138" y1="72" x2="138" y2="88"/>
+          <line x1="146" y1="64" x2="146" y2="96"/>
+          <line x1="154" y1="76" x2="154" y2="84"/>
+          <line x1="162" y1="58" x2="162" y2="102"/>
+          <line x1="170" y1="70" x2="170" y2="90"/>
+          <line x1="178" y1="66" x2="178" y2="94"/>
+          <line x1="186" y1="74" x2="186" y2="86"/>
+        </g>
+        <!-- timeline label -->
+        <text x="118" y="146" fill="#7d8aa6" font-size="9" font-family="sans-serif">自動カット結果</text>
+        <!-- timeline track with kept(green)/cut(gray) -->
+        <rect x="118" y="152" width="84" height="13" rx="6.5" fill="#2a3344"/>
+        <rect x="118" y="152" width="22" height="13" rx="6.5" fill="url(#hg1)"/>
+        <rect x="150" y="152" width="16" height="13" rx="6.5" fill="url(#hg1)"/>
+        <rect x="176" y="152" width="26" height="13" rx="6.5" fill="url(#hg1)"/>
+        <!-- stat chips on screen -->
+        <rect x="118" y="174" width="40" height="22" rx="6" fill="rgba(255,255,255,.05)"/>
+        <text x="138" y="185" fill="#9fb0c8" font-size="7" text-anchor="middle" font-family="sans-serif">短縮率</text>
+        <text x="138" y="193" fill="#37efc0" font-size="9" font-weight="bold" text-anchor="middle" font-family="sans-serif">-40%</text>
+        <rect x="162" y="174" width="40" height="22" rx="6" fill="rgba(255,255,255,.05)"/>
+        <text x="182" y="185" fill="#9fb0c8" font-size="7" text-anchor="middle" font-family="sans-serif">カット後</text>
+        <text x="182" y="193" fill="#fff" font-size="9" font-weight="bold" text-anchor="middle" font-family="sans-serif">0:07</text>
+        <!-- floating "自動カット" badge -->
+        <g>
+          <rect x="194" y="50" width="106" height="34" rx="17" fill="url(#hg1)"/>
+          <path d="M211 62 l5 5 9 -10" stroke="#04231c" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="235" y="71" fill="#04231c" font-size="11" font-weight="bold" font-family="sans-serif">自動カット</text>
+        </g>
+        <!-- scissors floating -->
+        <g transform="translate(30 70)" stroke="#5ad1ff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="6" cy="20" r="5"/><circle cx="6" cy="4" r="5"/>
+          <path d="M10 17 L34 6"/><path d="M10 7 L34 18"/>
+        </g>
+        <!-- sparkles -->
+        <path d="M250 110 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3 z" fill="rgba(90,209,255,.8)"/>
+        <path d="M44 130 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2 z" fill="rgba(46,230,182,.85)"/>
+      </svg>
+    </div>
   </header>
 
   <!-- STEP 1 -->
@@ -346,12 +446,24 @@
 
     <div class="ofblk accent">
       <h2 class="ofh">フル解放すると、<span class="em">“完成”まで</span><br>スマホで全部終わります</h2>
-      <ul class="feat">
-        <li>①<b>カットの正式版</b>：カットした動画をそのまま保存（書き出し）</li>
-        <li>②<b>自動テロップ入れ</b>：しゃべった内容を自動で字幕に</li>
-        <li>③<b>テロップベース作成GPT</b>：TVでよく見る“座布団”（強調の帯）を量産</li>
-        <li>④<b>リッチテロップデザインGPT</b>：映えるテロップ案を一瞬で</li>
-      </ul>
+      <div class="fgrid">
+        <div class="fcard"><span class="num">01</span>
+          <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 3v10"/><path d="M8 9l4 4 4-4"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg></div>
+          <div class="ft">カットの正式版</div><div class="fd">カットした動画を<br>そのまま保存（書き出し）</div>
+        </div>
+        <div class="fcard"><span class="num">02</span>
+          <div class="ico"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M7 11h4"/><path d="M7 15h10"/><path d="M14 11h3"/></svg></div>
+          <div class="ft">自動テロップ入れ</div><div class="fd">しゃべった内容を<br>自動で字幕に</div>
+        </div>
+        <div class="fcard"><span class="num">03</span>
+          <div class="ico"><svg viewBox="0 0 24 24"><rect x="2.5" y="8.5" width="19" height="8" rx="4"/><path d="M7 12.5h7"/></svg></div>
+          <div class="ft">テロップベース作成GPT</div><div class="fd">TVで見る“座布団”<br>（強調の帯）を量産</div>
+        </div>
+        <div class="fcard"><span class="num">04</span>
+          <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 4.6L18.4 9.4 13.8 11.2 12 15.8 10.2 11.2 5.6 9.4 10.2 7.6z"/><path d="M18.5 14.5l.9 2.3 2.3.9-2.3.9-.9 2.3-.9-2.3-2.3-.9 2.3-.9z"/></svg></div>
+          <div class="ft">リッチテロップGPT</div><div class="fd">映えるテロップ案を<br>一瞬で</div>
+        </div>
+      </div>
       <table class="cmp">
         <tr><th>できること</th><th>無料版（今）</th><th>フル版</th></tr>
         <tr><td>自動カット</td><td class="y">○</td><td class="y">○</td></tr>
