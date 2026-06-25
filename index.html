@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>スマホ動画 自動カット｜無料体験版</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#0e1118; --card:#161b26; --line:#283143;
@@ -133,15 +136,122 @@
   a.ofcta{display:block;text-align:center;text-decoration:none;background:linear-gradient(180deg,#2ee6b6,#15b894);color:#04201a;font-weight:800;font-size:15px;padding:15px 12px;border-radius:12px;margin:16px 0 4px}
   a.ofcta:active{transform:translateY(1px)}
   .note-sm{font-size:11px;color:var(--sub);text-align:center}
+
+  /* ===================== PREMIUM REDESIGN（上書き） ===================== */
+  :root{
+    --mint:#2ee6b6; --mint2:#16c79a; --indigo:#6d6cff; --gold:#ffb547;
+    --glass:rgba(255,255,255,.045); --glass-bd:rgba(255,255,255,.09);
+    --shadow:0 14px 40px rgba(0,0,0,.45);
+  }
+  body{
+    font-family:"Noto Sans JP",-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN",sans-serif;
+    background:#0a0d16; color:#f1f5fb;
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    position:relative; overflow-x:hidden;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+    background:
+      radial-gradient(820px 520px at 50% -8%, rgba(46,230,182,.16), transparent 60%),
+      radial-gradient(720px 520px at 100% 10%, rgba(109,108,255,.14), transparent 55%),
+      linear-gradient(180deg,#0c1020 0%, #0a0d16 42%);
+  }
+  .wrap{max-width:600px;padding:26px 18px}
+
+  /* ---- ヒーロー ---- */
+  header.hero{text-align:center;margin:6px 0 26px;position:relative}
+  .eyebrow{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.14em;color:var(--mint);
+    text-transform:uppercase;padding:6px 14px;border:1px solid rgba(46,230,182,.32);border-radius:999px;
+    background:rgba(46,230,182,.08);margin-bottom:16px}
+  .hero h1{font-size:30px;line-height:1.34;font-weight:900;letter-spacing:.01em;margin:0 0 12px}
+  .hero h1 .em,.grad{background:linear-gradient(100deg,#3df0c0,#5ad1ff 72%);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+  .hero .lead{font-size:14.5px;color:#9fb0c8;line-height:1.85;max-width:430px;margin:0 auto}
+  .chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+  .chip{font-size:12px;font-weight:700;color:#f1f5fb;background:var(--glass);
+    border:1px solid var(--glass-bd);border-radius:999px;padding:7px 13px}
+
+  /* ---- ツールのカード ---- */
+  .card{background:var(--glass);border:1px solid var(--glass-bd);border-radius:20px;padding:22px 18px;margin-top:18px;
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:var(--shadow)}
+  .card h2{font-size:16px;font-weight:800;margin:0 0 14px}
+  .step-no{width:26px;height:26px;font-size:13px;
+    background:linear-gradient(135deg,var(--indigo),#3b82f6);box-shadow:0 4px 14px rgba(99,102,241,.5)}
+  #drop{border:1.5px dashed rgba(255,255,255,.18);border-radius:16px;padding:32px 16px;background:rgba(255,255,255,.02);transition:.18s}
+  #drop:hover,#drop.drag{border-color:var(--mint);background:rgba(46,230,182,.06);transform:translateY(-1px)}
+  #drop .ic{font-size:28px;width:62px;height:62px;line-height:62px;margin:0 auto 10px;border-radius:50%;
+    background:linear-gradient(135deg,rgba(46,230,182,.18),rgba(109,108,255,.18));border:1px solid var(--glass-bd)}
+  #drop .t{font-weight:800;font-size:15px}
+  #drop .s{font-size:12px;color:#9fb0c8;margin-top:6px}
+  video{border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+  .stat{background:rgba(255,255,255,.03);border:1px solid var(--glass-bd);border-radius:14px;padding:14px 8px}
+  .stat .v{font-size:22px;font-weight:900}
+  .stat .v.big{background:linear-gradient(100deg,#3df0c0,#5ad1ff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .stat .l{font-size:11px;margin-top:4px}
+
+  /* ---- ボタン ---- */
+  button.b{border-radius:14px;padding:15px 14px;font-size:14.5px;font-weight:800;letter-spacing:.02em;transition:.15s}
+  .b.prim{background:linear-gradient(135deg,#37efc0,#16c79a);color:#04231c;box-shadow:0 10px 26px rgba(34,211,166,.36)}
+  .b.prim:hover{transform:translateY(-1px);box-shadow:0 14px 32px rgba(34,211,166,.46)}
+  .b.ghost{background:rgba(255,255,255,.05);border:1px solid var(--glass-bd);color:#f1f5fb}
+
+  /* ---- ロック（解放）---- */
+  .lock{margin-top:18px;border-radius:18px;padding:20px;box-shadow:var(--shadow);
+    background:linear-gradient(135deg,rgba(255,181,71,.12),rgba(109,108,255,.12));border:1px solid rgba(255,181,71,.34)}
+  .lock .h{font-size:16px;font-weight:800}
+  .lock .unlock{background:linear-gradient(135deg,var(--gold),#f59e0b);color:#231400;border-radius:12px}
+
+  /* ---- 下部オファーLP ---- */
+  .offer{margin-top:46px}
+  .offer .lead-tag{display:flex;align-items:center;gap:12px;justify-content:center;color:var(--gold);
+    font-size:12px;letter-spacing:.1em;font-weight:800;text-transform:none;margin:0 0 4px}
+  .offer .lead-tag::before,.offer .lead-tag::after{content:"";height:1px;flex:1;max-width:64px;background:linear-gradient(90deg,transparent,rgba(255,181,71,.55))}
+  .offer .lead-tag::after{background:linear-gradient(90deg,rgba(255,181,71,.55),transparent)}
+  .ofblk{background:var(--glass);border:1px solid var(--glass-bd);border-radius:20px;padding:24px 18px;margin-top:16px;
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:var(--shadow)}
+  .ofblk.accent{border-color:rgba(255,181,71,.34);background:linear-gradient(150deg,rgba(255,181,71,.12),rgba(109,108,255,.10))}
+  .ofh{font-size:20px;line-height:1.5;font-weight:900;margin:0 0 12px}
+  .offer .em{background:linear-gradient(100deg,#3df0c0,#5ad1ff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+  .offer p{font-size:14.5px;line-height:1.85}
+  .offer .big{font-size:17px;font-weight:800}
+  .feat li{background:rgba(255,255,255,.03);border:1px solid var(--glass-bd);border-radius:12px;padding:12px 14px;font-size:14px}
+  .feat b{color:var(--mint)}
+
+  /* 比較表（フル版列をハイライト） */
+  table.cmp{border:0;border-radius:14px;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,.3);font-size:13.5px}
+  table.cmp th,table.cmp td{border:0;border-bottom:1px solid rgba(255,255,255,.07);padding:12px 8px}
+  table.cmp th{background:rgba(255,255,255,.06);color:#9fb0c8;font-weight:800;font-size:12px}
+  table.cmp th:last-child{background:linear-gradient(135deg,rgba(46,230,182,.22),rgba(46,230,182,.10));color:#bff6e6}
+  table.cmp td:last-child{background:rgba(46,230,182,.07);color:var(--mint);font-weight:900}
+  table.cmp td.n{color:#5b6b82}
+  table.cmp tr:last-child td{border-bottom:0}
+
+  /* ステップ */
+  ol.steps li{font-size:14.5px;padding:10px 8px 10px 44px}
+  ol.steps li::before{width:28px;height:28px;font-size:14px;top:6px;
+    background:linear-gradient(135deg,var(--mint),#16c79a);color:#04231c;box-shadow:0 4px 14px rgba(34,211,166,.5)}
+
+  /* FAQ */
+  .faqq{font-size:14.5px;color:#f1f5fb;position:relative;padding-left:22px}
+  .faqq::before{content:"Q";position:absolute;left:0;color:var(--mint);font-weight:900}
+  .faqa{font-size:13.5px;padding-left:14px;border-left:2px solid rgba(255,255,255,.09);margin-left:8px}
+
+  /* オファーCTA */
+  a.ofcta{background:linear-gradient(135deg,#37efc0,#16c79a);color:#04231c;font-size:16px;padding:18px 14px;border-radius:14px;
+    box-shadow:0 12px 30px rgba(34,211,166,.4);letter-spacing:.02em;transition:.15s}
+  a.ofcta:hover{transform:translateY(-2px);box-shadow:0 16px 38px rgba(34,211,166,.5)}
+
+  footer{color:#5b6b82;margin-top:30px;font-size:11.5px}
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <header>
-    <span class="badge">無料体験版</span>
-    <h1>スマホ動画 <span class="em">自動カット</span></h1>
-    <p class="lead">動画を選ぶだけで、しゃべってない“間”を自動で検出。<br>カット後の状態をその場でプレビューできます。</p>
+  <header class="hero">
+    <span class="eyebrow">無料体験版 · インストール不要</span>
+    <h1>スマホに入れるだけ。<br><span class="em">面倒なカット</span>を自動で。</h1>
+    <p class="lead">しゃべってない“間”を自動で検出。カット後の仕上がりを、その場でプレビューできます。</p>
+    <div class="chips"><span class="chip">スマホ完結</span><span class="chip">アップロード不要</span><span class="chip">3ステップ</span></div>
   </header>
 
   <!-- STEP 1 -->
@@ -216,7 +326,7 @@
 
   <!-- ===== 下部LP：動画編集ツール フル解放パスワードお渡し会 ===== -->
   <section class="offer">
-    <span class="lead-tag">━━ ここから、フル版のご案内 ━━</span>
+    <span class="lead-tag">ここから、フル版のご案内</span>
 
     <div class="ofblk">
       <h2 class="ofh">そのカット、手作業だったら<br>何分かかってたと思いますか？</h2>
