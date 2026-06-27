@@ -1,0 +1,9 @@
+.git/
+server/.venv/
+**/__pycache__/
+*.pyc
+.DS_Store
+test_autocut.mp4
+.playwright-mcp/
+/*.png
+/*.jpeg
