@@ -345,6 +345,22 @@
   .warnbox .wt{display:inline-block;color:#fff;background:#ff5a5a;font-weight:900;font-size:19px;letter-spacing:.08em;padding:8px 22px;border-radius:10px;margin-bottom:16px;box-shadow:0 8px 20px rgba(255,90,90,.45)}
   .warnbox .wbig{font-size:25px;font-weight:900;color:#fff;margin:6px 0}
   .warnbox .wbig .num{color:#ff7a7a}
+
+  /* サンプル動画ボックス */
+  .sample{margin-top:14px;border:1px dashed rgba(46,230,182,.4);border-radius:14px;padding:15px;background:rgba(46,230,182,.05)}
+  .sample-t{font-weight:800;font-size:14px;color:#fff}
+  .sample-d{font-size:12px;color:#9fb0c8;margin:6px 0 11px;line-height:1.65}
+  .sample-btn{display:block;text-align:center;text-decoration:none;background:rgba(255,255,255,.06);border:1px solid var(--glass-bd);color:#bff6e6;font-weight:800;font-size:13.5px;padding:13px;border-radius:11px;transition:.15s}
+  .sample-btn:hover{background:rgba(46,230,182,.14);border-color:rgba(46,230,182,.45)}
+
+  /* 追加バンド色（「カットはできた」用・紫）*/
+  .band-gap{background:radial-gradient(620px 320px at 50% 0,rgba(124,121,255,.12),transparent),linear-gradient(180deg,#13102a,#0c0f22)}
+
+  /* 透過カード画像（枠なし）*/
+  .sec-art.plain{border:none;box-shadow:none;background:transparent;filter:drop-shadow(0 18px 32px rgba(0,0,0,.55))}
+
+  /* つなぎ「そこで…」*/
+  .bridge{text-align:center;font-size:30px;font-weight:900;color:var(--gold);letter-spacing:.04em;margin:0 0 8px;text-shadow:0 4px 18px rgba(255,181,71,.35)}
 </style>
 </head>
 <body>
@@ -421,6 +437,11 @@
     </div>
     <input type="file" id="file" accept="video/*">
     <div class="status" id="status"></div>
+    <div class="sample">
+      <div class="sample-t">カットする動画をお持ちでない方へ</div>
+      <p class="sample-d">“しゃべりの間（無音）”が入ったサンプル動画をご用意しました。ダウンロードして、そのまま上の「動画を選ぶ」で読み込めば、すぐにお試しいただけます。</p>
+      <a class="sample-btn" href="https://drive.google.com/uc?export=download&id=1jDxPMOUV1cFXQh_jbKI666E557qu-eDd" target="_blank" rel="noopener">⬇ サンプル動画をダウンロード</a>
+    </div>
   </div>
 
   <!-- STEP 2 -->
@@ -491,7 +512,13 @@
       </div>
       <p>たった今、動画を入れただけで“しゃべってない間”が消えましたよね。手でやると、地味に何十分もかかる作業です。</p>
       <p class="big">でも正直に言うと——このツール、あなたはまだ<span class="kw-b">“半分”</span>しか使えていません。</p>
-      <div class="bhead" style="margin-top:30px">
+    </div>
+  </section>
+
+  <!-- カットはできた（色違いバンド）-->
+  <section class="band band-gap">
+    <div class="inner">
+      <div class="bhead">
         <h2 class="bh sm">カットはできた。<span class="kw-r">でも、その先は？</span></h2>
       </div>
       <p>無料版でできるのは「カットの結果をプレビューで見る」ところまで。本当にやりたいのは、この先ですよね。</p>
@@ -509,16 +536,16 @@
       <div class="bhead">
         <h2 class="bh">フル機能を<span class="mk t">無料で解放</span>できます</h2>
       </div>
-      <img class="sec-art" src="assets/feat.jpg" alt="テロップ入りの完成した動画イメージ" loading="lazy">
+      <img class="sec-art plain" src="assets/feat-card.png" alt="動画編集 自動化ツール" loading="lazy">
       <div class="frows">
         <div class="frow">
           <span class="fnum">01</span>
-          <div class="ftxt"><div class="ft">カットの正式版</div><div class="fd">カットした動画をそのまま保存（書き出し）できる</div></div>
+          <div class="ftxt"><div class="ft">カットツールフル機能版</div><div class="fd">カットした動画をそのまま保存（書き出し）できる</div></div>
           <img class="fimg" src="assets/ic-cut.jpg" alt="" loading="lazy">
         </div>
         <div class="frow">
           <span class="fnum">02</span>
-          <div class="ftxt"><div class="ft">自動テロップ入れ</div><div class="fd">しゃべった内容を、自動で字幕（テロップ）に</div></div>
+          <div class="ftxt"><div class="ft">自動字幕入れツール</div><div class="fd">しゃべった内容を、自動で字幕（テロップ）に</div></div>
           <img class="fimg" src="assets/ic-telop.jpg" alt="" loading="lazy">
         </div>
         <div class="frow">
@@ -549,10 +576,10 @@
   <section class="band band-why">
     <div class="inner">
       <div class="bhead">
-        <h2 class="bh">「普通、お金取るでしょ？」<br><span class="mk">——その通りです。</span></h2>
+        <h2 class="bh">なぜ<span class="mk">無料</span>で<br>配布しているのか</h2>
       </div>
       <img class="sec-art" src="assets/gift.jpg" alt="無料プレゼントのイメージ" loading="lazy">
-      <p>なのに無料で渡す理由は、2つだけ。</p>
+      <p>無料で渡す理由は、2つだけ。</p>
       <ul class="feat">
         <li>① 作ったツールを、もっと多くの人に試して<b>“感想がほしい”</b></li>
         <li>② これから動画編集を始めたい人と<b>“出会いたい”</b></li>
@@ -564,6 +591,7 @@
   <!-- 受け取り方＋ステップ＋CTA -->
   <section class="band band-get">
     <div class="inner">
+      <div class="bridge">そこで…</div>
       <div class="bhead">
         <h2 class="bh sm">「動画編集ツール フル解放<br>パスワードお渡し会」を<br><span class="mk">開催</span>します</h2>
       </div>
