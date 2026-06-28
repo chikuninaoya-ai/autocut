@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>動画編集ツール フル解放パスワードお渡し会</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{--mint:#2ee6b6;--gold:#ffb547;--glass:rgba(255,255,255,.045);--glass-bd:rgba(255,255,255,.09);--shadow:0 14px 40px rgba(0,0,0,.45)}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{margin:0;background:#0a0d16;color:#f1f5fb;line-height:1.7;-webkit-font-smoothing:antialiased;
+    font-family:"Noto Sans JP",-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN",sans-serif}
+  img{max-width:100%;display:block}
+  .band{padding:48px 16px;border-top:1px solid rgba(255,255,255,.05)}
+  .inner{max-width:600px;margin:0 auto}
+  .band-hero{background:radial-gradient(720px 420px at 50% -10%,rgba(46,230,182,.20),transparent),linear-gradient(180deg,#0c1424,#0a0d16);border-top:none}
+  .band-feat{background:radial-gradient(620px 340px at 50% 0,rgba(46,230,182,.15),transparent),linear-gradient(180deg,#07211b,#0a0f1c)}
+  .band-why{background:radial-gradient(620px 340px at 50% 0,rgba(255,181,71,.14),transparent),linear-gradient(180deg,#1f1808,#0d0f1c)}
+  .band-get{background:radial-gradient(620px 340px at 50% 0,rgba(124,121,255,.17),transparent),linear-gradient(180deg,#15122e,#0b0d1d)}
+  .band-limit{background:radial-gradient(620px 320px at 50% 0,rgba(255,90,90,.15),transparent),linear-gradient(180deg,#240e11,#0d0c14)}
+  .band-faq{background:linear-gradient(180deg,#0b101f,#0a0d18)}
+  .band-final{background:radial-gradient(620px 380px at 50% 8%,rgba(46,230,182,.22),transparent),linear-gradient(180deg,#08231c,#0a0d16)}
+  .bhead{text-align:center;margin-bottom:20px}
+  .bh{font-size:24px;line-height:1.46;font-weight:900;margin:0;color:#fff}
+  .bh.sm{font-size:20px}
+  .mk{color:#ffd54a;font-weight:900}.mk.t{color:#37efc0;font-weight:900}
+  .kw-r{color:#ff7a7a;font-weight:900}.kw-b{color:#5ad1ff;font-weight:900}
+  .band p{font-size:14.5px;line-height:1.9;color:#dbe3ef;margin:10px 0}
+  .sub{color:#9fb0c8;font-size:13px}
+  .big{font-size:17px;font-weight:800;color:#fff}
+  .center{text-align:center}
+  .sec-art{width:100%;border-radius:14px;margin:2px 0 16px;box-shadow:var(--shadow);border:1px solid var(--glass-bd)}
+  .sec-art.plain{border:none;box-shadow:none;background:transparent;filter:drop-shadow(0 18px 32px rgba(0,0,0,.55))}
+  .feat{list-style:none;padding:0;margin:12px 0}
+  .feat li{background:rgba(255,255,255,.03);border:1px solid var(--glass-bd);border-radius:12px;padding:12px 14px;margin:8px 0;font-size:14px}
+  .feat b{color:var(--mint)}
+  .frows{display:flex;flex-direction:column;gap:12px;margin:14px 0}
+  .frow{display:flex;align-items:center;gap:13px;background:rgba(255,255,255,.035);border:1px solid var(--glass-bd);border-radius:16px;padding:15px;box-shadow:0 8px 20px rgba(0,0,0,.3)}
+  .frow .fnum{flex:none;width:27px;height:27px;border-radius:8px;background:rgba(46,230,182,.14);color:#37efc0;font-weight:900;font-size:12px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(46,230,182,.32)}
+  .frow .ftxt{flex:1;min-width:0}.frow .ft{font-weight:800;font-size:15.5px;color:#fff;line-height:1.4}.frow .fd{font-size:12.5px;color:#9fb0c8;margin-top:3px;line-height:1.6}
+  .frow .fimg{flex:none;width:74px;height:74px;border-radius:14px;object-fit:cover;border:1px solid var(--glass-bd);box-shadow:0 6px 16px rgba(0,0,0,.45)}
+  table.cmp{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.5px;border-radius:14px;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,.3)}
+  table.cmp th,table.cmp td{border-bottom:1px solid rgba(255,255,255,.07);padding:12px 8px;text-align:center}
+  table.cmp th{background:rgba(255,255,255,.06);color:#9fb0c8;font-weight:800;font-size:12px}
+  table.cmp th:last-child{background:linear-gradient(135deg,rgba(46,230,182,.22),rgba(46,230,182,.10));color:#bff6e6}
+  table.cmp td:first-child{text-align:left;color:#fff}
+  table.cmp td:last-child{background:rgba(46,230,182,.07)}
+  table.cmp tr:last-child td{border-bottom:0}
+  table.cmp td.y,table.cmp td.n{color:transparent;line-height:0}
+  table.cmp td.y::after{content:"✓";display:inline-flex;align-items:center;justify-content:center;width:23px;height:23px;border-radius:50%;background:linear-gradient(135deg,#37efc0,#16c79a);color:#04231c;font-weight:900;font-size:13px;line-height:1}
+  table.cmp td.n::after{content:"−";display:inline-flex;align-items:center;justify-content:center;width:23px;height:23px;border-radius:50%;background:rgba(255,255,255,.06);color:#5b6b82;font-weight:900;font-size:15px;line-height:1}
+  ol.steps{counter-reset:st;list-style:none;padding:0;margin:12px 0}
+  ol.steps li{display:flex;align-items:flex-start;gap:10px;font-size:14.5px;padding:8px 0;color:#dbe3ef}
+  ol.steps li::before{counter-increment:st;content:counter(st);flex:none;width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--mint),#16c79a);color:#04231c;font-weight:900;font-size:14px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(34,211,166,.5)}
+  .faqq{font-weight:700;font-size:14.5px;color:#fff;position:relative;padding-left:22px;margin:12px 0 2px}
+  .faqq::before{content:"Q";position:absolute;left:0;color:var(--mint);font-weight:900}
+  .faqa{font-size:13.5px;color:#9fb0c8;padding-left:14px;border-left:2px solid rgba(255,255,255,.09);margin:0 0 8px 8px}
+  .cta-wrap{text-align:center;margin-top:18px}
+  .cta-tab{display:inline-block;background:#ff5a5a;color:#fff;font-weight:900;font-size:12px;padding:6px 16px;border-radius:9px 9px 0 0;letter-spacing:.05em}
+  .cta-arrow{color:var(--mint);font-weight:900;letter-spacing:.34em;font-size:14px;margin:8px 0 4px}
+  a.ofcta{display:block;max-width:460px;margin:0 auto;text-align:center;text-decoration:none;background:linear-gradient(135deg,#37efc0,#16c79a);color:#04231c;font-weight:800;font-size:16px;padding:18px 14px;border-radius:14px;box-shadow:0 12px 30px rgba(34,211,166,.4)}
+  .warnbox{border:2px solid rgba(255,90,90,.5);background:rgba(255,90,90,.06);border-radius:16px;padding:22px 18px;text-align:center}
+  .warnbox .wt{display:inline-block;color:#fff;background:#ff5a5a;font-weight:900;font-size:19px;letter-spacing:.08em;padding:8px 22px;border-radius:10px;margin-bottom:16px;box-shadow:0 8px 20px rgba(255,90,90,.45)}
+  .warnbox .wbig{font-size:25px;font-weight:900;color:#fff;margin:6px 0}.warnbox .wbig .num{color:#ff7a7a}
+  .note-sm{font-size:11px;color:#9fb0c8;text-align:center;margin-top:8px}
+  footer{text-align:center;font-size:11px;color:#5b6b82;padding:26px 16px}
+</style>
+</head>
+<body>
+
+  <!-- ヒーロー：お渡し会タイトル -->
+  <section class="band band-hero">
+    <div class="inner">
+      <img class="sec-art" src="https://autocut-api-506892521047.asia-northeast1.run.app/assets/otatashikai-hero.jpg" alt="動画編集ツール フル解放パスワードお渡し会 無料開催します">
+      <p class="big center">スマホ動画編集の“続き”を、ぜんぶ。</p>
+      <p class="sub center">フル機能を解放する“パスワード”を、無料のお渡し会でお渡しします。</p>
+      <div class="cta-wrap">
+        <div class="cta-tab">参加無料・人数限定</div>
+        <a class="ofcta" href="https://utage-system.com/line/open/9rNaDhXph58j">お渡し会に参加する（無料）</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- フル版でできること -->
+  <section class="band band-feat">
+    <div class="inner">
+      <div class="bhead"><h2 class="bh">フル機能を<span class="mk t">無料で解放</span>できます</h2></div>
+      <img class="sec-art plain" src="https://autocut-api-506892521047.asia-northeast1.run.app/assets/feat-card.png" alt="動画編集 自動化ツール">
+      <div class="frows">
+        <div class="frow">
+          <span class="fnum">01</span>
+          <div class="ftxt"><div class="ft">カットツールフル機能版</div><div class="fd">カットした動画をそのまま保存（書き出し）できる</div></div>
+          <img class="fimg" src="https://autocut-api-506892521047.asia-northeast1.run.app/assets/ic-cut.jpg" alt="">
+        </div>
+        <div class="frow">
+          <span class="fnum">02</span>
+          <div class="ftxt"><div class="ft">自動字幕入れツール</div><div class="fd">しゃべった内容を、自動で字幕（テロップ）に</div></div>
+          <img class="fimg" src="https://autocut-api-506892521047.asia-northeast1.run.app/assets/ic-telop.jpg" alt="">
+        </div>
+        <div class="frow">
+          <span class="fnum">03</span>
+          <div class="ftxt"><div class="ft">テロップベース作成ツール</div><div class="fd">TVで見る“座布団”（強調の帯）を量産できる</div></div>
+          <img class="fimg" src="https://autocut-api-506892521047.asia-northeast1.run.app/assets/ic-base.jpg" alt="">
+        </div>
+        <div class="frow">
+          <span class="fnum">04</span>
+          <div class="ftxt"><div class="ft">リッチテロップツール</div><div class="fd">映える・かっこいいテロップ案を一瞬で</div></div>
+          <img class="fimg" src="https://autocut-api-506892521047.asia-northeast1.run.app/assets/ic-rich.jpg" alt="">
+        </div>
+      </div>
+      <table class="cmp">
+        <tr><th>できること</th><th>無料版</th><th>フル版</th></tr>
+        <tr><td>自動カット</td><td class="y">○</td><td class="y">○</td></tr>
+        <tr><td>プレビュー</td><td class="y">○</td><td class="y">○</td></tr>
+        <tr><td>保存（書き出し）</td><td class="n">✕</td><td class="y">○</td></tr>
+        <tr><td>自動テロップ</td><td class="n">✕</td><td class="y">○</td></tr>
+        <tr><td>座布団デザイン</td><td class="n">✕</td><td class="y">○</td></tr>
+        <tr><td>リッチテロップ</td><td class="n">✕</td><td class="y">○</td></tr>
+      </table>
+      <p class="sub">正直、これ全部スマホ前提で揃うの、たぶん他で見たことないです。</p>
+    </div>
+  </section>
+
+  <!-- なぜ無料 -->
+  <section class="band band-why">
+    <div class="inner">
+      <div class="bhead"><h2 class="bh">なぜ<span class="mk">無料</span>で<br>配布しているのか</h2></div>
+      <img class="sec-art" src="https://autocut-api-506892521047.asia-northeast1.run.app/assets/gift.jpg" alt="無料プレゼントのイメージ">
+      <p>無料で渡す理由は、2つだけ。</p>
+      <ul class="feat">
+        <li>① 作ったツールを、もっと多くの人に試して<b>“感想がほしい”</b></li>
+        <li>② これから動画編集を始めたい人と<b>“出会いたい”</b></li>
+      </ul>
+      <p class="sub">もちろん、後から高額請求や隠れた費用は一切ありません。</p>
+    </div>
+  </section>
+
+  <!-- お渡し会でやること＋3ステップ -->
+  <section class="band band-get">
+    <div class="inner">
+      <div class="bhead"><h2 class="bh sm">お渡し会で、<span class="mk">やること</span></h2></div>
+      <img class="sec-art" src="https://autocut-api-506892521047.asia-northeast1.run.app/assets/unlock.jpg" alt="フル解放のイメージ">
+      <ul class="feat">
+        <li>オンラインで個別（マンツーマン）</li>
+        <li>スマホ1台でOK</li>
+        <li>やることは、<b>フル解放パスワードを受け取るだけ</b></li>
+      </ul>
+      <p class="sub">ついでに「最初に何をすればいいか」も、その場で一緒に整理します。</p>
+      <div class="bhead" style="margin-top:28px"><h2 class="bh sm">受け取りまでは、<span class="mk t">たった3ステップ</span></h2></div>
+      <ol class="steps">
+        <li>下のボタンから申し込む（LINEで受け取り）</li>
+        <li>お渡し会に参加する（スマホでOK）</li>
+        <li>フル解放パスワードを受け取る → 4つ全部が使える</li>
+      </ol>
+      <div class="cta-wrap">
+        <div class="cta-tab">参加無料・人数限定</div>
+        <a class="ofcta" href="https://utage-system.com/line/open/9rNaDhXph58j">お渡し会に参加する（無料）</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 限定 -->
+  <section class="band band-limit">
+    <div class="inner">
+      <div class="warnbox">
+        <div class="wt">※ ご注意ください ※</div>
+        <div class="wbig">人数には<span class="num">限り</span>があります</div>
+        <p class="sub" style="margin-top:8px">一人ずつ丁寧にお渡しするため、ご案内できる枠には限りがあります。枠が埋まったら、次がいつになるかはお約束できません。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="band band-faq">
+    <div class="inner">
+      <div class="bhead"><h2 class="bh sm">よくある質問</h2></div>
+      <p class="faqq">Q. 何か売り込まれませんか？</p><p class="faqa">A. 無理な勧誘はしません。その場で何かを買う必要もありません。</p>
+      <p class="faqq">Q. お金はかかりますか？</p><p class="faqa">A. 参加もツールも無料です。</p>
+      <p class="faqq">Q. スマホだけでできますか？</p><p class="faqa">A. はい。スマホ1台でOKです。</p>
+      <p class="faqq">Q. 編集はまったくの未経験ですが？</p><p class="faqa">A. 大丈夫。面倒な作業はツールがやります（操作はタップだけ）。</p>
+    </div>
+  </section>
+
+  <!-- 最終CTA -->
+  <section class="band band-final">
+    <div class="inner">
+      <div class="bhead"><h2 class="bh">あなたは、<span class="mk t">どっちを選ぶ？</span></h2></div>
+      <p>このまま“カットだけ”で止まるか、フル解放して<span class="kw-b">“保存もテロップも全部”</span>スマホで終わらせるか。</p>
+      <p class="sub">どちらも自由です。費用はかかりません（無料です）。</p>
+      <div class="cta-wrap">
+        <div class="cta-arrow">▼ ▼ ▼</div>
+        <a class="ofcta" href="https://utage-system.com/line/open/9rNaDhXph58j">お渡し会に参加する（無料）</a>
+      </div>
+      <p class="big center" style="margin-top:26px">“あの時もらっておけば”が、いちばん悔しい。<br>フル解放した向こう側で、待ってます。</p>
+      <p class="note-sm">※参加・ツールは無料です。無理な勧誘はありません。</p>
+    </div>
+  </section>
+
+  <footer>© 2026 株式会社ブイスト</footer>
+</body>
+</html>
