@@ -244,8 +244,9 @@
   footer{color:#5b6b82;margin-top:30px;font-size:11.5px}
 
   /* ===================== ビジュアル要素 ===================== */
-  .hero-art{margin:24px auto 4px;max-width:320px}
+  .hero-art{margin:24px auto 4px;max-width:300px}
   .hero-art svg{width:100%;height:auto;display:block;filter:drop-shadow(0 16px 36px rgba(0,0,0,.5))}
+  .hero-art img{width:100%;height:auto;display:block;filter:drop-shadow(0 20px 40px rgba(0,0,0,.6))}
 
   /* セクション見出しのアイコン丸 */
   .ofh-ico{display:flex;align-items:center;gap:12px}
@@ -372,58 +373,7 @@
     <p class="lead">しゃべってない“間”を自動で検出。カット後の仕上がりを、その場でプレビューできます。</p>
     <div class="chips"><span class="chip">スマホ完結</span><span class="chip">アップロード不要</span><span class="chip">3ステップ</span></div>
     <div class="hero-art">
-      <svg viewBox="0 0 320 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="スマホで自動カットするイメージ">
-        <defs>
-          <linearGradient id="hg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#37efc0"/><stop offset="1" stop-color="#16c79a"/></linearGradient>
-          <linearGradient id="hg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b2546"/><stop offset="1" stop-color="#0d1430"/></linearGradient>
-          <linearGradient id="hg3" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5ad1ff"/><stop offset="1" stop-color="#6d6cff"/></linearGradient>
-        </defs>
-        <ellipse cx="160" cy="205" rx="120" ry="14" fill="rgba(46,230,182,.10)"/>
-        <!-- phone -->
-        <rect x="108" y="16" width="104" height="190" rx="20" fill="url(#hg2)" stroke="rgba(255,255,255,.16)" stroke-width="1.5"/>
-        <rect x="146" y="22" width="28" height="5" rx="2.5" fill="rgba(255,255,255,.18)"/>
-        <!-- screen -->
-        <rect x="118" y="34" width="84" height="92" rx="9" fill="#0a1126"/>
-        <!-- waveform -->
-        <g stroke="url(#hg3)" stroke-width="3" stroke-linecap="round" opacity=".9">
-          <line x1="130" y1="80" x2="130" y2="80"/>
-          <line x1="138" y1="72" x2="138" y2="88"/>
-          <line x1="146" y1="64" x2="146" y2="96"/>
-          <line x1="154" y1="76" x2="154" y2="84"/>
-          <line x1="162" y1="58" x2="162" y2="102"/>
-          <line x1="170" y1="70" x2="170" y2="90"/>
-          <line x1="178" y1="66" x2="178" y2="94"/>
-          <line x1="186" y1="74" x2="186" y2="86"/>
-        </g>
-        <!-- timeline label -->
-        <text x="118" y="146" fill="#7d8aa6" font-size="9" font-family="sans-serif">自動カット結果</text>
-        <!-- timeline track with kept(green)/cut(gray) -->
-        <rect x="118" y="152" width="84" height="13" rx="6.5" fill="#2a3344"/>
-        <rect x="118" y="152" width="22" height="13" rx="6.5" fill="url(#hg1)"/>
-        <rect x="150" y="152" width="16" height="13" rx="6.5" fill="url(#hg1)"/>
-        <rect x="176" y="152" width="26" height="13" rx="6.5" fill="url(#hg1)"/>
-        <!-- stat chips on screen -->
-        <rect x="118" y="174" width="40" height="22" rx="6" fill="rgba(255,255,255,.05)"/>
-        <text x="138" y="185" fill="#9fb0c8" font-size="7" text-anchor="middle" font-family="sans-serif">短縮率</text>
-        <text x="138" y="193" fill="#37efc0" font-size="9" font-weight="bold" text-anchor="middle" font-family="sans-serif">-40%</text>
-        <rect x="162" y="174" width="40" height="22" rx="6" fill="rgba(255,255,255,.05)"/>
-        <text x="182" y="185" fill="#9fb0c8" font-size="7" text-anchor="middle" font-family="sans-serif">カット後</text>
-        <text x="182" y="193" fill="#fff" font-size="9" font-weight="bold" text-anchor="middle" font-family="sans-serif">0:07</text>
-        <!-- floating "自動カット" badge -->
-        <g>
-          <rect x="194" y="50" width="106" height="34" rx="17" fill="url(#hg1)"/>
-          <path d="M211 62 l5 5 9 -10" stroke="#04231c" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-          <text x="235" y="71" fill="#04231c" font-size="11" font-weight="bold" font-family="sans-serif">自動カット</text>
-        </g>
-        <!-- scissors floating -->
-        <g transform="translate(30 70)" stroke="#5ad1ff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="6" cy="20" r="5"/><circle cx="6" cy="4" r="5"/>
-          <path d="M10 17 L34 6"/><path d="M10 7 L34 18"/>
-        </g>
-        <!-- sparkles -->
-        <path d="M250 110 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3 z" fill="rgba(90,209,255,.8)"/>
-        <path d="M44 130 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2 z" fill="rgba(46,230,182,.85)"/>
-      </svg>
+      <img src="assets/hero-card.png" alt="動画編集 自動化ツール プレミアム会員">
     </div>
   </header>
 
@@ -536,7 +486,7 @@
       <div class="bhead">
         <h2 class="bh">フル機能を<span class="mk t">無料で解放</span>できます</h2>
       </div>
-      <img class="sec-art plain" src="assets/feat-card.png" alt="動画編集 自動化ツール" loading="lazy">
+      <img class="sec-art" src="assets/feat-unlock.jpg" alt="4大機能フル解放" loading="lazy">
       <div class="frows">
         <div class="frow">
           <span class="fnum">01</span>
