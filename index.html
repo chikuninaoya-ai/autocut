@@ -364,6 +364,27 @@
 
   /* つなぎ「そこで…」*/
   .bridge{text-align:center;font-size:30px;font-weight:900;color:var(--gold);letter-spacing:.04em;margin:0 0 8px;text-shadow:0 4px 18px rgba(255,181,71,.35)}
+
+  /* ===== はじめての方へ｜使い方ガイド ===== */
+  .guide{background:var(--glass);border:1px solid var(--glass-bd);border-radius:18px;padding:22px 16px;margin-top:18px;box-shadow:var(--shadow)}
+  .guide-h{font-size:18px;font-weight:900;color:#fff;margin:0 0 8px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+  .g-badge{font-size:12px;font-weight:800;color:#37efc0;background:rgba(46,230,182,.14);border:1px solid rgba(46,230,182,.4);padding:5px 13px;border-radius:999px}
+  .guide-lead{font-size:13.5px;color:#9fb0c8;margin:0 0 16px;line-height:1.75}
+  ol.gsteps{counter-reset:gs;list-style:none;padding:0;margin:0}
+  ol.gsteps li{position:relative;padding:0 0 22px 46px}
+  ol.gsteps li:last-child{padding-bottom:0}
+  ol.gsteps li::before{counter-increment:gs;content:counter(gs);position:absolute;left:0;top:0;width:31px;height:31px;border-radius:50%;
+    background:linear-gradient(135deg,#37efc0,#16c79a);color:#04231c;font-weight:900;font-size:15px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(34,211,166,.5)}
+  ol.gsteps li:not(:last-child)::after{content:"";position:absolute;left:15px;top:34px;bottom:8px;width:2px;background:rgba(255,255,255,.1)}
+  .gsteps .gt{font-weight:800;font-size:15.5px;color:#fff;line-height:1.4}
+  .gsteps .gd{font-size:13px;color:#cbd5e6;margin-top:5px;line-height:1.75}
+  .g-dl{display:inline-flex;align-items:center;gap:6px;margin-top:11px;text-decoration:none;
+    background:linear-gradient(135deg,#37efc0,#16c79a);color:#04231c;font-weight:800;font-size:14px;padding:12px 18px;border-radius:11px;box-shadow:0 8px 20px rgba(34,211,166,.35)}
+  .gsteps .ghint{font-size:11.5px;color:#8aa3bd;margin-top:7px}
+  .gshot{width:100%;max-width:260px;border-radius:12px;border:1px solid var(--glass-bd);margin-top:11px;box-shadow:0 10px 24px rgba(0,0,0,.45);display:block}
+  .guide-foot{text-align:center;font-size:13px;color:#37efc0;font-weight:800;margin-top:18px}
+  .guide-foot .arw{display:block;font-size:20px;margin-top:2px;animation:bob 1.4s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
 </style>
 </head>
 <body>
@@ -376,6 +397,32 @@
     <div class="chips"><span class="chip">スマホ完結</span><span class="chip">アップロード不要</span><span class="chip">3ステップ</span></div>
   </header>
 
+  <!-- はじめての方へ｜使い方ガイド -->
+  <section class="guide">
+    <div class="guide-h"><span class="g-badge">はじめての方へ</span>かんたん使い方</div>
+    <p class="guide-lead">動画編集はまったくの初めてでも大丈夫。<strong style="color:#fff">スマホだけ・3ステップ</strong>で試せます。まずはお試し用の動画をダウンロードするところから。</p>
+    <ol class="gsteps">
+      <li>
+        <div class="gt">まずは「サンプル動画」を保存する</div>
+        <div class="gd">自分で撮った動画がなくてもOK。下のボタンを押すと、お試し用の動画（人がしゃべっている動画）がスマホに保存されます。</div>
+        <a class="g-dl" href="https://drive.google.com/uc?export=download&id=1jDxPMOUV1cFXQh_jbKI666E557qu-eDd" target="_blank" rel="noopener">⬇ サンプル動画をダウンロード</a>
+        <div class="ghint">※すでに自分の動画がある方は、このステップは飛ばしてOKです</div>
+      </li>
+      <li>
+        <div class="gt">動画を読み込む</div>
+        <div class="gd">下の<strong style="color:#fff">「タップして動画を選択」</strong>を押して、いま保存した動画（または自分の動画）を選びます。カメラロールから選ぶだけ。</div>
+        <img class="gshot" src="assets/guide-select.jpg" alt="タップして動画を選択する画面" loading="lazy">
+      </li>
+      <li>
+        <div class="gt">ボタンを押すだけで自動カット</div>
+        <div class="gd"><strong style="color:#fff">「自動カットを解析する」</strong>を押すと、しゃべっていない“間（無音）”をAIが自動で見つけてカットします。<strong style="color:#fff">「カット版を再生」</strong>を押すと、カット後の仕上がりをその場で確認できます（緑＝残す／暗＝カットした部分）。</div>
+        <img class="gshot" src="assets/guide-result.jpg" alt="自動カット結果の画面" loading="lazy">
+      </li>
+    </ol>
+    <div class="guide-foot">それでは、さっそく下のツールで試してみましょう<span class="arw">↓</span></div>
+  </section>
+
+
   <!-- STEP 1 -->
   <div class="card">
     <h2><span class="step-no">1</span>動画を選ぶ</h2>
@@ -386,11 +433,6 @@
     </div>
     <input type="file" id="file" accept="video/*">
     <div class="status" id="status"></div>
-    <div class="sample">
-      <div class="sample-t">カットする動画をお持ちでない方へ</div>
-      <p class="sample-d">“しゃべりの間（無音）”が入ったサンプル動画をご用意しました。ダウンロードして、そのまま上の「動画を選ぶ」で読み込めば、すぐにお試しいただけます。</p>
-      <a class="sample-btn" href="https://drive.google.com/uc?export=download&id=1jDxPMOUV1cFXQh_jbKI666E557qu-eDd" target="_blank" rel="noopener">⬇ サンプル動画をダウンロード</a>
-    </div>
   </div>
 
   <!-- STEP 2 -->
