@@ -425,12 +425,12 @@
       <details>
         <summary>カットの強さを調整する</summary>
         <div class="ctl">
-          <label>無音と判定する音量 <b><span id="thrV">-40</span> dB</b></label>
-          <input type="range" id="thr" min="-60" max="-20" step="1" value="-40">
+          <label>無音と判定する音量 <b><span id="thrV">-48</span> dB</b></label>
+          <input type="range" id="thr" min="-60" max="-20" step="1" value="-48">
           <div class="hint">右にするほど “小さい音まで無音扱い” でカットが増えます</div>
 
-          <label>カットする最短の無音 <b><span id="minV">0.5</span> 秒</b></label>
-          <input type="range" id="min" min="0.2" max="2" step="0.1" value="0.5">
+          <label>カットする最短の無音 <b><span id="minV">0.7</span> 秒</b></label>
+          <input type="range" id="min" min="0.2" max="2" step="0.1" value="0.7">
           <div class="hint">この長さ以上の無音だけを削ります（短い“間”は残す）</div>
         </div>
       </details>
@@ -611,7 +611,8 @@
   const BACKEND_URL = "https://autocut-api-506892521047.asia-northeast1.run.app"; // 書き出し用バックエンド（Cloud Run）
   const APPLY_URL = "https://utage-system.com/line/open/9rNaDhXph58j"; // お渡し会の申込導線URL
   let unlockedPw = null;               // 解放済みパスワード（書き出し時に送信）
-  const PAD_SEC   = 0.08;  // カット前後に少し残す
+  const PAD_SEC   = 0.12;  // カット後ろの余白
+  const PAD_LEAD  = 0.0533; // カット前(喋り出し)の余白 ＝0.12 - 2frame@30fps
   const WIN_SEC   = 0.03;  // 解析ウィンドウ
   const DECODE_TIMEOUT = 6000; // 高速デコードの上限（固まり防止）
 
@@ -795,7 +796,7 @@
     const raw=[]; i=0;
     while(i<n){
       if(voiced[i]){ let j=i; while(j<n&&voiced[j]) j++;
-        let s=i*winSec-PAD_SEC, e=j*winSec+PAD_SEC; if(s<0)s=0; if(e>duration)e=duration;
+        let s=i*winSec-PAD_LEAD, e=j*winSec+PAD_SEC; if(s<0)s=0; if(e>duration)e=duration;
         raw.push({start:s,end:e}); i=j; }
       else i++;
     }
