@@ -12,12 +12,16 @@ GET  /health   : 死活監視
   FONTS_DIR        : フォントディレクトリ（既定: ./fonts）
   ALLOW_ORIGIN     : CORS許可オリジン（既定: *）
 """
-import os, tempfile, shutil, traceback
+import os, tempfile, shutil, traceback, mimetypes
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.staticfiles import StaticFiles
 from starlette.background import BackgroundTask
+
+# slim版Pythonに無い場合があるMIMEを明示登録（LINE内ブラウザでの確実な表示用）
+mimetypes.add_type("image/webp", ".webp")
 
 import process_video, transcribe
 
@@ -29,6 +33,8 @@ ALLOW_ORIGIN = os.environ.get("ALLOW_ORIGIN", "*")
 MAX_BYTES  = int(os.environ.get("MAX_BYTES", 300 * 1024 * 1024))  # 300MB
 
 app = FastAPI(title="Sumaho AutoCut API")
+# HTML/CSS/JS等のテキスト応答を自動gzip（LP本体56KB→約13KBに圧縮し初回ロードを短縮）
+app.add_middleware(GZipMiddleware, minimum_size=512)
 app.add_middleware(CORSMiddleware, allow_origins=[ALLOW_ORIGIN] if ALLOW_ORIGIN!="*" else ["*"],
                    allow_methods=["*"], allow_headers=["*"])
 
