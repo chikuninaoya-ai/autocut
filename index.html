@@ -480,7 +480,7 @@
   </div>
 
   <!-- LOCKED EXPORT -->
-  <div class="lock hidden" id="lock">
+  <div class="lock" id="lock">
     <div class="h">🔒 カット済みの動画を書き出す（保存）</div>
     <p>体験版ではプレビューまで。<b>カット済み動画のフル書き出し</b>は、無料の個別相談に参加した方に解放パスワードをお渡ししています。</p>
     <div class="pw">
@@ -687,7 +687,7 @@
     // 動画はすぐ表示、解析はボタンで（iOSのユーザー操作起点対策）
     resultCard.classList.remove("hidden");
     analyzed.classList.add("hidden");
-    lock.classList.add("hidden");
+    // #lock は常時表示（動画読み込み時に隠さない）
     analyzeBtn.disabled=false;
     analyzeBtn.textContent="▶ 自動カットを解析する";
     setStatus("動画を読み込みました。「解析する」を押してください👇");
