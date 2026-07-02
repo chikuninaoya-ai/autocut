@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>動画編集に革命｜スマホ自動カットツール</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0e1118; --card:#161b26; --line:#283143;
+    --txt:#eef2f8; --sub:#9aa7bd; --accent:#22d3a6; --accent2:#3b82f6;
+    --cut:#2a3344; --keep:#22d3a6; --warn:#fbbf24; --lock:#f97316;
+    --radius:16px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    background:radial-gradient(1200px 600px at 50% -10%, #1a2233 0%, var(--bg) 60%);
+    color:var(--txt);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;
+    line-height:1.7; min-height:100vh;
+    padding:env(safe-area-inset-top) 0 calc(env(safe-area-inset-bottom) + 24px);
+  }
+  .wrap{max-width:560px;margin:0 auto;padding:20px 16px}
+  header{text-align:center;margin-bottom:18px}
+  .badge{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.04em;
+    color:var(--accent);background:rgba(34,211,166,.12);border:1px solid rgba(34,211,166,.3);
+    padding:4px 12px;border-radius:999px;margin-bottom:10px}
+  h1{font-size:22px;margin:6px 0 4px;font-weight:800;letter-spacing:.01em}
+  h1 .em{color:var(--accent)}
+  .lead{font-size:13.5px;color:var(--sub);margin:0}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px 16px;margin-top:16px}
+  .step-no{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;
+    border-radius:50%;background:var(--accent2);color:#fff;font-size:12px;font-weight:800;margin-right:8px}
+  .card h2{font-size:15px;margin:0 0 12px;display:flex;align-items:center}
+
+  /* drop / pick */
+  #drop{border:2px dashed var(--line);border-radius:14px;padding:26px 14px;text-align:center;
+    transition:.15s;cursor:pointer;background:rgba(255,255,255,.015)}
+  #drop.drag{border-color:var(--accent);background:rgba(34,211,166,.07)}
+  #drop .ic{font-size:34px}
+  #drop .t{font-weight:700;margin-top:6px}
+  #drop .s{font-size:12px;color:var(--sub);margin-top:4px}
+  input[type=file]{display:none}
+
+  video{width:100%;border-radius:12px;background:#000;margin-top:4px;display:block}
+
+  /* timeline */
+  .tl-wrap{margin-top:14px}
+  .tl{position:relative;width:100%;height:30px;background:var(--cut);border-radius:8px;overflow:hidden}
+  .tl .seg{position:absolute;top:0;height:100%;background:linear-gradient(180deg,#2ee6b6,#16b893)}
+  .tl .play{position:absolute;top:0;width:2px;height:100%;background:#fff;opacity:.9;transform:translateX(-1px);display:none}
+  .legend{display:flex;gap:16px;font-size:11.5px;color:var(--sub);margin-top:8px}
+  .legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+  .legend .k{background:var(--keep)} .legend .c{background:var(--cut)}
+
+  /* stats */
+  .stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:14px}
+  .stat{background:#10151f;border:1px solid var(--line);border-radius:12px;padding:10px 8px;text-align:center}
+  .stat .v{font-size:19px;font-weight:800;letter-spacing:.01em}
+  .stat .v.big{color:var(--accent)}
+  .stat .l{font-size:10.5px;color:var(--sub);margin-top:2px}
+
+  /* controls */
+  .ctl{margin-top:8px}
+  .ctl label{display:flex;justify-content:space-between;font-size:12.5px;color:var(--sub);margin:10px 0 4px}
+  .ctl label b{color:var(--txt);font-variant-numeric:tabular-nums}
+  input[type=range]{width:100%;accent-color:var(--accent)}
+  .ctl .hint{font-size:11px;color:var(--sub);margin-top:2px}
+  details{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}
+  summary{font-size:12.5px;color:var(--sub);cursor:pointer;list-style:none}
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:"⚙ ";color:var(--accent)}
+
+  /* buttons */
+  .btns{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+  button.b{flex:1 1 0;min-width:130px;border:none;border-radius:12px;padding:13px 12px;font-size:14px;
+    font-weight:800;cursor:pointer;transition:.12s;font-family:inherit}
+  .b.full{flex:1 1 100%;width:100%}
+  .b.prim{background:linear-gradient(180deg,#2ee6b6,#15b894);color:#04201a}
+  .b.prim:active{transform:translateY(1px)}
+  .b.ghost{background:#10151f;color:var(--txt);border:1px solid var(--line)}
+  .b:disabled{opacity:.5;cursor:not-allowed}
+
+  /* lock CTA */
+  .lock{margin-top:16px;background:linear-gradient(135deg,rgba(249,115,22,.12),rgba(59,130,246,.10));
+    border:1px solid rgba(249,115,22,.35);border-radius:14px;padding:16px}
+  .lock .h{font-weight:800;font-size:15px;display:flex;align-items:center;gap:7px}
+  .lock p{font-size:12.5px;color:#d8c6b0;margin:8px 0 12px}
+  .lock .pw{display:flex;gap:8px}
+  .lock input{flex:1;background:#0d1119;border:1px solid var(--line);color:var(--txt);
+    border-radius:10px;padding:11px;font-size:14px;font-family:inherit}
+  .lock .unlock{background:var(--lock);color:#1a0d02;border:none;border-radius:10px;padding:0 16px;
+    font-weight:800;font-size:13px;cursor:pointer}
+  .lock .msg{font-size:12px;margin-top:8px;min-height:16px}
+  .lock .msg.ok{color:var(--accent)} .lock .msg.ng{color:#f87171}
+
+  .status{font-size:12.5px;color:var(--sub);margin-top:10px;min-height:18px;text-align:center}
+  .status.work{color:var(--warn)}
+  .status.err{color:#f87171}
+  .status.ok{color:var(--accent)}
+  .spin{display:inline-block;width:13px;height:13px;border:2px solid var(--line);
+    border-top-color:var(--accent);border-radius:50%;animation:sp .7s linear infinite;vertical-align:-2px;margin-right:6px}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  .hidden{display:none!important}
+  footer{text-align:center;font-size:11px;color:#5b6678;margin-top:22px}
+
+  /* ===== 下部LP（フル解放パスワードお渡し会）===== */
+  .offer{margin-top:30px}
+  .offer .lead-tag{display:block;text-align:center;font-size:12px;font-weight:800;letter-spacing:.04em;color:var(--lock);margin-bottom:2px}
+  .ofblk{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 16px;margin-top:14px}
+  .ofblk.accent{border-color:rgba(249,115,22,.4);background:linear-gradient(135deg,rgba(249,115,22,.10),rgba(59,130,246,.08))}
+  .ofh{font-size:18px;font-weight:800;margin:0 0 10px;line-height:1.45}
+  .offer p{font-size:14px;margin:8px 0;color:var(--txt)}
+  .offer .sub{color:var(--sub);font-size:13px}
+  .offer .big{font-size:16.5px;font-weight:700}
+  .offer .em{color:var(--accent)}
+  .feat{list-style:none;padding:0;margin:10px 0}
+  .feat li{background:#10151f;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0;font-size:13.5px}
+  .feat b{color:var(--accent)}
+  table.cmp{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}
+  table.cmp th,table.cmp td{border:1px solid var(--line);padding:8px 6px;text-align:center}
+  table.cmp th{background:#10151f;color:var(--sub);font-weight:700}
+  table.cmp td.y{color:var(--accent);font-weight:800}
+  table.cmp td.n{color:#64748b}
+  table.cmp td:first-child{text-align:left;color:var(--txt)}
+  ol.steps{counter-reset:st;list-style:none;padding:0;margin:10px 0}
+  ol.steps li{position:relative;padding:8px 8px 8px 38px;margin:8px 0;font-size:14px}
+  ol.steps li::before{counter-increment:st;content:counter(st);position:absolute;left:0;top:5px;width:24px;height:24px;border-radius:50%;background:var(--accent2);color:#fff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center}
+  .faqq{font-weight:700;margin:10px 0 2px;font-size:13.5px}
+  .faqa{color:var(--sub);font-size:13px;margin:0 0 8px}
+  a.ofcta{display:block;text-align:center;text-decoration:none;background:linear-gradient(180deg,#2ee6b6,#15b894);color:#04201a;font-weight:800;font-size:15px;padding:15px 12px;border-radius:12px;margin:16px 0 4px}
+  a.ofcta:active{transform:translateY(1px)}
+  .note-sm{font-size:11px;color:var(--sub);text-align:center}
+
+  /* ===================== PREMIUM REDESIGN（上書き） ===================== */
+  :root{
+    --mint:#2ee6b6; --mint2:#16c79a; --indigo:#6d6cff; --gold:#ffb547;
+    --glass:rgba(255,255,255,.045); --glass-bd:rgba(255,255,255,.09);
+    --shadow:0 14px 40px rgba(0,0,0,.45);
+  }
+  body{
+    font-family:"Noto Sans JP",-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN",sans-serif;
+    background:#0a0d16; color:#f1f5fb;
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    position:relative; overflow-x:hidden;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+    background:
+      radial-gradient(820px 520px at 50% -8%, rgba(46,230,182,.16), transparent 60%),
+      radial-gradient(720px 520px at 100% 10%, rgba(109,108,255,.14), transparent 55%),
+      linear-gradient(180deg,#0c1020 0%, #0a0d16 42%);
+  }
+  .wrap{max-width:600px;padding:26px 18px}
+
+  /* ---- ヒーロー ---- */
+  header.hero{text-align:center;margin:6px 0 26px;position:relative}
+  .eyebrow{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.14em;color:var(--mint);
+    text-transform:uppercase;padding:6px 14px;border:1px solid rgba(46,230,182,.32);border-radius:999px;
+    background:rgba(46,230,182,.08);margin-bottom:16px}
+  .hero h1{font-size:30px;line-height:1.34;font-weight:900;letter-spacing:.01em;margin:0 0 12px}
+  .hero h1 .em,.grad{background:linear-gradient(100deg,#3df0c0,#5ad1ff 72%);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+  .hero .lead{font-size:14.5px;color:#9fb0c8;line-height:1.85;max-width:430px;margin:0 auto}
+  .chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+  .chip{font-size:12px;font-weight:700;color:#f1f5fb;background:var(--glass);
+    border:1px solid var(--glass-bd);border-radius:999px;padding:7px 13px}
+
+  /* ---- ツールのカード ---- */
+  .card{background:var(--glass);border:1px solid var(--glass-bd);border-radius:20px;padding:22px 18px;margin-top:18px;
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:var(--shadow)}
+  .card h2{font-size:16px;font-weight:800;margin:0 0 14px}
+  .step-no{width:26px;height:26px;font-size:13px;
+    background:linear-gradient(135deg,var(--indigo),#3b82f6);box-shadow:0 4px 14px rgba(99,102,241,.5)}
+  #drop{border:1.5px dashed rgba(255,255,255,.18);border-radius:16px;padding:32px 16px;background:rgba(255,255,255,.02);transition:.18s}
+  #drop:hover,#drop.drag{border-color:var(--mint);background:rgba(46,230,182,.06);transform:translateY(-1px)}
+  #drop .ic{font-size:28px;width:62px;height:62px;line-height:62px;margin:0 auto 10px;border-radius:50%;
+    background:linear-gradient(135deg,rgba(46,230,182,.18),rgba(109,108,255,.18));border:1px solid var(--glass-bd)}
+  #drop .t{font-weight:800;font-size:15px}
+  #drop .s{font-size:12px;color:#9fb0c8;margin-top:6px}
+  video{border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+  .stat{background:rgba(255,255,255,.03);border:1px solid var(--glass-bd);border-radius:14px;padding:14px 8px}
+  .stat .v{font-size:22px;font-weight:900}
+  .stat .v.big{background:linear-gradient(100deg,#3df0c0,#5ad1ff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .stat .l{font-size:11px;margin-top:4px}
+
+  /* ---- ボタン ---- */
+  button.b{border-radius:14px;padding:15px 14px;font-size:14.5px;font-weight:800;letter-spacing:.02em;transition:.15s}
+  .b.prim{background:linear-gradient(135deg,#37efc0,#16c79a);color:#04231c;box-shadow:0 10px 26px rgba(34,211,166,.36)}
+  .b.prim:hover{transform:translateY(-1px);box-shadow:0 14px 32px rgba(34,211,166,.46)}
+  .b.ghost{background:rgba(255,255,255,.05);border:1px solid var(--glass-bd);color:#f1f5fb}
+
+  /* ---- ロック（解放）---- */
+  .lock{margin-top:18px;border-radius:18px;padding:20px;box-shadow:var(--shadow);
+    background:linear-gradient(135deg,rgba(255,181,71,.12),rgba(109,108,255,.12));border:1px solid rgba(255,181,71,.34)}
+  .lock .h{font-size:16px;font-weight:800}
+  .lock .unlock{background:linear-gradient(135deg,var(--gold),#f59e0b);color:#231400;border-radius:12px}
+
+  /* ---- 下部オファーLP ---- */
+  .offer{margin-top:46px}
+  .offer .lead-tag{display:flex;align-items:center;gap:12px;justify-content:center;color:var(--gold);
+    font-size:12px;letter-spacing:.1em;font-weight:800;text-transform:none;margin:0 0 4px}
+  .offer .lead-tag::before,.offer .lead-tag::after{content:"";height:1px;flex:1;max-width:64px;background:linear-gradient(90deg,transparent,rgba(255,181,71,.55))}
+  .offer .lead-tag::after{background:linear-gradient(90deg,rgba(255,181,71,.55),transparent)}
+  .ofblk{background:var(--glass);border:1px solid var(--glass-bd);border-radius:20px;padding:24px 18px;margin-top:16px;
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:var(--shadow)}
+  .ofblk.accent{border-color:rgba(255,181,71,.34);background:linear-gradient(150deg,rgba(255,181,71,.12),rgba(109,108,255,.10))}
+  .ofh{font-size:20px;line-height:1.5;font-weight:900;margin:0 0 12px}
+  .offer .em{background:linear-gradient(100deg,#3df0c0,#5ad1ff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+  .offer p{font-size:14.5px;line-height:1.85}
+  .offer .big{font-size:17px;font-weight:800}
+  .feat li{background:rgba(255,255,255,.03);border:1px solid var(--glass-bd);border-radius:12px;padding:12px 14px;font-size:14px}
+  .feat b{color:var(--mint)}
+
+  /* 比較表（フル版列をハイライト） */
+  table.cmp{border:0;border-radius:14px;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,.3);font-size:13.5px}
+  table.cmp th,table.cmp td{border:0;border-bottom:1px solid rgba(255,255,255,.07);padding:12px 8px}
+  table.cmp th{background:rgba(255,255,255,.06);color:#9fb0c8;font-weight:800;font-size:12px}
+  table.cmp th:last-child{background:linear-gradient(135deg,rgba(46,230,182,.22),rgba(46,230,182,.10));color:#bff6e6}
+  table.cmp td:last-child{background:rgba(46,230,182,.07);color:var(--mint);font-weight:900}
+  table.cmp td.n{color:#5b6b82}
+  table.cmp tr:last-child td{border-bottom:0}
+
+  /* ステップ */
+  ol.steps li{font-size:14.5px;padding:10px 8px 10px 44px}
+  ol.steps li::before{width:28px;height:28px;font-size:14px;top:6px;
+    background:linear-gradient(135deg,var(--mint),#16c79a);color:#04231c;box-shadow:0 4px 14px rgba(34,211,166,.5)}
+
+  /* FAQ */
+  .faqq{font-size:14.5px;color:#f1f5fb;position:relative;padding-left:22px}
+  .faqq::before{content:"Q";position:absolute;left:0;color:var(--mint);font-weight:900}
+  .faqa{font-size:13.5px;padding-left:14px;border-left:2px solid rgba(255,255,255,.09);margin-left:8px}
+
+  /* オファーCTA */
+  a.ofcta{background:linear-gradient(135deg,#37efc0,#16c79a);color:#04231c;font-size:16px;padding:18px 14px;border-radius:14px;
+    box-shadow:0 12px 30px rgba(34,211,166,.4);letter-spacing:.02em;transition:.15s}
+  a.ofcta:hover{transform:translateY(-2px);box-shadow:0 16px 38px rgba(34,211,166,.5)}
+
+  footer{color:#5b6b82;margin-top:30px;font-size:11.5px}
+
+  /* ===================== ビジュアル要素 ===================== */
+  .hero-art{margin:24px auto 4px;max-width:300px}
+  .hero-art svg{width:100%;height:auto;display:block;filter:drop-shadow(0 16px 36px rgba(0,0,0,.5))}
+  .hero-art img{width:100%;height:auto;display:block;filter:drop-shadow(0 20px 40px rgba(0,0,0,.6))}
+  .hero-banner{display:block;width:100%;max-width:360px;margin:16px auto 16px;border-radius:18px;
+    border:1px solid var(--glass-bd);box-shadow:0 22px 46px rgba(0,0,0,.6),0 0 60px rgba(34,211,166,.12)}
+
+  /* セクション見出しのアイコン丸 */
+  .ofh-ico{display:flex;align-items:center;gap:12px}
+  .ofh-ico .badge-ico{flex:none;width:44px;height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,rgba(46,230,182,.18),rgba(109,108,255,.18));border:1px solid var(--glass-bd)}
+  .ofh-ico .badge-ico svg{width:24px;height:24px;stroke:var(--mint);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .ofh-ico .ofh{margin:0}
+
+  /* POINT番号バッジ */
+  .pnum{display:inline-flex;align-items:center;gap:8px;font-weight:900;color:var(--gold);font-size:12px;letter-spacing:.1em;margin-bottom:8px}
+  .pnum span{font-size:26px;line-height:1;background:linear-gradient(135deg,var(--gold),#ff8a3d);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+
+  /* 特典アイコングリッド（2x2） */
+  .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+  .fcard{background:rgba(255,255,255,.03);border:1px solid var(--glass-bd);border-radius:16px;padding:16px 12px;text-align:center;position:relative}
+  .fcard .num{position:absolute;top:10px;right:12px;font-size:11px;font-weight:900;color:rgba(255,255,255,.18)}
+  .fcard .ico{width:50px;height:50px;margin:2px auto 10px;border-radius:14px;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,rgba(46,230,182,.18),rgba(109,108,255,.18));border:1px solid var(--glass-bd)}
+  .fcard .ico svg{width:28px;height:28px;stroke:var(--mint);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .fcard .ft{font-weight:800;font-size:13.5px;color:#f1f5fb;line-height:1.4}
+  .fcard .fd{font-size:11.5px;color:#9fb0c8;margin-top:4px;line-height:1.5}
+
+  /* ビフォーアフター（時短）ビジュアル */
+  .ba{display:flex;align-items:center;gap:10px;margin:14px 0;justify-content:center}
+  .ba .col{flex:1;background:rgba(255,255,255,.03);border:1px solid var(--glass-bd);border-radius:14px;padding:12px;text-align:center}
+  .ba .col .lab{font-size:11px;color:#9fb0c8;margin-bottom:6px}
+  .ba .bar{height:10px;border-radius:6px;background:#2a3344;overflow:hidden;display:flex;gap:2px}
+  .ba .bar i{display:block;height:100%;background:linear-gradient(90deg,#37efc0,#16c79a)}
+  .ba .arrow{flex:none;color:var(--mint);font-size:22px;font-weight:900}
+  .ba .big2{font-size:20px;font-weight:900;margin-top:6px}
+  .ba .big2.cut{color:var(--mint)}
+
+  /* 比較表 ○✕ をバッジ化 */
+  table.cmp td.y,table.cmp td.n{color:transparent;line-height:0}
+  table.cmp td.y::after{content:"✓";display:inline-flex;align-items:center;justify-content:center;width:23px;height:23px;border-radius:50%;
+    background:linear-gradient(135deg,#37efc0,#16c79a);color:#04231c;font-weight:900;font-size:13px;line-height:1}
+  table.cmp td.n::after{content:"−";display:inline-flex;align-items:center;justify-content:center;width:23px;height:23px;border-radius:50%;
+    background:rgba(255,255,255,.06);color:#5b6b82;font-weight:900;font-size:15px;line-height:1}
+
+  /* ステップにアイコン枠 */
+  ol.steps li{display:flex;align-items:flex-start;gap:10px;padding-left:8px}
+  ol.steps li::before{position:static;flex:none}
+
+  /* セクションイラスト */
+  .sec-art{width:100%;border-radius:14px;margin:2px 0 16px;display:block;
+    box-shadow:0 14px 32px rgba(0,0,0,.45);border:1px solid var(--glass-bd)}
+
+  /* 特典＝横長カード（右にアイコン）を縦並び */
+  .frows{display:flex;flex-direction:column;gap:12px;margin:14px 0}
+  .frow{display:flex;align-items:center;gap:13px;background:rgba(255,255,255,.035);border:1px solid var(--glass-bd);border-radius:16px;padding:15px;box-shadow:0 8px 20px rgba(0,0,0,.3)}
+  .frow .fnum{flex:none;width:27px;height:27px;border-radius:8px;background:rgba(46,230,182,.14);color:#37efc0;font-weight:900;font-size:12px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(46,230,182,.32)}
+  .frow .ftxt{flex:1;min-width:0}
+  .frow .ft{font-weight:800;font-size:15.5px;color:#fff;line-height:1.4}
+  .frow .fd{font-size:12.5px;color:#9fb0c8;margin-top:3px;line-height:1.6}
+  .frow .fimg{flex:none;width:74px;height:74px;border-radius:14px;object-fit:cover;border:1px solid var(--glass-bd);box-shadow:0 6px 16px rgba(0,0,0,.45)}
+
+  /* ===================== カラーバンド（セクション色分け）===================== */
+  .band{position:relative;left:50%;width:100vw;margin-left:-50vw;padding:48px 0;border-top:1px solid rgba(255,255,255,.05)}
+  .band .inner{max-width:600px;margin:0 auto;padding:0 18px}
+  .band-problem{background:radial-gradient(620px 320px at 50% 0,rgba(99,102,241,.10),transparent),linear-gradient(180deg,#0c1326,#0a0f1f)}
+  .band-feat{background:radial-gradient(620px 340px at 50% 0,rgba(46,230,182,.15),transparent),linear-gradient(180deg,#07211b,#0a0f1c)}
+  .band-why{background:radial-gradient(620px 340px at 50% 0,rgba(255,181,71,.14),transparent),linear-gradient(180deg,#1f1808,#0d0f1c)}
+  .band-get{background:radial-gradient(620px 340px at 50% 0,rgba(124,121,255,.17),transparent),linear-gradient(180deg,#15122e,#0b0d1d)}
+  .band-limit{background:radial-gradient(620px 320px at 50% 0,rgba(255,90,90,.15),transparent),linear-gradient(180deg,#240e11,#0d0c14)}
+  .band-faq{background:linear-gradient(180deg,#0b101f,#0a0d18)}
+  .band-final{background:radial-gradient(620px 380px at 50% 8%,rgba(46,230,182,.22),transparent),linear-gradient(180deg,#08231c,#0a0d16)}
+
+  /* 目立つセクション見出し */
+  .bhead{text-align:center;margin-bottom:20px}
+  .slabel{display:inline-flex;align-items:center;gap:7px;font-weight:900;font-size:12px;letter-spacing:.1em;padding:7px 16px;border-radius:999px;margin-bottom:14px}
+  .slabel .pn{font-size:14px;line-height:1}
+  .slabel.t{background:rgba(46,230,182,.15);color:#6ff2cf;border:1px solid rgba(46,230,182,.45)}
+  .slabel.g{background:rgba(255,181,71,.15);color:#ffd28a;border:1px solid rgba(255,181,71,.45)}
+  .slabel.i{background:rgba(124,121,255,.18);color:#c2bfff;border:1px solid rgba(124,121,255,.45)}
+  .slabel.r{background:rgba(255,90,90,.16);color:#ffa3a3;border:1px solid rgba(255,90,90,.5)}
+  .slabel.s{background:rgba(255,255,255,.06);color:#cdd7e6;border:1px solid var(--glass-bd)}
+  .bh{font-size:25px;line-height:1.46;font-weight:900;margin:0;letter-spacing:.004em;color:#fff}
+  .bh.sm{font-size:21px}
+  /* 蛍光マーカー */
+  .mk{color:#ffd54a;font-weight:900}
+  .mk.t{color:#37efc0;font-weight:900}
+  .kw-r{color:#ff7a7a;font-weight:900}
+  .kw-b{color:#5ad1ff;font-weight:900}
+
+  .band p{font-size:14.5px;line-height:1.9;color:#dbe3ef;margin:10px 0}
+  .band .sub{color:#9fb0c8;font-size:13px}
+  .band .big{font-size:17px;font-weight:800;color:#fff}
+
+  /* CTA（先着タブ＋▼）*/
+  .cta-wrap{text-align:center;margin-top:18px}
+  .cta-tab{display:inline-block;background:#ff5a5a;color:#fff;font-weight:900;font-size:12px;padding:6px 16px;border-radius:9px 9px 0 0;letter-spacing:.05em}
+  .cta-arrow{color:var(--mint);font-weight:900;letter-spacing:.34em;font-size:14px;margin:8px 0 4px}
+  .band a.ofcta{margin:0 auto;max-width:460px}
+
+  /* 注意ボックス（限定）*/
+  .warnbox{border:2px solid rgba(255,90,90,.5);background:rgba(255,90,90,.06);border-radius:16px;padding:22px 18px;text-align:center}
+  .warnbox .wt{display:inline-block;color:#fff;background:#ff5a5a;font-weight:900;font-size:19px;letter-spacing:.08em;padding:8px 22px;border-radius:10px;margin-bottom:16px;box-shadow:0 8px 20px rgba(255,90,90,.45)}
+  .warnbox .wbig{font-size:25px;font-weight:900;color:#fff;margin:6px 0}
+  .warnbox .wbig .num{color:#ff7a7a}
+
+  /* サンプル動画ボックス */
+  .sample{margin-top:14px;border:1px dashed rgba(46,230,182,.4);border-radius:14px;padding:15px;background:rgba(46,230,182,.05)}
+  .sample-t{font-weight:800;font-size:14px;color:#fff}
+  .sample-d{font-size:12px;color:#9fb0c8;margin:6px 0 11px;line-height:1.65}
+  .sample-btn{display:block;text-align:center;text-decoration:none;background:rgba(255,255,255,.06);border:1px solid var(--glass-bd);color:#bff6e6;font-weight:800;font-size:13.5px;padding:13px;border-radius:11px;transition:.15s}
+  .sample-btn:hover{background:rgba(46,230,182,.14);border-color:rgba(46,230,182,.45)}
+
+  /* 追加バンド色（「カットはできた」用・紫）*/
+  .band-gap{background:radial-gradient(620px 320px at 50% 0,rgba(124,121,255,.12),transparent),linear-gradient(180deg,#13102a,#0c0f22)}
+
+  /* 透過カード画像（枠なし）*/
+  .sec-art.plain{border:none;box-shadow:none;background:transparent;filter:drop-shadow(0 18px 32px rgba(0,0,0,.55))}
+
+  /* つなぎ「そこで…」*/
+  .bridge{text-align:center;font-size:30px;font-weight:900;color:var(--gold);letter-spacing:.04em;margin:0 0 8px;text-shadow:0 4px 18px rgba(255,181,71,.35)}
+
+  /* ===== はじめての方へ｜使い方ガイド ===== */
+  .guide{background:var(--glass);border:1px solid var(--glass-bd);border-radius:18px;padding:22px 16px;margin-top:18px;box-shadow:var(--shadow)}
+  .guide-h{font-size:18px;font-weight:900;color:#fff;margin:0 0 8px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+  .g-badge{font-size:12px;font-weight:800;color:#37efc0;background:rgba(46,230,182,.14);border:1px solid rgba(46,230,182,.4);padding:5px 13px;border-radius:999px}
+  .guide-lead{font-size:13.5px;color:#9fb0c8;margin:0 0 16px;line-height:1.75}
+  ol.gsteps{counter-reset:gs;list-style:none;padding:0;margin:0}
+  ol.gsteps li{position:relative;padding:0 0 22px 46px}
+  ol.gsteps li:last-child{padding-bottom:0}
+  ol.gsteps li::before{counter-increment:gs;content:counter(gs);position:absolute;left:0;top:0;width:31px;height:31px;border-radius:50%;
+    background:linear-gradient(135deg,#37efc0,#16c79a);color:#04231c;font-weight:900;font-size:15px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(34,211,166,.5)}
+  ol.gsteps li:not(:last-child)::after{content:"";position:absolute;left:15px;top:34px;bottom:8px;width:2px;background:rgba(255,255,255,.1)}
+  .gsteps .gt{font-weight:800;font-size:15.5px;color:#fff;line-height:1.4}
+  .gsteps .gd{font-size:13px;color:#cbd5e6;margin-top:5px;line-height:1.75}
+  .g-dl{display:inline-flex;align-items:center;gap:6px;margin-top:11px;text-decoration:none;
+    background:linear-gradient(135deg,#37efc0,#16c79a);color:#04231c;font-weight:800;font-size:14px;padding:12px 18px;border-radius:11px;box-shadow:0 8px 20px rgba(34,211,166,.35)}
+  .gsteps .ghint{font-size:11.5px;color:#8aa3bd;margin-top:7px}
+  .gshot{width:100%;max-width:260px;border-radius:12px;border:1px solid var(--glass-bd);margin-top:11px;box-shadow:0 10px 24px rgba(0,0,0,.45);display:block}
+  .guide-foot{text-align:center;font-size:13px;color:#37efc0;font-weight:800;margin-top:18px}
+  .guide-foot .arw{display:block;font-size:20px;margin-top:2px;animation:bob 1.4s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <span class="eyebrow">NEW · スマホ完結 · インストール不要</span>
+    <h1>動画編集に、<br><span class="em">革命</span>が起きました。</h1>
+    <p class="lead">「面倒なカット作業」を、AIが自動で終わらせる——<br>そんなツールが、ついに完成しました。<br><strong style="color:#fff">スマホだけ</strong>で、今すぐ体験できます。</p>
+    <img class="hero-banner" src="assets/hero-banner.webp" alt="スマホ自動カットツール">
+    <div class="chips"><span class="chip">スマホ完結</span><span class="chip">アップロード不要</span><span class="chip">無料で体験</span></div>
+  </header>
+
+  <!-- ② ツールのすごさ -->
+  <section class="band band-feat">
+    <div class="inner">
+      <div class="bhead">
+        <span class="slabel t"><span class="pn">🚀</span>できること</span>
+        <h2 class="bh">しゃべってない“間”を、<br><span class="mk t">AIが自動でカット</span></h2>
+      </div>
+      <p>動画を選んで、ボタンを押すだけ。無音の“間”をAIが見つけて、テンポのいい動画に仕上げます。むずかしい設定も、アプリのインストールも一切いりません。</p>
+      <div class="ba">
+        <div class="col"><div class="lab">手作業のカット</div><div class="bar"><i style="width:100%"></i></div><div class="big2">30分〜</div></div>
+        <div class="arrow">→</div>
+        <div class="col"><div class="lab">このツール</div><div class="bar"><i style="width:12%"></i></div><div class="big2 cut">数秒</div></div>
+      </div>
+      <p class="sub">これまで何十分もかかっていた作業が、ボタン1つで終わります。</p>
+    </div>
+  </section>
+
+  <!-- はじめての方へ｜使い方ガイド -->
+  <section class="guide">
+    <div class="guide-h"><span class="g-badge">はじめての方へ</span>かんたん使い方</div>
+    <p class="guide-lead">動画編集はまったくの初めてでも大丈夫。<strong style="color:#fff">スマホだけ・3ステップ</strong>で試せます。まずはお試し用の動画をダウンロードするところから。</p>
+    <ol class="gsteps">
+      <li>
+        <div class="gt">まずは「サンプル動画」を保存する</div>
+        <div class="gd">自分で撮った動画がなくてもOK。下のボタンを押すと、お試し用の動画（人がしゃべっている動画）がスマホに保存されます。</div>
+        <a class="g-dl" href="https://drive.google.com/uc?export=download&id=1-NhC1hDIHl6HjTSZGTSnB_SEe7BdBvOS" target="_blank" rel="noopener">⬇ サンプル動画をダウンロード</a>
+        <div class="ghint">※すでに自分の動画がある方は、このステップは飛ばしてOKです</div>
+      </li>
+      <li>
+        <div class="gt">動画を読み込む</div>
+        <div class="gd">下の<strong style="color:#fff">「タップして動画を選択」</strong>を押して、いま保存した動画（または自分の動画）を選びます。カメラロールから選ぶだけ。</div>
+        <img class="gshot" src="assets/guide-select.webp" alt="タップして動画を選択する画面" loading="lazy">
+      </li>
+      <li>
+        <div class="gt">ボタンを押すだけで自動カット</div>
+        <div class="gd"><strong style="color:#fff">「自動カットを解析する」</strong>を押すと、しゃべっていない“間（無音）”をAIが自動で見つけてカットします。<strong style="color:#fff">「カット版を再生」</strong>を押すと、カット後の仕上がりをその場で確認できます（緑＝残す／暗＝カットした部分）。</div>
+        <img class="gshot" src="assets/guide-result.webp" alt="自動カット結果の画面" loading="lazy">
+      </li>
+    </ol>
+    <div class="guide-foot">それでは、さっそく下のツールで試してみましょう<span class="arw">↓</span></div>
+  </section>
+
+
+  <!-- STEP 1 -->
+  <div class="card">
+    <h2><span class="step-no">1</span>動画を選ぶ</h2>
+    <div id="drop">
+      <div class="ic">🎬</div>
+      <div class="t">タップして動画を選択</div>
+      <div class="s">（PCはドラッグ＆ドロップもOK / カメラロールから選べます）</div>
+    </div>
+    <input type="file" id="file" accept="video/*">
+    <div class="status" id="status"></div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="card hidden" id="resultCard">
+    <h2><span class="step-no">2</span>自動カット結果</h2>
+    <video id="video" playsinline webkit-playsinline preload="metadata"></video>
+
+    <!-- 解析ボタン（iOSは必ずユーザー操作起点で実行） -->
+    <button class="b prim full" id="analyze" style="margin-top:12px">▶ 自動カットを解析する</button>
+
+    <!-- 解析後に表示 -->
+    <div id="analyzed" class="hidden">
+      <div class="tl-wrap">
+        <div class="tl" id="tl"><div class="play" id="playhead"></div></div>
+        <div class="legend">
+          <span><i class="k"></i>残す（しゃべってる所）</span>
+          <span><i class="c"></i>カット（無音）</span>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><div class="v" id="sOrig">–</div><div class="l">元の長さ</div></div>
+        <div class="stat"><div class="v big" id="sCut">–</div><div class="l">カット後</div></div>
+        <div class="stat"><div class="v big" id="sPct">–</div><div class="l">短縮率</div></div>
+      </div>
+
+      <div class="btns">
+        <button class="b prim" id="playCut">▶ カット版を再生</button>
+        <button class="b ghost" id="playOrig">元の動画を再生</button>
+      </div>
+
+      <details>
+        <summary>カットの強さを調整する</summary>
+        <div class="ctl">
+          <label>無音と判定する音量 <b><span id="thrV">-48</span> dB</b></label>
+          <input type="range" id="thr" min="-60" max="-20" step="1" value="-48">
+          <div class="hint">右にするほど “小さい音まで無音扱い” でカットが増えます</div>
+
+          <label>カットする最短の無音 <b><span id="minV">0.7</span> 秒</b></label>
+          <input type="range" id="min" min="0.2" max="2" step="0.1" value="0.7">
+          <div class="hint">この長さ以上の無音だけを削ります（短い“間”は残す）</div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- LOCKED EXPORT -->
+  <div class="lock" id="lock">
+    <div class="h">🔒 カット済みの動画を書き出す（保存）</div>
+    <p>体験版ではプレビューまで。<b>カット済み動画のフル書き出し</b>は、無料の個別相談に参加した方に解放パスワードをお渡ししています。</p>
+    <div class="pw">
+      <input type="text" id="pw" placeholder="解放パスワードを入力" autocomplete="off">
+      <button class="unlock" id="unlock">解放</button>
+    </div>
+    <div class="msg" id="pwMsg"></div>
+    <button class="b prim full hidden" id="exportBtn" style="margin-top:12px">⬇ カット動画を書き出して保存</button>
+    <div class="status" id="expStatus"></div>
+    <div class="hidden" id="expNote" style="font-size:11px;color:var(--sub);margin-top:6px">※書き出しはサーバーで処理します（動画を安全に送信し、保存ファイルを作成します）</div>
+  </div>
+
+  <!-- ===== 革命→魅力→実績→フル解放 ===== -->
+
+  <!-- ④ 動画編集の魅力（今こそ副業）-->
+  <section class="band band-why">
+    <div class="inner">
+      <div class="bhead">
+        <span class="slabel g"><span class="pn">💡</span>WHY NOW</span>
+        <h2 class="bh">面倒がなくなった今こそ、<br><span class="mk">動画編集を始めるチャンス</span></h2>
+      </div>
+      <p>これまで動画編集は「時間のかかる面倒な作業」が大きな壁でした。でも、こうして<strong style="color:#fff">面倒な部分を自動化できる</strong>ようになった今なら、話はまったく別です。</p>
+      <ul class="feat">
+        <li>📱 <b>スマホ1台</b>から始められる</li>
+        <li>💰 初期費用・機材費は<b>ほぼゼロ</b></li>
+        <li>🔰 <b>未経験</b>からでもスタートできる</li>
+        <li>📈 動画の需要は<b>いま急成長中</b>で、伸び続けている</li>
+      </ul>
+      <p class="big">だからこそ、動画編集は<span class="mk t">“いま一番おすすめの副業”</span>なんです。</p>
+    </div>
+  </section>
+
+  <!-- ⑤ 実績者の声 -->
+  <section class="band band-problem">
+    <div class="inner">
+      <div class="bhead">
+        <span class="slabel i"><span class="pn">🙌</span>VOICE</span>
+        <h2 class="bh sm">実際に、<span class="kw-b">こんな方たち</span>が<br>動き出しています</h2>
+      </div>
+      <div class="frows">
+        <div class="frow">
+          <span class="fnum">01</span>
+          <div class="ftxt"><div class="ft">30代・会社員</div><div class="fd">「カットが自動なんて衝撃でした。スキマ時間だけで1本作れるようになって、これなら続けられそうです」</div></div>
+        </div>
+        <div class="frow">
+          <span class="fnum">02</span>
+          <div class="ftxt"><div class="ft">40代・主婦</div><div class="fd">「パソコンが苦手な私でも、スマホでポチポチするだけ。家事の合間に楽しく編集できています」</div></div>
+        </div>
+        <div class="frow">
+          <span class="fnum">03</span>
+          <div class="ftxt"><div class="ft">20代・未経験</div><div class="fd">「“面倒そう”で避けてたけど、これなら大丈夫。副業として本気でやってみます」</div></div>
+        </div>
+      </div>
+      <p class="note-sm" style="margin-top:8px">※個人の体験・感想であり、成果や収入を保証するものではありません。</p>
+    </div>
+  </section>
+
+  <!-- ⑥ フル解放＋CTA -->
+  <section class="band band-feat">
+    <div class="inner">
+      <div class="bhead">
+        <h2 class="bh">面倒を全部自動化する<br><span class="mk t">フルバージョン機能</span>を、<br>この企画で解放します</h2>
+      </div>
+      <img class="sec-art" src="assets/feat-unlock.webp" alt="4大機能フル解放" loading="lazy">
+      <div class="frows">
+        <div class="frow">
+          <span class="fnum">01</span>
+          <div class="ftxt"><div class="ft">カットツールフル機能版</div><div class="fd">カットした動画をそのまま保存（書き出し）できる</div></div>
+          <img class="fimg" src="assets/ic-cut.webp" alt="" loading="lazy">
+        </div>
+        <div class="frow">
+          <span class="fnum">02</span>
+          <div class="ftxt"><div class="ft">自動字幕入れツール</div><div class="fd">しゃべった内容を、自動で字幕（テロップ）に</div></div>
+          <img class="fimg" src="assets/ic-telop.webp" alt="" loading="lazy">
+        </div>
+        <div class="frow">
+          <span class="fnum">03</span>
+          <div class="ftxt"><div class="ft">テロップベース作成ツール</div><div class="fd">TVで見る“座布団”（強調の帯）を量産できる</div></div>
+          <img class="fimg" src="assets/ic-base.webp" alt="" loading="lazy">
+        </div>
+        <div class="frow">
+          <span class="fnum">04</span>
+          <div class="ftxt"><div class="ft">リッチテロップツール</div><div class="fd">映える・かっこいいテロップ案を一瞬で</div></div>
+          <img class="fimg" src="assets/ic-rich.webp" alt="" loading="lazy">
+        </div>
+      </div>
+      <p>いま無料で使えるのは「カット」まで。<strong style="color:#fff">保存（書き出し）・自動テロップ・座布団・リッチテロップ</strong>まで含めたフル機能を、この企画に参加した方へ無料で解放します。</p>
+      <p class="big" style="text-align:center">面倒な作業を自動化してフル活用するための<br><span class="mk t">フルバージョン機能の解放</span>は、こちらから👇</p>
+      <div class="cta-wrap">
+        <div class="cta-tab">参加無料・人数限定</div>
+        <a class="ofcta" data-apply href="#">フル解放パスワードお渡し会に申し込む</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 限定（注意）-->
+  <section class="band band-limit">
+    <div class="inner">
+      <div class="warnbox">
+        <div class="wt">※ ご注意ください ※</div>
+        <div class="wbig">人数には<span class="num">限り</span>があります</div>
+        <p class="sub" style="margin-top:8px">一人ずつ丁寧にお渡しするため、ご案内できる枠には限りがあります。枠が埋まったら、次がいつになるかはお約束できません。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="band band-faq">
+    <div class="inner">
+      <div class="bhead"><h2 class="bh sm">よくある質問</h2></div>
+      <p class="faqq">Q. 何か売り込まれませんか？</p><p class="faqa">A. その場で契約を迫るような無理な勧誘はしません。安心してご参加ください。</p>
+      <p class="faqq">Q. スクールなどの案内はありますか？</p><p class="faqa">A. はい。ご希望の方にはご案内しています。必要ない方への無理な勧誘はしませんので、ご安心ください。</p>
+      <p class="faqq">Q. お金はかかりますか？</p><p class="faqa">A. 参加もツールも無料です。</p>
+      <p class="faqq">Q. スマホだけでできますか？</p><p class="faqa">A. はい。スマホ1台でOKです。</p>
+      <p class="faqq">Q. 編集はまったくの未経験ですが？</p><p class="faqa">A. 大丈夫。面倒な作業はツールがやります（操作はタップだけ）。</p>
+    </div>
+  </section>
+
+  <!-- 決断（最終CTA）-->
+  <section class="band band-final">
+    <div class="inner">
+      <div class="bhead">
+        <h2 class="bh">あなたは、<span class="mk t">どっちを選ぶ？</span></h2>
+      </div>
+      <p>このまま無料版で“カットだけ”を使い続けるか、フル解放して<span class="kw-b">“保存もテロップも全部”</span>スマホで終わらせるか。</p>
+      <p class="sub">どちらも自由です。費用はかかりません（無料です）。</p>
+      <div class="cta-wrap">
+        <div class="cta-arrow">▼ ▼ ▼</div>
+        <a class="ofcta" data-apply href="#">フル解放パスワードお渡し会に申し込む（無料）</a>
+      </div>
+      <p class="big" style="text-align:center;margin-top:26px">“あの時もらっておけば”が、いちばん悔しい。<br>フル解放した向こう側で、待ってます。</p>
+      <div class="cta-wrap">
+        <a class="ofcta" data-apply href="#">いますぐ申し込む（無料）</a>
+        <p class="note-sm" style="margin-top:8px">※参加・ツールは無料です。ご希望の方にはスクールのご案内もします（任意）。</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>※ 体験版のプレビュー解析は端末内だけで行われます（書き出し時のみサーバー処理）</footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const drop=$("drop"), fileInput=$("file"), statusEl=$("status");
+  const resultCard=$("resultCard"), video=$("video");
+  const analyzeBtn=$("analyze"), analyzed=$("analyzed");
+  const tl=$("tl"), playhead=$("playhead");
+  const sOrig=$("sOrig"), sCut=$("sCut"), sPct=$("sPct");
+  const playCut=$("playCut"), playOrig=$("playOrig");
+  const thr=$("thr"), thrV=$("thrV"), minRange=$("min"), minLbl=$("minV");
+  const lock=$("lock"), pw=$("pw"), unlock=$("unlock"), pwMsg=$("pwMsg");
+  const exportBtn=$("exportBtn"), expStatus=$("expStatus"), expNote=$("expNote");
+
+  // ===== 設定 =====
+  const UNLOCK_PASSWORD = "sumaho"; // ←個別相談参加者に渡すパスワード（後で変更／バックエンドのAUTOCUT_PASSWORDと一致させる）
+  const CONSULT_URL = "#";             // ←個別相談LPのURL（後で差し込み）
+  const BACKEND_URL = "https://autocut-api-506892521047.asia-northeast1.run.app"; // 書き出し用バックエンド（Cloud Run）
+  const APPLY_URL = "https://utage-system.com/page/XLsETuSOkxJb"; // お渡し会の申込導線URL
+  let unlockedPw = null;               // 解放済みパスワード（書き出し時に送信）
+  const PAD_SEC   = 0.12;  // カット後ろの余白
+  const PAD_LEAD  = 0.0533; // カット前(喋り出し)の余白 ＝0.12 - 2frame@30fps
+  const WIN_SEC   = 0.03;  // 解析ウィンドウ
+  const DECODE_TIMEOUT = 6000; // 高速デコードの上限（固まり防止）
+
+  let currentFile=null;
+  let cache=null;      // {dbs, winSec, duration}
+  let segs=[];         // 残すセグメント [{start,end}]
+  let rafId=null, mode=null, segIdx=0;
+
+  // WebAudio（リアルタイム解析用・要素に1度だけバインド）
+  let rtCtx=null, mediaSrc=null, mainGain=null, analyserNode=null;
+
+  function setStatus(msg, cls){ statusEl.className="status"+(cls?(" "+cls):""); statusEl.innerHTML=msg||""; }
+  function fmt(t){ if(!isFinite(t))return"–"; const m=Math.floor(t/60), s=Math.floor(t%60); return m+":"+String(s).padStart(2,"0"); }
+  function withTimeout(p, ms){ return Promise.race([p, new Promise((_,rej)=>setTimeout(()=>rej(new Error("timeout")), ms))]); }
+
+  // ===== ファイル受け取り =====
+  drop.addEventListener("click", ()=>fileInput.click());
+  ["dragenter","dragover"].forEach(e=>drop.addEventListener(e,ev=>{ev.preventDefault();drop.classList.add("drag");}));
+  ["dragleave","drop"].forEach(e=>drop.addEventListener(e,ev=>{ev.preventDefault();drop.classList.remove("drag");}));
+  drop.addEventListener("drop", ev=>{ const f=ev.dataTransfer.files[0]; if(f) pickFile(f); });
+  fileInput.addEventListener("change", ()=>{ const f=fileInput.files[0]; if(f) pickFile(f); });
+
+  function pickFile(file){
+    if(!file.type.startsWith("video/")){ setStatus("動画ファイルを選んでください","err"); return; }
+    stopPlayback();
+    currentFile=file; cache=null; segs=[];
+    if(video.src) URL.revokeObjectURL(video.src);
+    video.src=URL.createObjectURL(file);
+    video.load();
+    // 動画はすぐ表示、解析はボタンで（iOSのユーザー操作起点対策）
+    resultCard.classList.remove("hidden");
+    analyzed.classList.add("hidden");
+    // #lock は常時表示（動画読み込み時に隠さない）
+    analyzeBtn.disabled=false;
+    analyzeBtn.textContent="▶ 自動カットを解析する";
+    setStatus("動画を読み込みました。「解析する」を押してください👇");
+  }
+
+  // ===== 解析ボタン =====
+  analyzeBtn.addEventListener("click", runAnalysis);
+  async function runAnalysis(){
+    if(!currentFile) return;
+    analyzeBtn.disabled=true;
+    let dbs=null;
+    // 1) 高速デコード（PCは一瞬）＋タイムアウト
+    setStatus('<span class="spin"></span>音声を解析しています…',"work");
+    try{ dbs=await fastDecode(currentFile); }
+    catch(e){ console.warn("fastDecode failed:",e.message); }
+    // 2) ダメならリアルタイム解析（iOSフォールバック）
+    if(!dbs){
+      try{
+        setStatus('<span class="spin"></span>この端末向けに解析中…（動画を内部再生します）',"work");
+        dbs=await realtimeDecode();
+      }catch(e){
+        console.error("realtimeDecode failed:",e);
+        setStatus("解析できませんでした。短め（〜2分）の動画でもう一度お試しください。","err");
+        analyzeBtn.disabled=false; return;
+      }
+    }
+    const duration=await getDuration();
+    cache={dbs, winSec:WIN_SEC, duration};
+    recompute();
+    analyzed.classList.remove("hidden");
+    lock.classList.remove("hidden");
+    analyzeBtn.textContent="✓ 解析しました";
+    setStatus("");
+  }
+
+  function getDuration(){
+    return new Promise(res=>{
+      if(isFinite(video.duration)&&video.duration>0) return res(video.duration);
+      video.addEventListener("loadedmetadata", ()=>res(video.duration||0), {once:true});
+    });
+  }
+
+  // ===== 高速デコード（decodeAudioData） =====
+  async function fastDecode(file){
+    const AC=window.AudioContext||window.webkitAudioContext;
+    if(!AC) throw new Error("no-webaudio");
+    let ctx;
+    try{ ctx=new AC({sampleRate:16000}); }catch(e){ ctx=new AC(); }
+    try{ await ctx.resume(); }catch(e){}
+    const buf=await file.arrayBuffer();
+    const audioBuf=await withTimeout(decodeCompat(ctx, buf.slice(0)), DECODE_TIMEOUT);
+    try{ ctx.close(); }catch(e){}
+    if(!audioBuf || !audioBuf.length) throw new Error("empty");
+    const dbs=bufferToDbs(audioBuf);
+    let mx=-200; for(let i=0;i<dbs.length;i++) if(dbs[i]>mx) mx=dbs[i];
+    if(mx < -90) throw new Error("silent"); // デコードできたが音が無い＝失敗扱い→フォールバック
+    return dbs;
+  }
+  // Safari旧仕様（コールバック版）にも対応
+  function decodeCompat(ctx, arrbuf){
+    return new Promise((resolve,reject)=>{
+      let done=false;
+      try{
+        const p=ctx.decodeAudioData(arrbuf, b=>{done=true;resolve(b);}, e=>{if(!done)reject(e||new Error("decode"));});
+        if(p&&p.then) p.then(b=>{if(!done){done=true;resolve(b);}}).catch(e=>{if(!done)reject(e);});
+      }catch(e){ reject(e); }
+    });
+  }
+  function bufferToDbs(audioBuf){
+    const sr=audioBuf.sampleRate;
+    const ch0=audioBuf.getChannelData(0);
+    const ch1=audioBuf.numberOfChannels>1?audioBuf.getChannelData(1):null;
+    const win=Math.max(1,Math.floor(sr*WIN_SEC));
+    const n=Math.floor(ch0.length/win);
+    const dbs=new Float32Array(n);
+    for(let i=0;i<n;i++){
+      const off=i*win; let sum=0;
+      for(let j=0;j<win;j++){ let s=ch0[off+j]; if(ch1)s=(s+ch1[off+j])*0.5; sum+=s*s; }
+      const rms=Math.sqrt(sum/win);
+      dbs[i]= rms>1e-7 ? 20*Math.log10(rms) : -120;
+    }
+    return dbs;
+  }
+
+  // ===== リアルタイム解析（iOS用フォールバック） =====
+  async function realtimeDecode(){
+    const AC=window.AudioContext||window.webkitAudioContext;
+    if(!AC) throw new Error("no-webaudio");
+    if(!rtCtx) rtCtx=new AC();
+    await rtCtx.resume();
+    if(!mediaSrc){
+      mediaSrc=rtCtx.createMediaElementSource(video);
+      mainGain=rtCtx.createGain();
+      analyserNode=rtCtx.createAnalyser(); analyserNode.fftSize=1024;
+      mediaSrc.connect(analyserNode);
+      mediaSrc.connect(mainGain); mainGain.connect(rtCtx.destination);
+    }
+    mainGain.gain.value=0; // 解析中は無音
+    const data=new Float32Array(analyserNode.fftSize);
+    const samples=[];
+    video.muted=false;
+    try{ video.currentTime=0; }catch(e){}
+    video.preservesPitch=false; video.webkitPreservesPitch=false;
+    let rate=2; try{ video.playbackRate=rate; }catch(e){ rate=1; }
+    await video.play();
+    const dur=video.duration||1;
+    await new Promise((resolve)=>{
+      let raf;
+      const finish=()=>{ if(raf)cancelAnimationFrame(raf);
+        video.pause(); try{video.playbackRate=1;}catch(e){}
+        mainGain.gain.value=1; try{video.currentTime=0;}catch(e){} resolve(); };
+      const tick=()=>{
+        analyserNode.getFloatTimeDomainData(data);
+        let sum=0; for(let i=0;i<data.length;i++) sum+=data[i]*data[i];
+        samples.push({t:video.currentTime, rms:Math.sqrt(sum/data.length)});
+        setStatus('<span class="spin"></span>解析中… '+Math.min(99,Math.round(video.currentTime/dur*100))+'%',"work");
+        if(video.ended || video.currentTime>=dur-0.06){ finish(); }
+        else raf=requestAnimationFrame(tick);
+      };
+      video.addEventListener("ended", finish, {once:true});
+      raf=requestAnimationFrame(tick);
+    });
+    return samplesToDbs(samples, video.duration||dur);
+  }
+  function samplesToDbs(samples, duration){
+    const n=Math.max(1,Math.floor(duration/WIN_SEC));
+    const rms=new Float32Array(n).fill(-1);
+    for(const s of samples){
+      let i=Math.floor(s.t/WIN_SEC); if(i<0)i=0; if(i>=n)i=n-1;
+      rms[i]= rms[i]<0 ? s.rms : Math.max(rms[i], s.rms);
+    }
+    let last=0; const dbs=new Float32Array(n);
+    for(let i=0;i<n;i++){ let v=rms[i]; if(v<0)v=last; last=v; dbs[i]= v>1e-7?20*Math.log10(v):-120; }
+    return dbs;
+  }
+
+  // ===== セグメント計算 =====
+  function buildSegments(dbs, winSec, duration, thrDb, minSilSec){
+    const n=dbs.length;
+    const voiced=new Uint8Array(n);
+    for(let i=0;i<n;i++) voiced[i]= dbs[i]>=thrDb ? 1:0;
+    const minSilWin=Math.max(1,Math.ceil(minSilSec/winSec));
+    let i=0;
+    while(i<n){
+      if(!voiced[i]){ let j=i; while(j<n&&!voiced[j]) j++; if(j-i<minSilWin) for(let k=i;k<j;k++) voiced[k]=1; i=j; }
+      else i++;
+    }
+    const raw=[]; i=0;
+    while(i<n){
+      if(voiced[i]){ let j=i; while(j<n&&voiced[j]) j++;
+        let s=i*winSec-PAD_LEAD, e=j*winSec+PAD_SEC; if(s<0)s=0; if(e>duration)e=duration;
+        raw.push({start:s,end:e}); i=j; }
+      else i++;
+    }
+    const merged=[];
+    for(const s of raw){ const last=merged[merged.length-1];
+      if(last && s.start<=last.end) last.end=Math.max(last.end,s.end); else merged.push({start:s.start,end:s.end}); }
+    return merged;
+  }
+  function recompute(){
+    if(!cache) return;
+    segs=buildSegments(cache.dbs, cache.winSec, cache.duration, parseFloat(thr.value), parseFloat(minRange.value));
+    if(segs.length===0) segs=[{start:0,end:cache.duration}];
+    renderTimeline(); renderStats(); stopPlayback();
+  }
+  function renderTimeline(){
+    const dur=cache.duration||1;
+    [...tl.querySelectorAll(".seg")].forEach(el=>el.remove());
+    for(const s of segs){ const d=document.createElement("div"); d.className="seg";
+      d.style.left=(s.start/dur*100)+"%"; d.style.width=(Math.max(0,(s.end-s.start))/dur*100)+"%";
+      tl.insertBefore(d, playhead); }
+  }
+  function renderStats(){
+    const dur=cache.duration||0;
+    const kept=segs.reduce((a,s)=>a+(s.end-s.start),0);
+    const pct=dur>0?Math.max(0,Math.round((1-kept/dur)*100)):0;
+    sOrig.textContent=fmt(dur); sCut.textContent=fmt(kept); sPct.textContent=pct+"%";
+  }
+
+  // ===== スライダー =====
+  thr.addEventListener("input", ()=>{ thrV.textContent=thr.value; debounce(recompute); });
+  minRange.addEventListener("input", ()=>{ minLbl.textContent=parseFloat(minRange.value).toFixed(1); debounce(recompute); });
+  let dbT=null; function debounce(fn){ clearTimeout(dbT); dbT=setTimeout(fn,180); }
+
+  // ===== 再生（カット版＝無音スキップ / 元動画＝そのまま） =====
+  function stopPlayback(){ if(rafId)cancelAnimationFrame(rafId); rafId=null; mode=null; video.pause(); playhead.style.display="none";
+    if(playCut)playCut.textContent="▶ カット版を再生"; if(playOrig)playOrig.textContent="元の動画を再生"; }
+  playCut.addEventListener("click", ()=>{
+    if(mode==="cut"){ stopPlayback(); return; }
+    stopPlayback(); mode="cut"; segIdx=0; playhead.style.display="block";
+    try{video.currentTime=segs[0].start;}catch(e){}
+    video.play().then(loop).catch(()=>setStatus("もう一度タップして再生してください"));
+    playCut.textContent="⏸ 停止";
+  });
+  playOrig.addEventListener("click", ()=>{
+    if(mode==="orig"){ stopPlayback(); return; }
+    stopPlayback(); mode="orig"; playhead.style.display="block";
+    video.play().then(loop).catch(()=>{});
+    playOrig.textContent="⏸ 停止";
+  });
+  function loop(){
+    const dur=cache?cache.duration:(video.duration||1);
+    playhead.style.left=(video.currentTime/dur*100)+"%";
+    if(mode==="cut"){
+      const t=video.currentTime; const seg=segs[segIdx];
+      if(!seg){ stopPlayback(); return; }
+      if(t < seg.start-0.03){ video.currentTime=seg.start; }
+      else if(t >= seg.end-0.005){ segIdx++; if(segIdx<segs.length){ video.currentTime=segs[segIdx].start; } else { stopPlayback(); return; } }
+    }
+    if(!video.paused && !video.ended) rafId=requestAnimationFrame(loop);
+    else if(video.ended) stopPlayback();
+  }
+  video.addEventListener("ended", ()=>{ if(mode) stopPlayback(); });
+
+  // ===== パスワード解放（有料＝書き出し） =====
+  unlock.addEventListener("click", ()=>{
+    const v=(pw.value||"").trim();
+    if(!v){ pwMsg.className="msg ng"; pwMsg.textContent="パスワードを入力してください"; return; }
+    if(v.toUpperCase()===UNLOCK_PASSWORD){
+      unlockedPw=v;
+      pwMsg.className="msg ok"; pwMsg.textContent="✓ 解放されました！下のボタンから書き出せます。";
+      exportBtn.classList.remove("hidden"); expNote.classList.remove("hidden");
+    }else{
+      pwMsg.className="msg ng"; pwMsg.textContent="パスワードが違います。個別相談でお渡ししたものをご確認ください。";
+    }
+  });
+
+  // ===== 書き出し（バックエンドでカット→MP4をダウンロード） =====
+  exportBtn.addEventListener("click", async ()=>{
+    if(!currentFile){ expStatus.className="status err"; expStatus.textContent="先に動画を選んでください"; return; }
+    if(!unlockedPw){ expStatus.className="status err"; expStatus.textContent="パスワードを解放してください"; return; }
+    exportBtn.disabled=true;
+    expStatus.className="status work"; expStatus.innerHTML='<span class="spin"></span>サーバーで書き出し中…（動画の長さにより数十秒〜数分）';
+    try{
+      const fd=new FormData();
+      fd.append("video", currentFile);
+      fd.append("password", unlockedPw);
+      fd.append("telop", "false");
+      fd.append("noise_db", thr.value);
+      fd.append("min_sil", minRange.value);
+      const res=await fetch(BACKEND_URL+"/process", {method:"POST", body:fd});
+      if(!res.ok){
+        let msg="書き出しに失敗しました（"+res.status+"）";
+        try{ const j=await res.json(); if(j.detail) msg=j.detail; }catch(e){}
+        throw new Error(msg);
+      }
+      const blob=await res.blob();
+      const a=document.createElement("a");
+      a.href=URL.createObjectURL(blob);
+      a.download="autocut.mp4";
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(()=>URL.revokeObjectURL(a.href), 10000);
+      expStatus.className="status ok"; expStatus.textContent="✓ 書き出し完了！ダウンロードを確認してください。";
+    }catch(err){
+      expStatus.className="status err"; expStatus.textContent=String(err.message||err);
+    }finally{
+      exportBtn.disabled=false;
+    }
+  });
+
+  // 初期表示
+  thrV.textContent=thr.value;
+  minLbl.textContent=parseFloat(minRange.value).toFixed(1);
+  // 下部LPのCTAリンクを設定（仮URL）
+  document.querySelectorAll('[data-apply]').forEach(a=>{ a.href=APPLY_URL; });
+})();
+</script>
+</body>
+</html>

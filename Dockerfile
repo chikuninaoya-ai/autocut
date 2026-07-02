@@ -15,7 +15,7 @@ RUN python -c "from faster_whisper import WhisperModel; WhisperModel('small', de
 
 # サーバーコード + 静的フロント（LP・ツール・画像）を同梱
 COPY server/ /app/
-COPY index.html telop.html /app/static/
+COPY index.html telop.html tool.html /app/static/
 COPY assets/ /app/static/assets/
 
 ENV PORT=8080
