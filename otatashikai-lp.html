@@ -33,14 +33,16 @@
   .center{text-align:center}
   .sec-art{width:100%;border-radius:14px;margin:2px 0 16px;box-shadow:var(--shadow);border:1px solid var(--glass-bd)}
   .sec-art.plain{border:none;box-shadow:none;background:transparent;filter:drop-shadow(0 18px 32px rgba(0,0,0,.55))}
+  .sec-banner{width:100%;display:block;margin:18px 0;border-radius:16px}
+  /* 手書き感テキスト */
+  .human{margin:22px 2px 10px;text-align:left}
+  .human p{font-size:16px;font-weight:800;line-height:1.95;color:#eef2f8;margin:0 0 14px;letter-spacing:.01em}
+  .human p:last-child{margin-bottom:0}
+  .human strong{color:#37efc0;font-weight:900}
+  .human p.hl{font-size:21px;font-weight:900;line-height:1.7;color:#fff}
   .feat{list-style:none;padding:0;margin:12px 0}
   .feat li{background:rgba(255,255,255,.03);border:1px solid var(--glass-bd);border-radius:12px;padding:12px 14px;margin:8px 0;font-size:14px}
   .feat b{color:var(--mint)}
-  .frows{display:flex;flex-direction:column;gap:12px;margin:14px 0}
-  .frow{display:flex;align-items:center;gap:13px;background:rgba(255,255,255,.035);border:1px solid var(--glass-bd);border-radius:16px;padding:15px;box-shadow:0 8px 20px rgba(0,0,0,.3)}
-  .frow .fnum{flex:none;width:27px;height:27px;border-radius:8px;background:rgba(46,230,182,.14);color:#37efc0;font-weight:900;font-size:12px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(46,230,182,.32)}
-  .frow .ftxt{flex:1;min-width:0}.frow .ft{font-weight:800;font-size:15.5px;color:#fff;line-height:1.4}.frow .fd{font-size:12.5px;color:#9fb0c8;margin-top:3px;line-height:1.6}
-  .frow .fimg{flex:none;width:74px;height:74px;border-radius:14px;object-fit:cover;border:1px solid var(--glass-bd);box-shadow:0 6px 16px rgba(0,0,0,.45)}
   table.cmp{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.5px;border-radius:14px;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,.3)}
   table.cmp th,table.cmp td{border-bottom:1px solid rgba(255,255,255,.07);padding:12px 8px;text-align:center}
   table.cmp th{background:rgba(255,255,255,.06);color:#9fb0c8;font-weight:800;font-size:12px}
@@ -51,19 +53,26 @@
   table.cmp td.y,table.cmp td.n{color:transparent;line-height:0}
   table.cmp td.y::after{content:"✓";display:inline-flex;align-items:center;justify-content:center;width:23px;height:23px;border-radius:50%;background:linear-gradient(135deg,#37efc0,#16c79a);color:#04231c;font-weight:900;font-size:13px;line-height:1}
   table.cmp td.n::after{content:"−";display:inline-flex;align-items:center;justify-content:center;width:23px;height:23px;border-radius:50%;background:rgba(255,255,255,.06);color:#5b6b82;font-weight:900;font-size:15px;line-height:1}
+  /* 3ステップ */
   ol.steps{counter-reset:st;list-style:none;padding:0;margin:12px 0}
-  ol.steps li{display:flex;align-items:flex-start;gap:10px;font-size:14.5px;padding:8px 0;color:#dbe3ef}
+  ol.steps li{display:flex;align-items:flex-start;gap:10px;font-size:15px;padding:9px 0;color:#eef2f8;font-weight:800}
   ol.steps li::before{counter-increment:st;content:counter(st);flex:none;width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--mint),#16c79a);color:#04231c;font-weight:900;font-size:14px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(34,211,166,.5)}
-  .faqq{font-weight:700;font-size:14.5px;color:#fff;position:relative;padding-left:22px;margin:12px 0 2px}
-  .faqq::before{content:"Q";position:absolute;left:0;color:var(--mint);font-weight:900}
-  .faqa{font-size:13.5px;color:#9fb0c8;padding-left:14px;border-left:2px solid rgba(255,255,255,.09);margin:0 0 8px 8px}
+  ol.steps .stx{flex:1;min-width:0}
+  .uline{background:linear-gradient(transparent 58%, rgba(255,213,74,.55) 58%);font-weight:800;padding:0 2px;border-radius:2px}
+  .step-arw{display:block;color:#ffd54a;font-weight:900;font-size:15px;line-height:1;margin:4px 0}
+  /* FAQ カード */
+  .faqlist{margin:16px 0 0}
+  .faqitem{border-radius:13px;padding:14px 16px;margin:0 0 9px}
+  .faqitem:nth-child(odd){background:rgba(255,255,255,.045)}
+  .faqitem:nth-child(even){background:rgba(46,230,182,.07)}
+  .faqq{font-size:14.5px;font-weight:800;color:#f1f5fb;position:relative;padding-left:26px;margin:0 0 7px;line-height:1.55}
+  .faqq::before{content:"Q";position:absolute;left:0;top:0;color:var(--mint);font-weight:900;font-size:16px}
+  .faqa{font-size:13.5px;color:#9fb0c8;position:relative;padding-left:26px;margin:0;line-height:1.75}
+  .faqa::before{content:"A";position:absolute;left:0;top:0;color:#ffd54a;font-weight:900;font-size:16px}
   .cta-wrap{text-align:center;margin-top:18px}
   .cta-tab{display:inline-block;background:#ff5a5a;color:#fff;font-weight:900;font-size:12px;padding:6px 16px;border-radius:9px 9px 0 0;letter-spacing:.05em}
   .cta-arrow{color:var(--mint);font-weight:900;letter-spacing:.34em;font-size:14px;margin:8px 0 4px}
   a.ofcta{display:block;max-width:460px;margin:0 auto;text-align:center;text-decoration:none;background:linear-gradient(135deg,#37efc0,#16c79a);color:#04231c;font-weight:800;font-size:16px;padding:18px 14px;border-radius:14px;box-shadow:0 12px 30px rgba(34,211,166,.4)}
-  .warnbox{border:2px solid rgba(255,90,90,.5);background:rgba(255,90,90,.06);border-radius:16px;padding:22px 18px;text-align:center}
-  .warnbox .wt{display:inline-block;color:#fff;background:#ff5a5a;font-weight:900;font-size:19px;letter-spacing:.08em;padding:8px 22px;border-radius:10px;margin-bottom:16px;box-shadow:0 8px 20px rgba(255,90,90,.45)}
-  .warnbox .wbig{font-size:25px;font-weight:900;color:#fff;margin:6px 0}.warnbox .wbig .num{color:#ff7a7a}
   .note-sm{font-size:11px;color:#9fb0c8;text-align:center;margin-top:8px}
   footer{text-align:center;font-size:11px;color:#5b6b82;padding:26px 16px}
 </style>
@@ -73,9 +82,9 @@
   <!-- ヒーロー：お渡し会タイトル -->
   <section class="band band-hero">
     <div class="inner">
-      <img class="sec-art" src="https://autocut-api-506892521047.asia-northeast1.run.app/assets/otatashikai-hero.jpg" alt="動画編集ツール フル解放パスワードお渡し会 無料開催します">
+      <img class="sec-art" src="https://autocut-api-506892521047.asia-northeast1.run.app/assets/otatashikai-hero.webp" alt="動画編集ツール フル解放パスワードお渡し会 無料開催します">
       <p class="big center">スマホ動画編集の“続き”を、ぜんぶ。</p>
-      <p class="sub center">フル機能を解放する“パスワード”を、無料のお渡し会でお渡しします。</p>
+      <p class="sub center">フル機能を解放する“パスワード”を、<br>無料のお渡し会でお渡しします。</p>
       <div class="cta-wrap">
         <div class="cta-tab">参加無料・人数限定</div>
         <a class="ofcta" href="https://utage-system.com/line/open/9rNaDhXph58j">お渡し会に参加する（無料）</a>
@@ -87,29 +96,12 @@
   <section class="band band-feat">
     <div class="inner">
       <div class="bhead"><h2 class="bh">フル機能を<span class="mk t">無料で解放</span>できます</h2></div>
-      <img class="sec-art plain" src="https://autocut-api-506892521047.asia-northeast1.run.app/assets/feat-card.png" alt="動画編集 自動化ツール">
-      <div class="frows">
-        <div class="frow">
-          <span class="fnum">01</span>
-          <div class="ftxt"><div class="ft">カットツールフル機能版</div><div class="fd">カットした動画をそのまま保存（書き出し）できる</div></div>
-          <img class="fimg" src="https://autocut-api-506892521047.asia-northeast1.run.app/assets/ic-cut.jpg" alt="">
-        </div>
-        <div class="frow">
-          <span class="fnum">02</span>
-          <div class="ftxt"><div class="ft">自動字幕入れツール</div><div class="fd">しゃべった内容を、自動で字幕（テロップ）に</div></div>
-          <img class="fimg" src="https://autocut-api-506892521047.asia-northeast1.run.app/assets/ic-telop.jpg" alt="">
-        </div>
-        <div class="frow">
-          <span class="fnum">03</span>
-          <div class="ftxt"><div class="ft">テロップベース作成ツール</div><div class="fd">TVで見る“座布団”（強調の帯）を量産できる</div></div>
-          <img class="fimg" src="https://autocut-api-506892521047.asia-northeast1.run.app/assets/ic-base.jpg" alt="">
-        </div>
-        <div class="frow">
-          <span class="fnum">04</span>
-          <div class="ftxt"><div class="ft">リッチテロップツール</div><div class="fd">映える・かっこいいテロップ案を一瞬で</div></div>
-          <img class="fimg" src="https://autocut-api-506892521047.asia-northeast1.run.app/assets/ic-rich.jpg" alt="">
-        </div>
+      <div class="human">
+        <p>いま使ってもらっているのは、<br>実は<strong>“カット機能”だけ</strong>なんです。</p>
+        <p>でも本当のすごさは、<br>解放したこの4つにあります👇</p>
       </div>
+      <img class="sec-banner" src="https://autocut-api-506892521047.asia-northeast1.run.app/assets/lp-banner-4kinou-hero.webp" alt="4大機能フル解放｜カットツールフル機能版・自動字幕入れツール・テロップベース作成ツール・リッチテロップツール">
+      <img class="sec-banner" src="https://autocut-api-506892521047.asia-northeast1.run.app/assets/lp-banner-4kinou.webp" alt="保存（書き出し）・自動テロップ・座布団・リッチテロップの4つのフル機能">
       <table class="cmp">
         <tr><th>できること</th><th>無料版</th><th>フル版</th></tr>
         <tr><td>自動カット</td><td class="y">○</td><td class="y">○</td></tr>
@@ -119,7 +111,7 @@
         <tr><td>座布団デザイン</td><td class="n">✕</td><td class="y">○</td></tr>
         <tr><td>リッチテロップ</td><td class="n">✕</td><td class="y">○</td></tr>
       </table>
-      <p class="sub">正直、これ全部スマホ前提で揃うの、たぶん他で見たことないです。</p>
+      <p class="sub">正直、これ全部スマホ前提で揃うの、<br>たぶん他で見たことないです。</p>
     </div>
   </section>
 
@@ -127,13 +119,15 @@
   <section class="band band-why">
     <div class="inner">
       <div class="bhead"><h2 class="bh">なぜ<span class="mk">無料</span>で<br>配布しているのか</h2></div>
-      <img class="sec-art" src="https://autocut-api-506892521047.asia-northeast1.run.app/assets/gift.jpg" alt="無料プレゼントのイメージ">
-      <p>無料で渡す理由は、2つだけ。</p>
+      <div class="human">
+        <p>「なんで無料なの？」<br>って思いますよね。</p>
+        <p>理由は、<strong>シンプルに2つだけ</strong>です。</p>
+      </div>
       <ul class="feat">
         <li>① 作ったツールを、もっと多くの人に試して<b>“感想がほしい”</b></li>
         <li>② これから動画編集を始めたい人と<b>“出会いたい”</b></li>
       </ul>
-      <p class="sub">もちろん、後から高額請求や隠れた費用は一切ありません。</p>
+      <p class="sub">もちろん、後から高額請求や<br>隠れた費用は一切ありません。</p>
     </div>
   </section>
 
@@ -141,18 +135,16 @@
   <section class="band band-get">
     <div class="inner">
       <div class="bhead"><h2 class="bh sm">お渡し会で、<span class="mk">やること</span></h2></div>
-      <img class="sec-art" src="https://autocut-api-506892521047.asia-northeast1.run.app/assets/unlock.jpg" alt="フル解放のイメージ">
-      <ul class="feat">
-        <li>オンラインで個別（マンツーマン）</li>
-        <li>スマホ1台でOK</li>
-        <li>やることは、<b>フル解放パスワードを受け取るだけ</b></li>
-      </ul>
-      <p class="sub">ついでに「最初に何をすればいいか」も、その場で一緒に整理します。</p>
-      <div class="bhead" style="margin-top:28px"><h2 class="bh sm">受け取りまでは、<span class="mk t">たった3ステップ</span></h2></div>
+      <div class="human">
+        <p>むずかしいことは、<br><strong>何もありません。</strong></p>
+      </div>
+      <img class="sec-banner" src="https://autocut-api-506892521047.asia-northeast1.run.app/assets/lp-banner-3point.webp" alt="お渡し会の3つのポイント｜オンラインで個別に副業サポート／スマホ1台でOK／フル解放パスワードを受け取るだけでOK">
+      <p class="sub">参加したあなたが<br>副業でうまくいくために、<br>最初に何をすればいいかも、<br>その場で一緒にレクチャーします✨</p>
+      <div class="bhead" style="margin-top:28px"><h2 class="bh sm">受け取りまで<span class="mk t">たった3ステップ</span></h2></div>
       <ol class="steps">
-        <li>下のボタンから申し込む（LINEで受け取り）</li>
-        <li>お渡し会に参加する（スマホでOK）</li>
-        <li>フル解放パスワードを受け取る → 4つ全部が使える</li>
+        <li><span class="stx">下のボタンから<span class="uline">申し込む</span>（LINEで受け取り）</span></li>
+        <li><span class="stx"><span class="uline">お渡し会に参加</span>する</span></li>
+        <li><span class="stx"><span class="uline">フル解放パスワードを受け取る</span><span class="step-arw">↓</span><strong style="color:#fff">4つの機能が全て使える</strong></span></li>
       </ol>
       <div class="cta-wrap">
         <div class="cta-tab">参加無料・人数限定</div>
@@ -164,11 +156,7 @@
   <!-- 限定 -->
   <section class="band band-limit">
     <div class="inner">
-      <div class="warnbox">
-        <div class="wt">※ ご注意ください ※</div>
-        <div class="wbig">人数には<span class="num">限り</span>があります</div>
-        <p class="sub" style="margin-top:8px">一人ずつ丁寧にお渡しするため、ご案内できる枠には限りがあります。枠が埋まったら、次がいつになるかはお約束できません。</p>
-      </div>
+      <img class="sec-banner" src="https://autocut-api-506892521047.asia-northeast1.run.app/assets/lp-banner-limit.webp" alt="※ご注意ください※ 人数には限りがあります。一人ずつ丁寧にお渡しするため、ご案内できる枠には限りがあります。枠が埋まったら、次がいつになるかはお約束できません">
     </div>
   </section>
 
@@ -176,25 +164,34 @@
   <section class="band band-faq">
     <div class="inner">
       <div class="bhead"><h2 class="bh sm">よくある質問</h2></div>
-      <p class="faqq">Q. 何か売り込まれませんか？</p><p class="faqa">A. その場で契約を迫るような無理な勧誘はしません。安心してご参加ください。</p>
-      <p class="faqq">Q. スクールなどの案内はありますか？</p><p class="faqa">A. はい。ご希望の方にはご案内しています。必要ない方への無理な勧誘はしませんので、ご安心ください。</p>
-      <p class="faqq">Q. お金はかかりますか？</p><p class="faqa">A. 参加もツールも無料です。</p>
-      <p class="faqq">Q. スマホだけでできますか？</p><p class="faqa">A. はい。スマホ1台でOKです。</p>
-      <p class="faqq">Q. 編集はまったくの未経験ですが？</p><p class="faqa">A. 大丈夫。面倒な作業はツールがやります（操作はタップだけ）。</p>
+      <div class="human">
+        <p>ここまで読んで、<br><strong>「ちょっと不安だな…」</strong>って思ったところ、<br>正直にお答えします。</p>
+      </div>
+      <div class="faqlist">
+        <div class="faqitem"><p class="faqq">何か売り込まれませんか？</p><p class="faqa">その場で契約を迫るような、無理な勧誘は一切しません。安心して来てくださいね。</p></div>
+        <div class="faqitem"><p class="faqq">スクールなどの案内はありますか？</p><p class="faqa">はい、ご希望の方にはご案内しています。「いらないな」という方に押しつけることはないので、そこはご安心を。</p></div>
+        <div class="faqitem"><p class="faqq">お金はかかりますか？</p><p class="faqa">かかりません。参加もツールも、まるっと無料です。</p></div>
+        <div class="faqitem"><p class="faqq">スマホだけでできますか？</p><p class="faqa">できます。パソコンは要りません、スマホ1台でOKです。</p></div>
+        <div class="faqitem"><p class="faqq">編集はまったくの未経験ですが…？</p><p class="faqa">大丈夫です。面倒な作業はぜんぶツールがやってくれるので、あなたはタップするだけ。むしろ未経験の人にこそ使ってほしいです。</p></div>
+      </div>
     </div>
   </section>
 
   <!-- 最終CTA -->
   <section class="band band-final">
     <div class="inner">
-      <div class="bhead"><h2 class="bh">あなたは、<span class="mk t">どっちを選ぶ？</span></h2></div>
-      <p>このまま“カットだけ”で止まるか、フル解放して<span class="kw-b">“保存もテロップも全部”</span>スマホで終わらせるか。</p>
-      <p class="sub">どちらも自由です。費用はかかりません（無料です）。</p>
+      <div class="bhead"><h2 class="bh">あなたは<span class="mk t">どっちを選ぶ？</span></h2></div>
+      <div class="human">
+        <p>最後に、ひとつだけ。</p>
+        <p>このまま無料版で<br>“カットだけ”を使い続けるのも、<br>フル解放して<strong>“保存もテロップも全部”<br>スマホで終わらせる</strong>のも、<br>どっちもアリです。</p>
+        <p>でも、せっかく<br>ここまで来てくれたなら——<br><strong>全部使える状態</strong>で、<br>動画づくりを始めてほしいなと思っています。</p>
+      </div>
+      <p class="sub">もちろん、どちらも自由。<br>費用はかかりません（無料です）。</p>
       <div class="cta-wrap">
         <div class="cta-arrow">▼ ▼ ▼</div>
         <a class="ofcta" href="https://utage-system.com/line/open/9rNaDhXph58j">お渡し会に参加する（無料）</a>
       </div>
-      <p class="big center" style="margin-top:26px">“あの時もらっておけば”が、いちばん悔しい。<br>フル解放した向こう側で、待ってます。</p>
+      <p class="big center" style="margin-top:26px">せっかく無料で受け取れるのに、<br>チャンスを逃すのが<br>いちばんもったいないです。<br>お渡し会でお待ちしてます。</p>
       <p class="note-sm">※参加・ツールは無料です。ご希望の方にはスクールのご案内もします（任意）。</p>
     </div>
   </section>
