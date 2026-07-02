@@ -405,6 +405,17 @@
   .wcard .wt .hl{background:linear-gradient(100deg,#ffd54a,#ff8a3d);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
   .wcard .wd{font-size:12.5px;color:#cbd5e6;margin-top:5px;line-height:1.65}
 
+  /* 人肌感（左揃え・太字の一言）*/
+  .human{margin:26px 4px 8px;text-align:left}
+  .human p{font-size:16px;font-weight:800;line-height:1.95;color:#eef2f8;margin:0 0 14px;letter-spacing:.01em}
+  .human p:last-child{margin-bottom:0}
+  .human strong{color:#37efc0;font-weight:900}
+
+  /* 解放ボタンを入力欄の下に（枠内に収める）*/
+  .lock .pw{display:block}
+  .lock .pw input{width:100%}
+  .lock .pw .unlock{display:block;width:100%;margin-top:10px;padding:13px 16px;font-size:14px}
+
   /* フッター法務リンク */
   footer .legal{margin:0}
   footer .legal a{color:#8aa3bd;text-decoration:underline;font-size:11.5px}
@@ -419,32 +430,39 @@
     <img class="hero-fv" src="assets/hero-kakumei.webp" alt="動画編集に革命 自動カットツール無料配布">
   </header>
 
+  <!-- 人肌感（あえて手書き風の一言）-->
+  <section class="human">
+    <p>どうも、カズマルです👋</p>
+    <p>いきなりですが……<br>このツール、<strong>なんとこんなことができます。</strong></p>
+    <p>スマホに動画を入れて、ボタンをポチッ。<br>それだけで、しゃべってない“間”が勝手に消えて、テンポのいい動画になるんです。</p>
+    <p>「え、それだけ？」って思いますよね。<br><strong>はい、それだけなんです。</strong>まずは下で試してみてください👇</p>
+  </section>
+
   <!-- ② ツールのすごさ（バナー画像）-->
   <img class="sec-banner" src="assets/lp-banner-cut.webp" alt="しゃべってない“間”を、AIが自動でカット。手作業30分→数秒。ボタン1つで終わります" loading="lazy">
 
-  <!-- はじめての方へ｜使い方ガイド -->
+  <!-- かんたん使い方 -->
   <section class="guide">
-    <div class="guide-h"><span class="g-badge">はじめての方へ</span>かんたん使い方</div>
-    <p class="guide-lead">動画編集はまったくの初めてでも大丈夫。<strong style="color:#fff">スマホだけ・3ステップ</strong>で試せます。まずはお試し用の動画をダウンロードするところから。</p>
+    <div class="guide-h">かんたん使い方</div>
+    <p class="guide-lead"><strong style="color:#fff">スマホだけ・3ステップ。</strong>まずはお試し動画のダウンロードから👇</p>
     <ol class="gsteps">
       <li>
-        <div class="gt">まずは「サンプル動画」を保存する</div>
-        <div class="gd">自分で撮った動画がなくてもOK。下のボタンを押すと、お試し用の動画（人がしゃべっている動画）がスマホに保存されます。</div>
+        <div class="gt">サンプル動画を保存</div>
+        <div class="gd">自分の動画がなくてもOK。下のボタンから保存できます。</div>
         <a class="g-dl" href="https://drive.google.com/uc?export=download&id=1-NhC1hDIHl6HjTSZGTSnB_SEe7BdBvOS" target="_blank" rel="noopener">⬇ サンプル動画をダウンロード</a>
-        <div class="ghint">※すでに自分の動画がある方は、このステップは飛ばしてOKです</div>
       </li>
       <li>
         <div class="gt">動画を読み込む</div>
-        <div class="gd">下の<strong style="color:#fff">「タップして動画を選択」</strong>を押して、いま保存した動画（または自分の動画）を選びます。カメラロールから選ぶだけ。</div>
+        <div class="gd">「タップして動画を選択」からカメラロールで選ぶだけ。</div>
         <img class="gshot" src="assets/guide-select.webp" alt="タップして動画を選択する画面" loading="lazy">
       </li>
       <li>
-        <div class="gt">ボタンを押すだけで自動カット</div>
-        <div class="gd"><strong style="color:#fff">「自動カットを解析する」</strong>を押すと、しゃべっていない“間（無音）”をAIが自動で見つけてカットします。<strong style="color:#fff">「カット版を再生」</strong>を押すと、カット後の仕上がりをその場で確認できます（緑＝残す／暗＝カットした部分）。</div>
+        <div class="gt">ボタンを押すだけ</div>
+        <div class="gd">「自動カットを解析する」→「カット版を再生」で仕上がりを確認（緑＝残す／暗＝カット）。</div>
         <img class="gshot" src="assets/guide-result.webp" alt="自動カット結果の画面" loading="lazy">
       </li>
     </ol>
-    <div class="guide-foot">それでは、さっそく下のツールで試してみましょう<span class="arw">↓</span></div>
+    <div class="guide-foot">さっそく下で試してみましょう<span class="arw">↓</span></div>
   </section>
 
 
