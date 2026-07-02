@@ -7,7 +7,11 @@
 <title>動画編集に革命｜スマホ自動カットツール</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<!-- フォントはレンダーブロックさせず非同期読込（先にシステムフォントで即描画→差し替え）-->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap"></noscript>
+<!-- LCP画像を優先プリロード -->
+<link rel="preload" as="image" href="assets/hero-kakumei.webp" fetchpriority="high">
 <style>
   :root{
     --bg:#0e1118; --card:#161b26; --line:#283143;
@@ -16,6 +20,7 @@
     --radius:16px;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  img{height:auto}
   html,body{margin:0;padding:0}
   body{
     background:radial-gradient(1200px 600px at 50% -10%, #1a2233 0%, var(--bg) 60%);
@@ -445,7 +450,7 @@
 <div class="wrap">
 
   <header class="hero">
-    <img class="hero-fv" src="assets/hero-kakumei.webp" alt="動画編集に革命 自動カットツール無料配布">
+    <img class="hero-fv" src="assets/hero-kakumei.webp" alt="動画編集に革命 自動カットツール無料配布" width="1024" height="1536" fetchpriority="high" decoding="async">
   </header>
 
   <!-- 人肌感（あえて手書き風の一言）-->
@@ -457,7 +462,7 @@
   </section>
 
   <!-- ② ツールのすごさ（バナー画像）-->
-  <img class="sec-banner" src="assets/lp-banner-cut.webp" alt="しゃべってない“間”を、AIが自動でカット。手作業30分→数秒。ボタン1つで終わります" loading="lazy">
+  <img class="sec-banner" src="assets/lp-banner-cut.webp" alt="しゃべってない“間”を、AIが自動でカット。手作業30分→数秒。ボタン1つで終わります" width="800" height="805" loading="lazy" decoding="async">
 
   <!-- かんたん使い方 -->
   <section class="guide">
@@ -472,12 +477,12 @@
       <li>
         <div class="gt">動画を読み込む</div>
         <div class="gd">「タップして動画を選択」からカメラロールで選ぶだけ。</div>
-        <img class="gshot" src="assets/guide-select.webp" alt="タップして動画を選択する画面" loading="lazy">
+        <img class="gshot" src="assets/guide-select.webp" alt="タップして動画を選択する画面" width="316" height="213" loading="lazy" decoding="async">
       </li>
       <li>
         <div class="gt">ボタンを押すだけ</div>
         <div class="gd">「自動カットを解析する」→「カット版を再生」で仕上がりを確認（緑＝残す／暗＝カット）。</div>
-        <img class="gshot" src="assets/guide-result.webp" alt="自動カット結果の画面" loading="lazy">
+        <img class="gshot" src="assets/guide-result.webp" alt="自動カット結果の画面" width="354" height="1000" loading="lazy" decoding="async">
       </li>
     </ol>
     <div class="guide-foot">さっそく下で試してみましょう<span class="arw">↓</span></div>
@@ -564,7 +569,7 @@
     <p class="hl"><strong>面倒な作業が自動化できるいまって、<br>実は動画編集を始める<br>“最高のタイミング”なんです。</strong></p>
     <p>むずかしいところは<br>ぜんぶツールにおまかせ。<br>理由は、この4つ👇</p>
   </section>
-  <img class="sec-banner" src="assets/lp-banner-whynow-cards.webp" alt="スマホ1台でOK・初期費用はほぼゼロ・未経験からでもOK・需要はいま急成長中" loading="lazy">
+  <img class="sec-banner" src="assets/lp-banner-whynow-cards.webp" alt="スマホ1台でOK・初期費用はほぼゼロ・未経験からでもOK・需要はいま急成長中" width="800" height="633" loading="lazy" decoding="async">
   <section class="human">
     <p class="hl">だからこそ動画編集って、<br><strong>いま一番おすすめできる副業</strong>だと<br>本気で思ってます。</p>
   </section>
@@ -576,12 +581,12 @@
         <h2 class="bh sm">ここも実際に<span class="kw-b">こんな結果</span>を<br>出している人がいます</h2>
       </div>
       <div class="jisseki">
-        <img src="assets/jisseki-1.webp" alt="受講生の実績 山口さん" loading="lazy">
-        <img src="assets/jisseki-2.webp" alt="受講生の実績 佐藤さん" loading="lazy">
-        <img src="assets/jisseki-3.webp" alt="受講生の実績 高木さん" loading="lazy">
-        <img src="assets/jisseki-4.webp" alt="受講生の実績 北村さん" loading="lazy">
-        <img src="assets/jisseki-5.webp" alt="受講生の実績 大浜さん" loading="lazy">
-        <img src="assets/jisseki-6.webp" alt="受講生の実績 山下さん" loading="lazy">
+        <img src="assets/jisseki-1.webp" alt="受講生の実績 山口さん" width="800" height="450" loading="lazy" decoding="async">
+        <img src="assets/jisseki-2.webp" alt="受講生の実績 佐藤さん" width="800" height="450" loading="lazy" decoding="async">
+        <img src="assets/jisseki-3.webp" alt="受講生の実績 高木さん" width="800" height="450" loading="lazy" decoding="async">
+        <img src="assets/jisseki-4.webp" alt="受講生の実績 北村さん" width="800" height="450" loading="lazy" decoding="async">
+        <img src="assets/jisseki-5.webp" alt="受講生の実績 大浜さん" width="800" height="450" loading="lazy" decoding="async">
+        <img src="assets/jisseki-6.webp" alt="受講生の実績 山下さん" width="800" height="450" loading="lazy" decoding="async">
       </div>
       <p class="note-sm" style="margin-top:10px">※個人の体験・成果であり、成果や収入を保証するものではありません。</p>
     </div>
@@ -598,8 +603,8 @@
         <p>いま無料で使えるのは「カット」だけ。<br>でも実はこのツール、<br><strong>まだ“続き”があるんです。</strong></p>
         <p>本当のすごさは、ここからなんです👇</p>
       </div>
-      <img class="sec-banner" src="assets/lp-banner-4kinou-hero.webp" alt="4大機能フル解放｜カットツールフル機能版・自動字幕入れツール・テロップベース作成ツール・リッチテロップツール" loading="lazy">
-      <img class="sec-banner" src="assets/lp-banner-4kinou.webp" alt="今回お渡ししたのはカット機能だけ。保存（書き出し）・自動テロップ・座布団・リッチテロップの4つのフル機能はまだ含まれていません" loading="lazy">
+      <img class="sec-banner" src="assets/lp-banner-4kinou-hero.webp" alt="4大機能フル解放｜カットツールフル機能版・自動字幕入れツール・テロップベース作成ツール・リッチテロップツール" width="800" height="1067" loading="lazy" decoding="async">
+      <img class="sec-banner" src="assets/lp-banner-4kinou.webp" alt="今回お渡ししたのはカット機能だけ。保存（書き出し）・自動テロップ・座布団・リッチテロップの4つのフル機能はまだ含まれていません" width="800" height="1000" loading="lazy" decoding="async">
     </div>
   </section>
 
@@ -607,13 +612,13 @@
   <section class="band band-get">
     <div class="inner">
       <div class="bridge">そこで…</div>
-      <img class="sec-art" src="assets/otatashikai-hero.webp" alt="動画編集ツール フル解放パスワードお渡し会を無料開催します" loading="lazy">
+      <img class="sec-art" src="assets/otatashikai-hero.webp" alt="動画編集ツール フル解放パスワードお渡し会を無料開催します" width="780" height="585" loading="lazy" decoding="async">
       <div class="human">
         <p>で、ここからが本題です。</p>
         <p>面倒な作業を全部自動化する<br><strong>“フルバージョン機能”</strong>を、<br>この企画に来てくれた方には<br><strong>無料で解放</strong>します。</p>
         <p>正直、ここまで出すのは<br>自分でもかなり思い切りました。</p>
       </div>
-      <img class="sec-banner" src="assets/lp-banner-3point.webp" alt="お渡し会の3つのポイント｜オンラインで個別に副業サポート／スマホ1台でOK／フル解放パスワードを受け取るだけでOK" loading="lazy">
+      <img class="sec-banner" src="assets/lp-banner-3point.webp" alt="お渡し会の3つのポイント｜オンラインで個別に副業サポート／スマホ1台でOK／フル解放パスワードを受け取るだけでOK" width="800" height="1067" loading="lazy" decoding="async">
       <p class="sub">参加したあなたが<br>副業でうまくいくために、<br>最初に何をすればいいかも、<br>その場で一緒にレクチャーします✨</p>
       <div class="bhead" style="margin-top:28px">
         <h2 class="bh sm">解放まで<span class="mk t">たった3ステップ</span></h2>
@@ -633,7 +638,7 @@
   <!-- 限定（注意）-->
   <section class="band band-limit">
     <div class="inner">
-      <img class="sec-banner" src="assets/lp-banner-limit.webp" alt="※ご注意ください※ 人数には限りがあります。一人ずつ丁寧にお渡しするため、ご案内できる枠には限りがあります。枠が埋まったら、次がいつになるかはお約束できません" loading="lazy">
+      <img class="sec-banner" src="assets/lp-banner-limit.webp" alt="※ご注意ください※ 人数には限りがあります。一人ずつ丁寧にお渡しするため、ご案内できる枠には限りがあります。枠が埋まったら、次がいつになるかはお約束できません" width="800" height="1000" loading="lazy" decoding="async">
     </div>
   </section>
 
