@@ -367,7 +367,7 @@
 
   /* ===== はじめての方へ｜使い方ガイド ===== */
   .guide{background:var(--glass);border:1px solid var(--glass-bd);border-radius:18px;padding:22px 16px;margin-top:18px;box-shadow:var(--shadow)}
-  .guide-h{font-size:18px;font-weight:900;color:#fff;margin:0 0 8px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+  .guide-h{font-size:26px;font-weight:900;color:#fff;margin:0 0 10px;display:inline-block;line-height:1.3;letter-spacing:.01em;background:linear-gradient(transparent 62%, rgba(46,230,182,.35) 62%);padding:0 4px}
   .g-badge{font-size:12px;font-weight:800;color:#37efc0;background:rgba(46,230,182,.14);border:1px solid rgba(46,230,182,.4);padding:5px 13px;border-radius:999px}
   .guide-lead{font-size:13.5px;color:#9fb0c8;margin:0 0 16px;line-height:1.75}
   ol.gsteps{counter-reset:gs;list-style:none;padding:0;margin:0}
@@ -416,7 +416,9 @@
   .jisseki img{width:100%;display:block;border-radius:14px;border:1px solid var(--glass-bd);box-shadow:0 12px 28px rgba(0,0,0,.5)}
 
   /* マーカー下線（ステップ強調）*/
-  .uline{background:linear-gradient(transparent 58%, rgba(55,239,192,.40) 58%);font-weight:800;padding:0 2px;border-radius:2px}
+  .uline{background:linear-gradient(transparent 58%, rgba(255,213,74,.55) 58%);font-weight:800;padding:0 2px;border-radius:2px}
+  .steps .stx{flex:1;min-width:0}
+  .step-arw{display:block;color:#ffd54a;font-weight:900;font-size:15px;line-height:1;margin:4px 0}
 
   /* 解放ボタンを入力欄の下に（枠内に収める）*/
   .lock .pw{display:block}
@@ -439,10 +441,10 @@
 
   <!-- 人肌感（あえて手書き風の一言）-->
   <section class="human">
-    <p>どうも、カズマルです👋</p>
-    <p>いきなりですが……<br>このツール、<strong>なんとこんなことができます。</strong></p>
-    <p>スマホに動画を入れて、ボタンをポチッ。<br>それだけで、しゃべってない“間”が勝手に消えて、テンポのいい動画になるんです。</p>
-    <p>「え、それだけ？」って思いますよね。<br><strong>はい、それだけなんです。</strong>まずは下で試してみてください👇</p>
+    <p>どうも、スマホでできる動画編集を教えているカズマルです。</p>
+    <p>いきなりですが、<strong>とんでもないツールを開発しちゃいました！</strong></p>
+    <p>このツールを使えば、動画を読み込んでボタンをポチッと押すだけで、しゃべっていない“間”が消えて、<strong>自然なテンポのいい動画</strong>になるんです！</p>
+    <p>まずは下で試してみてください👇</p>
   </section>
 
   <!-- ② ツールのすごさ（バナー画像）-->
@@ -451,7 +453,7 @@
   <!-- かんたん使い方 -->
   <section class="guide">
     <div class="guide-h">かんたん使い方</div>
-    <p class="guide-lead"><strong style="color:#fff">スマホだけ・3ステップ。</strong>まずはお試し動画のダウンロードから👇</p>
+    <p class="guide-lead"><strong style="color:#fff">むずかしい設定はゼロ。スマホだけ・3ステップです。</strong>まずはお試し動画のダウンロードからいってみましょう👇</p>
     <ol class="gsteps">
       <li>
         <div class="gt">サンプル動画を保存</div>
@@ -574,33 +576,10 @@
       </div>
       <div class="human">
         <p>正直に言いますね。</p>
-        <p>いま無料で使えるのは「カット」だけ。<br>でも実はこのツール、<strong>まだ“続き”</strong>があるんです。</p>
+        <p>いま無料で使えるのは「カット」だけ。でも実はこのツール、<strong>まだ“続き”があるんです。</strong></p>
         <p>本当のすごさは、ここからなんです👇</p>
       </div>
-      <img class="sec-art" src="assets/feat-unlock.webp" alt="4大機能フル解放" loading="lazy">
-      <div class="frows">
-        <div class="frow">
-          <span class="fnum">01</span>
-          <div class="ftxt"><div class="ft">カットツールフル機能版</div><div class="fd">カットした動画をそのまま保存（書き出し）できる</div></div>
-          <img class="fimg" src="assets/ic-cut.webp" alt="" loading="lazy">
-        </div>
-        <div class="frow">
-          <span class="fnum">02</span>
-          <div class="ftxt"><div class="ft">自動字幕入れツール</div><div class="fd">しゃべった内容を、自動で字幕（テロップ）に</div></div>
-          <img class="fimg" src="assets/ic-telop.webp" alt="" loading="lazy">
-        </div>
-        <div class="frow">
-          <span class="fnum">03</span>
-          <div class="ftxt"><div class="ft">テロップベース作成ツール</div><div class="fd">TVで見る“座布団”（強調の帯）を量産できる</div></div>
-          <img class="fimg" src="assets/ic-base.webp" alt="" loading="lazy">
-        </div>
-        <div class="frow">
-          <span class="fnum">04</span>
-          <div class="ftxt"><div class="ft">リッチテロップツール</div><div class="fd">映える・かっこいいテロップ案を一瞬で</div></div>
-          <img class="fimg" src="assets/ic-rich.webp" alt="" loading="lazy">
-        </div>
-      </div>
-      <p><strong style="color:#fff">保存（書き出し）・自動テロップ・座布団・リッチテロップ</strong>——この4つのフル機能は、今回お渡ししたツールには含まれていません。</p>
+      <img class="sec-banner" src="assets/lp-banner-4kinou.webp" alt="今回お渡ししたのはカット機能だけ。保存（書き出し）・自動テロップ・座布団・リッチテロップの4つのフル機能はまだ含まれていません" loading="lazy">
     </div>
   </section>
 
@@ -614,19 +593,15 @@
         <p>面倒な作業を全部自動化する<strong>“フルバージョン機能”</strong>を、この企画に来てくれた方には<strong>無料で解放</strong>します。</p>
         <p>正直、ここまで出すのは自分でもかなり思い切りました。</p>
       </div>
-      <div class="why4">
-        <div class="wcard"><div class="wico">🧑‍🏫</div><div class="wtxt"><div class="wt">オンラインで<span class="hl">個別に副業サポート</span></div><div class="wd">マンツーマンなので、あなたの状況に合わせて相談できます。</div></div></div>
-        <div class="wcard"><div class="wico">📱</div><div class="wtxt"><div class="wt"><span class="hl">スマホ1台</span>でOK</div><div class="wd">特別な機材もパソコンも不要。スマホがあれば参加できます。</div></div></div>
-        <div class="wcard"><div class="wico">🔑</div><div class="wtxt"><div class="wt">フル解放パスワードを<span class="hl">受け取るだけでOK</span></div><div class="wd">むずかしい手続きはなし。パスワードを受け取れば4機能が全部使えます。</div></div></div>
-      </div>
+      <img class="sec-banner" src="assets/lp-banner-3point.webp" alt="お渡し会の3つのポイント｜オンラインで個別に副業サポート／スマホ1台でOK／フル解放パスワードを受け取るだけでOK" loading="lazy">
       <p class="sub">ついでに「最初に何をすればいいか」も、その場で一緒に整理します。</p>
       <div class="bhead" style="margin-top:28px">
-        <h2 class="bh sm">解放までは、<span class="mk t">たった3ステップ</span></h2>
+        <h2 class="bh sm">解放まで<span class="mk t">たった3ステップ</span></h2>
       </div>
       <ol class="steps">
-        <li>下のボタンから<span class="uline">申し込む</span></li>
-        <li><span class="uline">お渡し会に参加</span>する（スマホでOK）</li>
-        <li><span class="uline">フル解放パスワードを受け取る</span> → <strong style="color:#fff">4つ全部が使える</strong></li>
+        <li><span class="stx">下のボタンから<span class="uline">申し込む</span></span></li>
+        <li><span class="stx"><span class="uline">お渡し会に参加</span>する</span></li>
+        <li><span class="stx"><span class="uline">フル解放パスワードを受け取る</span><span class="step-arw">↓</span><strong style="color:#fff">4つ全部が使える</strong></span></li>
       </ol>
       <div class="cta-wrap">
         <div class="cta-tab">参加無料・人数限定</div>
