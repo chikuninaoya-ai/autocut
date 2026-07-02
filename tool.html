@@ -415,6 +415,10 @@
   .human p{font-size:16px;font-weight:800;line-height:1.95;color:#eef2f8;margin:0 0 14px;letter-spacing:.01em}
   .human p:last-child{margin-bottom:0}
   .human strong{color:#37efc0;font-weight:900}
+  /* 重要な手書きエリアの強調（大きく目立たせる）*/
+  .human p.hl{font-size:21px;font-weight:900;line-height:1.7;color:#fff}
+  /* 余韻テロップ */
+  .telop-q{text-align:center;font-size:26px;font-weight:900;color:#fff;line-height:1.5;letter-spacing:.02em;margin:64px 4px 56px;text-shadow:0 2px 18px rgba(0,0,0,.5)}
 
   /* 実績カード（画像・縦並び）*/
   .jisseki{display:flex;flex-direction:column;gap:14px;margin:16px 0 4px}
@@ -448,7 +452,7 @@
   <section class="human">
     <p>どうも、スマホでできる<br>動画編集を教えているカズマルです。</p>
     <p>いきなりですが、<br><strong>とんでもないツールを<br>開発しちゃいました！</strong></p>
-    <p>このツールを使えば、<br>動画を読み込んでボタンを<br>ポチッと押すだけで、<br>しゃべっていない“間”が消えて、<br><strong>自然なテンポのいい動画</strong>になるんです！</p>
+    <p>このツールを使えば、<br>ボタンを押すだけで<br><strong>動画のカットが一瞬で終わるんです！</strong></p>
     <p>まずは下で試してみてください👇</p>
   </section>
 
@@ -552,14 +556,17 @@
 
   <!-- ===== 革命→魅力→実績→フル解放 ===== -->
 
+  <!-- 余韻テロップ -->
+  <p class="telop-q">ツール、どうでした？</p>
+
   <!-- ④ 動画編集の魅力（今こそ副業）-->
   <section class="human">
-    <p><strong>面倒な作業が自動化できるいまって、<br>実は動画編集を始める<br>“最高のタイミング”なんです。</strong></p>
+    <p class="hl"><strong>面倒な作業が自動化できるいまって、<br>実は動画編集を始める<br>“最高のタイミング”なんです。</strong></p>
     <p>むずかしいところは<br>ぜんぶツールにおまかせ。<br>理由は、この4つ👇</p>
   </section>
   <img class="sec-banner" src="assets/lp-banner-whynow-cards.webp" alt="スマホ1台でOK・初期費用はほぼゼロ・未経験からでもOK・需要はいま急成長中" loading="lazy">
   <section class="human">
-    <p>だからこそ動画編集って、<br><strong>いま一番おすすめできる副業</strong>だと<br>本気で思ってます。</p>
+    <p class="hl">だからこそ動画編集って、<br><strong>いま一番おすすめできる副業</strong>だと<br>本気で思ってます。</p>
   </section>
 
   <!-- ⑤ 実績者の声 -->
