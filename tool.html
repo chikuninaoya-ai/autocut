@@ -411,6 +411,10 @@
   .human p:last-child{margin-bottom:0}
   .human strong{color:#37efc0;font-weight:900}
 
+  /* 実績カード（画像・縦並び）*/
+  .jisseki{display:flex;flex-direction:column;gap:14px;margin:16px 0 4px}
+  .jisseki img{width:100%;display:block;border-radius:14px;border:1px solid var(--glass-bd);box-shadow:0 12px 28px rgba(0,0,0,.5)}
+
   /* マーカー下線（ステップ強調）*/
   .uline{background:linear-gradient(transparent 58%, rgba(55,239,192,.40) 58%);font-weight:800;padding:0 2px;border-radius:2px}
 
@@ -548,24 +552,17 @@
   <section class="band band-problem">
     <div class="inner">
       <div class="bhead">
-        <span class="slabel i"><span class="pn">🙌</span>VOICE</span>
-        <h2 class="bh sm">実際に、<span class="kw-b">こんな方たち</span>が<br>動き出しています</h2>
+        <h2 class="bh sm">ここも実際に<span class="kw-b">こんな結果</span>を<br>出している人がいます</h2>
       </div>
-      <div class="frows">
-        <div class="frow">
-          <span class="fnum">01</span>
-          <div class="ftxt"><div class="ft">30代・会社員</div><div class="fd">「カットが自動なんて衝撃でした。スキマ時間だけで1本作れるようになって、これなら続けられそうです」</div></div>
-        </div>
-        <div class="frow">
-          <span class="fnum">02</span>
-          <div class="ftxt"><div class="ft">40代・主婦</div><div class="fd">「パソコンが苦手な私でも、スマホでポチポチするだけ。家事の合間に楽しく編集できています」</div></div>
-        </div>
-        <div class="frow">
-          <span class="fnum">03</span>
-          <div class="ftxt"><div class="ft">20代・未経験</div><div class="fd">「“面倒そう”で避けてたけど、これなら大丈夫。副業として本気でやってみます」</div></div>
-        </div>
+      <div class="jisseki">
+        <img src="assets/jisseki-1.webp" alt="受講生の実績 山口さん" loading="lazy">
+        <img src="assets/jisseki-2.webp" alt="受講生の実績 佐藤さん" loading="lazy">
+        <img src="assets/jisseki-3.webp" alt="受講生の実績 高木さん" loading="lazy">
+        <img src="assets/jisseki-4.webp" alt="受講生の実績 北村さん" loading="lazy">
+        <img src="assets/jisseki-5.webp" alt="受講生の実績 大浜さん" loading="lazy">
+        <img src="assets/jisseki-6.webp" alt="受講生の実績 山下さん" loading="lazy">
       </div>
-      <p class="note-sm" style="margin-top:8px">※個人の体験・感想であり、成果や収入を保証するものではありません。</p>
+      <p class="note-sm" style="margin-top:10px">※個人の体験・成果であり、成果や収入を保証するものではありません。</p>
     </div>
   </section>
 
