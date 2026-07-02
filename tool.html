@@ -625,11 +625,14 @@
   <section class="band band-faq">
     <div class="inner">
       <div class="bhead"><h2 class="bh sm">よくある質問</h2></div>
-      <p class="faqq">Q. 何か売り込まれませんか？</p><p class="faqa">A. その場で契約を迫るような無理な勧誘はしません。安心してご参加ください。</p>
-      <p class="faqq">Q. スクールなどの案内はありますか？</p><p class="faqa">A. はい。ご希望の方にはご案内しています。必要ない方への無理な勧誘はしませんので、ご安心ください。</p>
-      <p class="faqq">Q. お金はかかりますか？</p><p class="faqa">A. 参加もツールも無料です。</p>
-      <p class="faqq">Q. スマホだけでできますか？</p><p class="faqa">A. はい。スマホ1台でOKです。</p>
-      <p class="faqq">Q. 編集はまったくの未経験ですが？</p><p class="faqa">A. 大丈夫。面倒な作業はツールがやります（操作はタップだけ）。</p>
+      <div class="human">
+        <p>ここまで読んで、<strong>「ちょっと不安だな…」</strong>って思ったところ、正直にお答えします。</p>
+      </div>
+      <p class="faqq">Q. 何か売り込まれませんか？</p><p class="faqa">A. その場で契約を迫るような、無理な勧誘は一切しません。安心して来てくださいね。</p>
+      <p class="faqq">Q. スクールなどの案内はありますか？</p><p class="faqa">A. はい、ご希望の方にはご案内しています。「いらないな」という方に押しつけることはないので、そこはご安心を。</p>
+      <p class="faqq">Q. お金はかかりますか？</p><p class="faqa">A. かかりません。参加もツールも、まるっと無料です。</p>
+      <p class="faqq">Q. スマホだけでできますか？</p><p class="faqa">A. できます。パソコンは要りません、スマホ1台でOKです。</p>
+      <p class="faqq">Q. 編集はまったくの未経験ですが…？</p><p class="faqa">A. 大丈夫です。面倒な作業はぜんぶツールがやってくれるので、あなたはタップするだけ。むしろ未経験の人にこそ使ってほしいです。</p>
     </div>
   </section>
 
@@ -639,8 +642,12 @@
       <div class="bhead">
         <h2 class="bh">あなたは、<span class="mk t">どっちを選ぶ？</span></h2>
       </div>
-      <p>このまま無料版で“カットだけ”を使い続けるか、フル解放して<span class="kw-b">“保存もテロップも全部”</span>スマホで終わらせるか。</p>
-      <p class="sub">どちらも自由です。費用はかかりません（無料です）。</p>
+      <div class="human">
+        <p>最後に、ひとつだけ。</p>
+        <p>このまま無料版で“カットだけ”を使い続けるのも、フル解放して<strong>“保存もテロップも全部”スマホで終わらせる</strong>のも、どっちもアリです。</p>
+        <p>でも、せっかくここまで来てくれたなら——<strong>全部使える状態</strong>で、動画づくりを始めてほしいなと思っています。</p>
+      </div>
+      <p class="sub">もちろん、どちらも自由。費用はかかりません（無料です）。</p>
       <div class="cta-wrap">
         <div class="cta-arrow">▼ ▼ ▼</div>
         <a class="ofcta" data-apply href="#">フル解放パスワードお渡し会に申し込む（無料）</a>
@@ -679,7 +686,7 @@
   const UNLOCK_PASSWORD = "sumaho"; // ←個別相談参加者に渡すパスワード（後で変更／バックエンドのAUTOCUT_PASSWORDと一致させる）
   const CONSULT_URL = "#";             // ←個別相談LPのURL（後で差し込み）
   const BACKEND_URL = "https://autocut-api-506892521047.asia-northeast1.run.app"; // 書き出し用バックエンド（Cloud Run）
-  const APPLY_URL = "https://utage-system.com/page/XLsETuSOkxJb"; // お渡し会の申込導線URL
+  const APPLY_URL = "https://utage-system.com/line/open/9rNaDhXph58j"; // お渡し会の申込導線URL
   let unlockedPw = null;               // 解放済みパスワード（書き出し時に送信）
   const PAD_SEC   = 0.12;  // カット後ろの余白
   const PAD_LEAD  = 0.0533; // カット前(喋り出し)の余白 ＝0.12 - 2frame@30fps
