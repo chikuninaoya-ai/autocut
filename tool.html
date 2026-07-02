@@ -232,9 +232,14 @@
     background:linear-gradient(135deg,var(--mint),#16c79a);color:#04231c;box-shadow:0 4px 14px rgba(34,211,166,.5)}
 
   /* FAQ */
-  .faqq{font-size:14.5px;color:#f1f5fb;position:relative;padding-left:22px}
-  .faqq::before{content:"Q";position:absolute;left:0;color:var(--mint);font-weight:900}
-  .faqa{font-size:13.5px;padding-left:14px;border-left:2px solid rgba(255,255,255,.09);margin-left:8px}
+  .faqlist{margin:16px 0 0}
+  .faqitem{border-radius:13px;padding:14px 16px;margin:0 0 9px}
+  .faqitem:nth-child(odd){background:rgba(255,255,255,.045)}
+  .faqitem:nth-child(even){background:rgba(46,230,182,.07)}
+  .faqq{font-size:14.5px;font-weight:800;color:#f1f5fb;position:relative;padding-left:26px;margin:0 0 7px;line-height:1.55}
+  .faqq::before{content:"Q";position:absolute;left:0;top:0;color:var(--mint);font-weight:900;font-size:16px}
+  .faqa{font-size:13.5px;color:var(--sub);position:relative;padding-left:26px;margin:0;line-height:1.75}
+  .faqa::before{content:"A";position:absolute;left:0;top:0;color:#ffd54a;font-weight:900;font-size:16px}
 
   /* オファーCTA */
   a.ofcta{background:linear-gradient(135deg,#37efc0,#16c79a);color:#04231c;font-size:16px;padding:18px 14px;border-radius:14px;
@@ -628,11 +633,13 @@
       <div class="human">
         <p>ここまで読んで、<strong>「ちょっと不安だな…」</strong>って思ったところ、正直にお答えします。</p>
       </div>
-      <p class="faqq">Q. 何か売り込まれませんか？</p><p class="faqa">A. その場で契約を迫るような、無理な勧誘は一切しません。安心して来てくださいね。</p>
-      <p class="faqq">Q. スクールなどの案内はありますか？</p><p class="faqa">A. はい、ご希望の方にはご案内しています。「いらないな」という方に押しつけることはないので、そこはご安心を。</p>
-      <p class="faqq">Q. お金はかかりますか？</p><p class="faqa">A. かかりません。参加もツールも、まるっと無料です。</p>
-      <p class="faqq">Q. スマホだけでできますか？</p><p class="faqa">A. できます。パソコンは要りません、スマホ1台でOKです。</p>
-      <p class="faqq">Q. 編集はまったくの未経験ですが…？</p><p class="faqa">A. 大丈夫です。面倒な作業はぜんぶツールがやってくれるので、あなたはタップするだけ。むしろ未経験の人にこそ使ってほしいです。</p>
+      <div class="faqlist">
+        <div class="faqitem"><p class="faqq">何か売り込まれませんか？</p><p class="faqa">その場で契約を迫るような、無理な勧誘は一切しません。安心して来てくださいね。</p></div>
+        <div class="faqitem"><p class="faqq">スクールなどの案内はありますか？</p><p class="faqa">はい、ご希望の方にはご案内しています。「いらないな」という方に押しつけることはないので、そこはご安心を。</p></div>
+        <div class="faqitem"><p class="faqq">お金はかかりますか？</p><p class="faqa">かかりません。参加もツールも、まるっと無料です。</p></div>
+        <div class="faqitem"><p class="faqq">スマホだけでできますか？</p><p class="faqa">できます。パソコンは要りません、スマホ1台でOKです。</p></div>
+        <div class="faqitem"><p class="faqq">編集はまったくの未経験ですが…？</p><p class="faqa">大丈夫です。面倒な作業はぜんぶツールがやってくれるので、あなたはタップするだけ。むしろ未経験の人にこそ使ってほしいです。</p></div>
+      </div>
     </div>
   </section>
 
