@@ -385,17 +385,31 @@
   .guide-foot{text-align:center;font-size:13px;color:#37efc0;font-weight:800;margin-top:18px}
   .guide-foot .arw{display:block;font-size:20px;margin-top:2px;animation:bob 1.4s ease-in-out infinite}
   @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+
+  /* ===== ファーストビュー画像（全面）===== */
+  .hero-fv{width:100%;display:block;border-radius:18px;border:1px solid var(--glass-bd);
+    box-shadow:0 22px 46px rgba(0,0,0,.6),0 0 60px rgba(34,211,166,.10)}
+
+  /* ===== WHY NOW 強調カード ===== */
+  .why4{display:flex;flex-direction:column;gap:12px;margin:18px 0 6px}
+  .wcard{display:flex;align-items:center;gap:14px;
+    background:linear-gradient(135deg,rgba(255,181,71,.10),rgba(255,255,255,.03));
+    border:1px solid rgba(255,181,71,.30);border-radius:16px;padding:16px 15px;
+    box-shadow:0 8px 22px rgba(0,0,0,.35)}
+  .wcard .wico{flex:none;width:54px;height:54px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:27px;
+    background:linear-gradient(135deg,rgba(255,181,71,.24),rgba(255,138,61,.18));border:1px solid rgba(255,181,71,.42);
+    box-shadow:0 6px 16px rgba(255,138,61,.25)}
+  .wcard .wtxt{flex:1;min-width:0}
+  .wcard .wt{font-size:17.5px;font-weight:900;color:#fff;line-height:1.35}
+  .wcard .wt .hl{background:linear-gradient(100deg,#ffd54a,#ff8a3d);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+  .wcard .wd{font-size:12.5px;color:#cbd5e6;margin-top:5px;line-height:1.65}
 </style>
 </head>
 <body>
 <div class="wrap">
 
   <header class="hero">
-    <span class="eyebrow">NEW · スマホ完結 · インストール不要</span>
-    <h1>動画編集に、<br><span class="em">革命</span>が起きました。</h1>
-    <p class="lead">「面倒なカット作業」を、AIが自動で終わらせる——<br>そんなツールが、ついに完成しました。<br><strong style="color:#fff">スマホだけ</strong>で、今すぐ体験できます。</p>
-    <img class="hero-banner" src="assets/hero-banner.webp" alt="スマホ自動カットツール">
-    <div class="chips"><span class="chip">スマホ完結</span><span class="chip">アップロード不要</span><span class="chip">無料で体験</span></div>
+    <img class="hero-fv" src="assets/hero-kakumei.webp" alt="動画編集に革命 自動カットツール無料配布">
   </header>
 
   <!-- ② ツールのすごさ -->
@@ -521,12 +535,12 @@
         <h2 class="bh">面倒がなくなった今こそ、<br><span class="mk">動画編集を始めるチャンス</span></h2>
       </div>
       <p>これまで動画編集は「時間のかかる面倒な作業」が大きな壁でした。でも、こうして<strong style="color:#fff">面倒な部分を自動化できる</strong>ようになった今なら、話はまったく別です。</p>
-      <ul class="feat">
-        <li>📱 <b>スマホ1台</b>から始められる</li>
-        <li>💰 初期費用・機材費は<b>ほぼゼロ</b></li>
-        <li>🔰 <b>未経験</b>からでもスタートできる</li>
-        <li>📈 動画の需要は<b>いま急成長中</b>で、伸び続けている</li>
-      </ul>
+      <div class="why4">
+        <div class="wcard"><div class="wico">📱</div><div class="wtxt"><div class="wt"><span class="hl">スマホ1台</span>でOK</div><div class="wd">パソコンも高い機材もいりません。いま持っているスマホだけで完結します。</div></div></div>
+        <div class="wcard"><div class="wico">💰</div><div class="wtxt"><div class="wt">初期費用は<span class="hl">ほぼゼロ</span></div><div class="wd">道具をそろえる出費がないから、リスクなく始められます。</div></div></div>
+        <div class="wcard"><div class="wico">🔰</div><div class="wtxt"><div class="wt"><span class="hl">未経験</span>からでもOK</div><div class="wd">面倒な作業はツールが自動化。だから編集経験がなくても大丈夫です。</div></div></div>
+        <div class="wcard"><div class="wico">📈</div><div class="wtxt"><div class="wt">需要は<span class="hl">いま急成長中</span></div><div class="wd">動画コンテンツは伸び続け、編集できる人がまだまだ足りていません。</div></div></div>
+      </div>
       <p class="big">だからこそ、動画編集は<span class="mk t">“いま一番おすすめの副業”</span>なんです。</p>
     </div>
   </section>
